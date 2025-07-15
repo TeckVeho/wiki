@@ -1,1 +1,37 @@
 
+## ラベル定義
+
+| ラベル                    | 定義                                                     |
+| ------------------------ | ------------------------------------------------------- |
+| in-dev                   | イシューが開発環境（デベロップメント環境）にある。  |
+| in-stg                   | イシューがテスト環境（ステージング環境）にある。      |
+| in-prod                  | イシューが本番環境（プロダクション環境）にある。        |
+| in-refixing              | The issue requires a refix after review.                |
+| waiting to deploy to stg | The issue is waiting for deployment to staging.         |
+| waiting to release       | The issue is waiting for deployment to production.      |
+| bug                      | The issue is for fixing a bug.                          | 
+| feature                  | The issue is for implementing a new feature.            |
+| backend                  | The issue is classified as a backend task.              |
+| frontend                 | The issue is classified as a frontend task.             |
+| high priority            | The issue requires urgent handling.                     |
+| middle priority          | The issue requires handling in the ordinary order.      |
+| low priority             | The issue can be deprioritized.                         |
+
+
+## Label Definition
+
+| Label                    | Definition                                              |
+| ------------------------ | ------------------------------------------------------- |
+| in-dev                   | The issue is currently in the development environment.  |
+| in-stg                   | The issue is currently in the staging environment.      |
+| in-prod                  | The issue is currently in the production environment.   |
+| in-refixing              | The issue requires a refix after review.                |
+| waiting to deploy to stg | The issue is waiting for deployment to staging.         |
+| waiting to release       | The issue is waiting for deployment to production.      |
+| bug                      | The issue is for fixing a bug.                          | 
+| feature                  | The issue is for implementing a new feature.            |
+| backend                  | The issue is classified as a backend task.              |
+| frontend                 | The issue is classified as a frontend task.             |
+| high priority            | The issue requires urgent handling.                     |
+| middle priority          | The issue requires handling in the ordinary order.      |
+| low priority             | The issue can be deprioritized.                         |
