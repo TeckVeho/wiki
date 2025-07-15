@@ -13,9 +13,9 @@
 | feature                  | イシューが新規機能追加のためのものである。                 　|
 | backend                  | イシューがバックエンドのものである。                        |
 | frontend                 | イシューがフロントエンドのものである。                      |
-| high priority            | イシューが至急対応が必要なものである。                      |
-| middle priority          | イシューが中程度の優先順位で対応が必要なものである。           |
-| low priority             | イシューが時間のある時に対応が必要なものである。              |
+| high priority            | イシューが至急の対応が必要なものである。                    |
+| middle priority          | イシューが中程度の優先順位で対応が必要なものである。          |
+| low priority             | イシューが不急の対応が必要なものである。                    |
 
 
 ## Label Definition
