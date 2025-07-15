@@ -1,21 +1,19 @@
 
 ## ラベル定義
 
-| ラベル                    | 定義                                                  |
-| ------------------------ | ---------------------------------------------------- |
-| in-dev                   | イシューが開発環境（デベロップメント環境）にある。            |
-| in-stg                   | イシューがテスト環境（ステージング環境）にある。              |
-| in-prod                  | イシューが本番環境（プロダクション環境）にある。              |
-| in-refixing              | イシューがレビュー後の再修正中である。                      |
-| waiting to deploy to stg | イシューがテスト環境（ステージング環境）へのデプロイ待ちである。 |
-| waiting to release       | イシューが本番環境（プロダクション環境）へのデプロイ待ちである。 |
-| bug                      | イシューがバグ修正のためのものである。                      | 
-| feature                  | イシューが新規機能追加のためのものである。                 　|
-| backend                  | イシューがバックエンドのものである。                        |
-| frontend                 | イシューがフロントエンドのものである。                      |
-| high priority            | イシューが至急の対応が必要なものである。                    |
-| middle priority          | イシューが中程度の優先順位で対応が必要なものである。          |
-| low priority             | イシューが不急の対応が必要なものである。                    |
+| ラベル                    | 定義                                        |
+| ------------------------ | --------------------------------------------|
+| in-dev                   | イシューが開発環境（デベロップメント環境）にある。  |
+| in-stg                   | イシューがテスト環境（ステージング環境）にある。    |
+| in-prod                  | イシューが本番環境（プロダクション環境）にある。    |
+| in-refixing              | イシューがレビュー後の再修正中である。            |
+| bug                      | イシューがバグ修正のためのものである。            | 
+| feature                  | イシューが新規機能追加のためのものである。       　|
+| backend                  | イシューがバックエンドのものである。              |
+| frontend                 | イシューがフロントエンドのものである。            |
+| high priority            | イシューが至急の対応が必要なものである。           |
+| middle priority          | イシューが中程度の優先順位で対応が必要なものである。 |
+| low priority             | イシューが不急の対応が必要なものである。           |
 
 
 ## Label Definition
@@ -26,8 +24,6 @@
 | in-stg                   | The issue is currently in the staging environment.      |
 | in-prod                  | The issue is currently in the production environment.   |
 | in-refixing              | The issue requires a refix after review.                |
-| waiting to deploy to stg | The issue is waiting for deployment to staging.         |
-| waiting to release       | The issue is waiting for deployment to production.      |
 | bug                      | The issue is for fixing a bug.                          | 
 | feature                  | The issue is for implementing a new feature.            |
 | backend                  | The issue is classified as a backend task.              |
