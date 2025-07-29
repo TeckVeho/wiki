@@ -12,7 +12,37 @@
 - **内容:** `仕様書`を基に、ビジネス要件・機能要件を記載した `要件定義.md` を作成  
 - **ツール:** `ChatGPT-o3` / `Gemini` / `Kiro`  
 - **インプット:** `要件定義内容をまとめたテキスト資料`  
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+
+```md
+# ROLE
+あなたはシニアITコンサルタント兼プロダクトマネージャーです。
+
+# GOAL
+以下の仕様書テキストを基に、Markdown 形式の「要件定義.md」を作成してください。
+
+# INPUT
+{{SPEC_TEXT}}
+
+# OUTPUT REQUIREMENTS
+- Markdown 形式・UTF‑8
+- セクション構成（番号付き）:
+  1. 目的（50〜80字）
+  2. 背景（100〜150字）
+  3. ビジネス要件
+     - BR‑01, BR‑02 … （箇条書き）
+  4. 機能要件
+     - FR‑01, FR‑02 … （【対象画面／API】＋【内容】＋【優先度(High/Mid/Low)】）
+  5. 非機能要件（性能・セキュリティ・運用）
+  6. 想定ユーザー・ペルソナ
+  7. 受入条件（Accept Criteria）
+- すべて日本語。用語は一貫して正式名称を使用。
+- 1項目につき原則 100 字以内。長い場合は適切に改行。
+
+# STYLE
+論点を漏れなく、重複なく。表現は簡潔に。
+  
+```
 - **成果物:** `要件定義.md`
 
 #### 2. モックアップ作成
@@ -21,7 +51,39 @@
 - **内容:** AIツールを使って `モックアップ` を作成  
 - **ツール:** `v0`  
 - **インプット:** `要件定義.md`  
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+
+```md
+# ROLE
+あなたはUI/UXデザイナー兼フロントエンドエンジニアです。
+
+# GOAL
+「要件定義.md」から Next.js + shadcn/ui 構成のモックアップコードを生成してください。
+
+# INPUT
+{{REQ_MD}}
+
+# OUTPUT REQUIREMENTS
+- 出力形式: ZIP ではなく“コードブロック付き Markdown”
+- ディレクトリ構造:
+  /app/(route)/page.tsx
+  /components/{{ComponentName}}.tsx
+  /lib/placeholder.ts
+- 各ページにはダミーデータ取得関数 `getFakeData()` を置く
+- UIルール:
+  - Tailwind CSS
+  - Card には `rounded-2xl` `shadow-md` を付与
+  - 見出しは `text-xl font-semibold`
+- コメントで TODO を残さない
+- 日本語コメントは禁止（コード内は英語）
+
+# STYLE
+コード例と簡潔な説明を交互に。必要最小限の実装。
+
+```
+
+
+
 - **成果物:** `モックアップコード（Next.js）`
 
 #### 3. 画面機能一覧作成
@@ -30,7 +92,30 @@
 - **内容:** モックアップコードから `画面機能一覧.md` を生成  
 - **ツール:** `v0`  
 - **インプット:** `モックアップコード`  
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+```md
+# ROLE
+あなたはプロダクトマネージャーです。
+
+# GOAL
+モックアップコードを解析し、画面単位の機能一覧を Markdown ファイルとしてまとめてください。
+
+# INPUT
+{{MOCKUP_CODE}}
+
+# OUTPUT REQUIREMENTS
+- テーブル形式（Markdown）
+  | No | 画面ID | 画面名 | 主なコンポーネント | 主要アクション | API呼出 | 備考 |
+- 行はモックアップ内のルート/Page単位で網羅
+- 画面IDは `PG-###` の連番
+- カラム幅は自動でOK。折り返しは `<br>` で調整。
+- 日本語。動詞は「〜する」で統一。
+
+# STYLE
+漏れ・重複なし。API呼出は `GET /api/users` 形式で。
+
+
+```
 - **成果物:** `画面機能一覧.md`
 
 ---
@@ -129,6 +214,7 @@ FE: E2Eテスト（Cursor）
 
 ---
 
+#### 開発フロー図
 ```mermaid
 sequenceDiagram
     %% 関係者定義
@@ -185,3 +271,80 @@ sequenceDiagram
     BE->>WES: システムテスト（MCP playwright）
     FE->>WES: システムテスト（MCP playwright）
 ```
+
+#### ディレクトリ構成テンプレート
+```md
+.
+├── .editorconfig
+├── .env.example                # ← 環境変数テンプレート
+├── .eslintignore
+├── .eslintrc.cjs               # ← Airbnb + Tailwind + Prettier
+├── .gitignore
+├── .prettierignore
+├── .prettierrc.cjs
+├── .commitlintrc.cjs           # ← Conventional Commits
+├── next.config.mjs
+├── package.json
+├── pnpm-lock.yaml
+├── README.md                   # ← プロジェクト概要テンプレート
+├── tsconfig.json
+│
+├── app/                        # ── Front end (App Router)
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── (auth)/page.tsx         # ← 例）/auth ルート
+│
+├── components/
+│   ├── ui/                     # ← shadcn/ui で生成した汎用 UI
+│   │   └── button.tsx
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   └── index.ts                # ← barrel export
+│
+├── lib/                        # ── フロント共通ロジック
+│   ├── api.ts                  # ← fetch ラッパ
+│   ├── auth.ts                 # ← NextAuth Helpers
+│   └── validators.ts
+│
+├── prisma/                     # ── DB スキーマ & Seed
+│   ├── schema.prisma
+│   └── seed.ts
+│
+├── scripts/                    # ── 補助スクリプト
+│   └── generate-openapi.ts
+│
+├── public/                     # ── 静的アセット
+│   └── favicon.ico
+│
+├── styles/
+│   ├── globals.css
+│   └── tailwind.css
+│
+├── tests/
+│   ├── unit/                   # ← vitest or jest
+│   ├── integration/
+│   └── e2e/                    # ← Playwright
+│       └── example.spec.ts
+│
+├── docs/                       # ── ドキュメント & プロンプト
+│   ├── requirements/要件定義.md
+│   ├── design/詳細設計.md
+│   ├── prompts/                # ← 前回答で示した各種プロンプト
+│   │   ├── 01_requirements_prompt.md
+│   │   ├── 02_mockup_prompt.md
+│   │   └── …
+│   └── architecture.mmd        # ← Mermaid ER/Sequence
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/
+│       ├── ci.yml              # ← Lint/Test/Build
+│       └── release.yml         # ← タグで Cloud Run デプロイ
+│
+└── vercel.json                 # ← Vercel 用 (任意)
+
+```
+
