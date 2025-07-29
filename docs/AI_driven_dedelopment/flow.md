@@ -424,8 +424,6 @@ sequenceDiagram
 │
 ├── docs/                       # ── ドキュメント & プロンプト
 │   ├── requirements/要件定義.md
-│   ├── design/詳細設計.md
-│   ├── design/詳細設計.md               
 │   └── architecture.mmd        # ← Mermaid ER/Sequence
 │
 ├── .github/
