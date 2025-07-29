@@ -425,10 +425,7 @@ sequenceDiagram
 ├── docs/                       # ── ドキュメント & プロンプト
 │   ├── requirements/要件定義.md
 │   ├── design/詳細設計.md
-│   ├── prompts/                # ← 前回答で示した各種プロンプト
-│   │   ├── 01_requirements_prompt.md
-│   │   ├── 02_mockup_prompt.md
-│   │   └── …
+│   ├── design/詳細設計.md               
 │   └── architecture.mmd        # ← Mermaid ER/Sequence
 │
 ├── .github/
@@ -439,8 +436,6 @@ sequenceDiagram
 │   └── workflows/
 │       ├── ci.yml              # ← Lint/Test/Build
 │       └── release.yml         # ← タグで Cloud Run デプロイ
-│
-└── vercel.json                 # ← Vercel 用 (任意)
 
 ```
 
