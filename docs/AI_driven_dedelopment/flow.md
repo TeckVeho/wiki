@@ -125,18 +125,8 @@
 #### 4. プロジェクト環境構築
 
 - **担当:** BE（TL）  
-- **内容:** `Cursor`を用いてディレクトリテンプレートに沿った環境を構築  
-- **成果物例:**
-
-
-/app
-/components
-/pages
-/api
-/tests
-README.md
-
-
+- **内容:** `Cursor`を用いてディレクトリ構成テンプレートに沿った環境を構築  
+- **ツール:** `Cursor`  
 
 #### 5. 詳細設計作成
 
@@ -144,7 +134,42 @@ README.md
 - **内容:** モックアップを基に `詳細設計` を生成  
 - **ツール:** `Cursor`  
 - **インプット:** `要件定義.md` `フロントエンドコード` `画面機能一覧.md`
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+```md
+# ROLE
+あなたはシステムアーキテクトです。
+
+# GOAL
+Swagger(OpenAPI 3.1)仕様・DBスキーマ(ER図/DDL)・バッチ設計(任意)をまとめた詳細設計を作成してください。
+
+# INPUT
+要件定義: {{REQ_MD}}
+モックアップコード: {{MOCKUP_CODE}}
+画面機能一覧: {{FEATURE_LIST_MD}}
+
+# OUTPUT REQUIREMENTS
+### 1. API設計
+- フォーマット: OpenAPI 3.1 (YAML) → コードブロック
+- エンドポイントの命名は REST + 慣用句
+- 必須/任意パラメータを明示
+
+### 2. データベース設計
+- ER図用テーブル定義書（Markdownのテーブル）
+- 直後に RDBMS 方言 (PostgreSQL) の CREATE TABLE DDL
+
+### 3. バッチ/ロジック設計 (optional)
+- 定期/非同期処理が必要な場合のみ
+- Cron 式・処理概要・入出力を箇条書き
+
+# STYLE
+- 章番号付き
+- 日本語
+- 仕様は“must/should”のRFC2119準拠で表記する
+- 参照関係を図示する場合は Mermaid を使用
+
+
+```
+
 - **成果物:** `Swagger(API)設計``データベース(スキーマ)設計`'バッチ設計(optional)''詳細ロジックAPI設計(optional)'
 
 
@@ -154,7 +179,30 @@ README.md
 - **内容:** 開発と並行して、テスト用の `シナリオ.md` を作成
 - **ツール:** `Cursor`  
 - **インプット:** `要件定義.md` 
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+```md
+# ROLE
+あなたはQAリードです。
+
+# GOAL
+受入テスト観点を網羅した「シナリオ.md」を生成してください。
+
+# INPUT
+{{REQ_MD}}
+
+# OUTPUT REQUIREMENTS
+- 区分: 正常系 / 異常系 / 境界値
+- テーブル形式
+  | ID | シナリオ | 前提 | 手順 | 期待結果 | 備考 |
+- ID は `SCN-001` 形式、連番
+- テスト粒度: 1シナリオ ≒ 1ユーザーストーリー
+- 全項目日本語
+- 手順は「1. 〜」「2. 〜」で箇条書き
+
+# STYLE
+網羅性を優先。機能優先度 High は最低1件異常系を含める。
+```
+
 - **成果物:** `シナリオ.md'
 
 
@@ -163,7 +211,31 @@ README.md
 - **内容:** これまで作成した成果物からタスク一覧を作成する。
 - **ツール:** `Cursor`  
 - **参照:** `タスク一覧.md` `Issueテンプレート.md`
-- **プロンプトテンプレート:** `XXXXXX`
+- **プロンプトテンプレート:**
+```md
+# ROLE
+あなたはテックリードです。
+
+# GOAL
+タスク分割しやすい粒度で Issue 化前の「タスク一覧.md」を作成してください。
+
+# INPUT
+詳細設計: {{DETAIL_DESIGN_MD}}
+画面機能一覧: {{FEATURE_LIST_MD}}
+シナリオ: {{SCENARIO_MD}}
+
+# OUTPUT REQUIREMENTS
+- Markdown テーブル
+  | No | ラベル | 概要 | 担当(候補) | 依存関係 | 見積(P/h) |
+- ラベル例: FE, BE, TEST, CI/CD
+- 1タスク上限: 8 P/h
+- 依存関係は No をカンマ区切り
+- 作業開始基準/完了定義のメモを末尾に箇条書き（”Definition of Done”）
+
+# STYLE
+SMART原則（Specific, Measurable…）で記述。日本語。
+```
+
 - **成果物:** `シナリオ.md'
 
 #### 8. Github_Issue作成
@@ -209,7 +281,31 @@ FE: E2Eテスト（Cursor）
 - **内容:** 全体を通した最終確認  
 - **ツール:** `Cursor(MCP playwright)`
 - **インプット:** `シナリオ.md'
-- **プロンプトテンプレート:** `XXXXXX`  
+- **プロンプトテンプレート:**
+```md
+# ROLE
+あなたはE2Eテスト自動化エンジニアです。
+
+# GOAL
+「シナリオ.md」の各IDに対応する Playwright テストコードを生成してください。
+
+# INPUT
+{{SCENARIO_MD}}
+
+# OUTPUT REQUIREMENTS
+- 言語: TypeScript
+- 1ファイルにつき 1 シナリオ
+- ファイル名: `scn-###.spec.ts`
+- 共通ヘッダーに `import { test, expect } from "@playwright/test";`
+- AAAパターン (Arrange‑Act‑Assert) コメントを入れる
+- データ依存を避けるため、必要に応じて Fixture でモック
+- ESLint/Prettier で警告が出ない構文
+- コード例外は throw せず expect で検証
+
+# STYLE
+可読性重視。冗長なコメントは不要。日本語コメント OK。
+```
+
 - **成果物:** `シナリオテストコード'
 
 ---
