@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  title: DriveeLink API
+  version: "1.0.0"
+paths:
+  /auth/login:
+    post:
+      summary: ログイン
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginReq"
+      responses:
+        "200":
+          description: トークンを返却
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthToken"
+  /drivers:
+    get:
+      summary: ドライバー一覧取得
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: 一覧
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DriverList"
+components:
+  schemas:
+    LoginReq:
+      type: object
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, format: password }
+    AuthToken:
+      type: object
+      properties:
+        access_token: { type: string }
+        expires_in: { type: integer }
+    Driver:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        status: { type: string, enum: [active, off] }
+    DriverList:
+      type: array
+      items: { $ref: "#/components/schemas/Driver" }
