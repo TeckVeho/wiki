@@ -13,4 +13,3 @@ erDiagram
   drivers ||--o{ routes : assigned
   drivers ||--o{ attendances : has
 ```
-# サンプル
