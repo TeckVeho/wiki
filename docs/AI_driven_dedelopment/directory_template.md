@@ -87,6 +87,5 @@
 │   └── workflows
 │       ├── ci.yml
 │       └── release.yml
-└── .vscode/                      # ← エディタ共通設定（任意）
-    └── settings.json
+└── 
 ```
