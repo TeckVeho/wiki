@@ -24,6 +24,9 @@
 # INPUT
 {{SPEC_TEXT}}
 
+# TEMPLATE
+{{requirements_definition.md}}
+
 # OUTPUT REQUIREMENTS
 - Markdown 形式・UTF‑8
 - セクション構成（番号付き）:
