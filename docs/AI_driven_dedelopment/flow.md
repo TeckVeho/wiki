@@ -25,7 +25,7 @@
 {{SPEC_TEXT}}
 
 # TEMPLATE
-{{requirements_definition.md}}
+{{document_templates/requirements_definition.md}}
 
 # OUTPUT REQUIREMENTS
 - Markdown 形式・UTF‑8
