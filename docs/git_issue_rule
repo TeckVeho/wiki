@@ -15,6 +15,10 @@
 | middle priority          | イシューが中程度の優先順位で対応が必要なものである。 |
 | low priority             | イシューが不急の対応が必要なものである。           |
 
+## SP定義
+- 1 SP = 1 時間 
+- 1 タスクに付与できる最大SP = 8 SP = 8 時間 
+  - もし、タスクの見積もり時間が8時間を超える場合、そのタスクをより小さなタスクに分解することで、それぞれのタスクが8時間を超えないようにする。
 
 ## Label Definition
 
@@ -31,3 +35,8 @@
 | high priority            | The issue requires urgent handling.                     |
 | middle priority          | The issue requires handling in the ordinary order.      |
 | low priority             | The issue can be deprioritized.                         |
+
+## SP Definition
+- 1 SP = 1 hour
+- Maximum SP per task = 8 SP (8 hours)
+  - If a task is estimated to exceed 8 hours, it should be broken down into smaller tasks so that each individual task is less than or equal to 8 SP (8 hours).
