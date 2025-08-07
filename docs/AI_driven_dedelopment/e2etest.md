@@ -10,25 +10,27 @@
 
 ## ✅ セットアップ手順
 ### 1. Claudeデスクトップアプリのインストール・ログイン
-[Claude公式サイト](https://claude.ai/download)からインストールし、ログインする
+- [Claude公式サイト](https://claude.ai/download)からインストールし、ログインする 
+- ログインアカウントはPMに確認する
 
 ### 2. Node.jsをインストール
-[公式サイト](https://nodejs.org/en)からインストールする
+- [公式サイト](https://nodejs.org/en)からインストールする
 
-※ Node.js バージョン確認方法（18.0.0以上が必要）
+- 既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br>
 ターミナルを開いて、次のコマンドを実行する
 ```
 node --version
 ```
 
 ### 3. Playwright MCPサーバーをインストール
-ターミナルを開いて、次のコマンドを実行する
+- ターミナルを開いて、次のコマンドを実行する
 ```
 npm install -g @executeautomation/playwright-mcp-server
 ```
 
-### 4. Claudeデスクトップクライアントの設定
-Claudeのデスクトップアプリのclaude_desktop_config.jsonファイルに以下の設定を追加する
+### 4. ClaudeデスクトップアプリにPlaywrite MCPを追加
+- Claudeのデスクトップアプリのclaude_desktop_config.jsonファイルに以下の設定を追加する  　<br>
+※Claudeのデスクトップアプリ　ファイル＞設定＞開発者＞設定を編集＞フォルダ内のclaude_desktop_config.jsonを開く
 ```
 {
   "mcpServers": {
@@ -39,66 +41,87 @@ Claudeのデスクトップアプリのclaude_desktop_config.jsonファイルに
   }
 }
 ```
+<img width="1422" height="925" alt="image" src="https://github.com/user-attachments/assets/44cc330d-4186-4391-b409-82d2c49958c9" />
 
-### 5. Claudeデスクトップクライアントを起動
-設定が完了したら、Claudeを起動してPlaywright MCPサーバーが認識されているか確認する
-※Playwright MCPが動いているか確認する方法
-```
+### 5. Claudeデスクトップアプリを起動する
+- 設定が完了したらClaudeを起動する（ファイル＞終了　でアプリを閉じ、再度アプリを開く）
+- Playwright MCPサーバーが認識されているか確認する
+<img width="1431" height="928" alt="image" src="https://github.com/user-attachments/assets/a9f6de07-ae42-40d5-a9bf-00232da07c78" />
+
+- Playwright MCPが動いているか確認する方法
 Claudeのチャットで以下を質問して、実行できるか確認する
+```
 https://www.google.com/を開いてスクリーンショットを取って。
 ```
 
 ## 🧩 Claude の使い方（プロンプト指示）
-Input
-ユーザーマニュアル
+### 1. テストシナリオの作成
+- **担当:** BA  
+- **内容:** 全体を通した最終確認のためのシナリオ作成  
+- **インプット:** ユーザーマニュアル
+- **プロンプトテンプレート:** 
+```md
+# ROLE
+あなたはE2Eテスト自動化エンジニアです。
 
-プロンプト
-以下のMCP構成のテストシナリオに従って、PlaywrightでのE2EテストコードをTypeScriptで生成してください。
+# GOAL
+添付のユーザーマニュアルと対象システムをもとに、E2Eテストのテストシナリオを作成してください。
 
-[制約条件]
-- テストフレームワークはPlaywright公式
-- ページURLは `https://example.com/login`
-- HTML要素はセレクタとして `#email`, `#password`, `#loginBtn` を使用
+# INPUT
+- ユーザーマニュアル
+- 対象システム
+  - システム名：{`システム名を入力`}
+  - システムURL：{`StgなどのシステムURLを入力`}
+  - ログイン情報
+    - ID：{`入力`}
+    - PW：{`入力`}
 
-[テストシナリオ]
-&lt;--- ここに test-scenario.txt の内容をコピペ ---&gt;
-</code></pre>
-<hr>
-<h2>🧪 Claude からの出力結果（例）</h2>
-<pre><code class="language-ts">// e2e/tests/login.spec.ts
-import { test, expect } from '@playwright/test';
+# OUTPUT REQUIREMENTS
+- 出力形式：htmlで、エクセル・CSVを出力可能とする
+- 列：シナリオID、シナリオ名、前提条件、テスト手順、期待結果、優先度、テストデータ、実行結果（テスト前なので値なし）、実行備考・実測データ（テスト前なので値なし）
+- 1ファイルにつき 1 シナリオ
+- ファイル名: `scn-システム名.html`
+```
+- **成果物:** `テストシナリオ'
+- 適宜修正依頼、手修正を加える
 
-test('ユーザーが正しい情報でログインできる', async ({ page }) =&gt; {
-  await page.goto('https://example.com/login');
-  await page.fill('#email', 'user@example.com');
-  await page.fill('#password', 'securePassword123');
-  await page.click('#loginBtn');
+### 2. テストの実行
+- **担当:** BA  
+- **内容:** 全体を通した最終確認  
+- **インプット:** テストシナリオ、サンプルデータ（テストでインポートが必要な場合）
+- **プロンプトテンプレート:** 
+```md
+# GOAL
+- 添付のシナリオテストをもとに、各シナリオIDに対応する Playwright テストコードを生成してください。
+- Playwriteでテストを実行し、「実行結果」「実行備考・実測データ」を更新してください。
+- 各シナリオID毎にスクリーンショットを保存してください。
+- `インポートは添付のサンプルデータを使用してください。（必要な場合）`
 
-  await expect(page).toHaveURL('https://example.com/dashboard');
-});
-</code></pre>
-<hr>
+# INPUT
+- テストシナリオ
+- `サンプルデータ（必要な場合）`
 
+# OUTPUT REQUIREMENTS
+- テストコード
+  - 言語: JavaScript
+  - ファイル名: `scn-システム名.test.js`
+  - シナリオIDとテスト箇所がわかるように明記
+- テスト結果
+  - テストシナリオの結果を更新
+    - 「実行結果」：PASS/FAIL/SKIP/BLOCK
+    - 「実行備考・実測データ」：実行結果の内容・理由
+- テスト証票（スクリーンショット）
+  - 各シナリオID毎に
+  - ファイル名: `シナリオID-シナリオ名.png`
 
+# STYLE
+可読性重視。冗長なコメントは不要。日本語コメント。
+```
+- **成果物:** ：シナリオテストコード、テスト結果、証票（スクリーンショット）
 
+※うまくいかないテストがあり、修正指示を行う場合
+```md
+シナリオID`XXX`について以下を修正し、再度テストを行ってください。テストコード・テスト結果も更新し、再度スクリーンショットを取ってください。
+`例：●●ではなく××というボタンを押してください`
+```
 
-<hr>
-<h2>🔁 反復的なテスト修正の流れ（仮）</h2>
-<ol>
-<li>
-<p>テストシナリオの手順を追記・修正</p>
-</li>
-<li>
-<p>Claudeに再投入 → テストコード再生成</p>
-</li>
-<li>
-<p>手元で <code inline="">npx playwright test</code> にて確認</p>
-</li>
-<li>
-<p>OKならPR提出、CIで再テスト確認</p>
-</li>
-</ol>
-
-
-
-</code>
