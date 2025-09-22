@@ -1,17 +1,17 @@
-# E2Eテスト自動化ガイド（Claude + Playwright MCP）
+# E2Eテスト自動化ガイド
 
-## 概要
-本ドキュメントは、開発したWebシステムのE2Eテストを **Claudeのデスクトップアプリ** と **Playwright MCP（Multi Code Prompt）** を利用して自動化するためのガイドです。
+本ドキュメントは、 **①Claudeデスクトップアプリ＋Playwright MCP**　または　 **②Cursor＋Playwright MCP**　を利用して、<br>
+開発したWebシステムのE2Eテストを自動化するためのガイドです。
 
-## 🛠 利用ツール
-- **Claude Desktop アプリ**（Anthropic社）
-- **Playwright MCP**（E2Eテスト用のブラウザ操作ライブラリ）
+## 🛠 1.セットアップ手順
 
-
-## ✅ セットアップ手順
+<details>
+  <summary><mark> ①Claudeのデスクトップアプリ＋Playwright MCP</mark>　利用の場合</summary>
+  <div>
+    
 ### 1. Claudeデスクトップアプリのインストール・ログイン
 - [Claude公式サイト](https://claude.ai/download)からインストールし、ログインする 
-- ログインアカウントはPMに確認する
+- ログインアカウントがわからない場合、PMに確認する
 
 ### 2. Node.jsをインストール
 - [公式サイト](https://nodejs.org/en)からインストールする
@@ -41,20 +41,76 @@ npm install -g @executeautomation/playwright-mcp-server
   }
 }
 ```
-<img width="1422" height="925" alt="image" src="https://github.com/user-attachments/assets/44cc330d-4186-4391-b409-82d2c49958c9" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/44cc330d-4186-4391-b409-82d2c49958c9" />
 
-### 5. Claudeデスクトップアプリを起動する
+### 5. Claudeデスクトップアプリを再起動する
 - 設定が完了したらClaudeを起動する（ファイル＞終了　でアプリを閉じ、再度アプリを開く）
 - Playwright MCPサーバーが認識されているか確認する
-<img width="1431" height="928" alt="image" src="https://github.com/user-attachments/assets/a9f6de07-ae42-40d5-a9bf-00232da07c78" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/a9f6de07-ae42-40d5-a9bf-00232da07c78" />
 
 - Playwright MCPが動いているか確認する方法
 Claudeのチャットで以下を質問して、実行できるか確認する
 ```
 https://www.google.com/を開いてスクリーンショットを取って。
 ```
+  </div>
+</details>
 
-## 🧩 Claude の使い方（プロンプト指示）
+<details>
+  <summary><mark> ②Cursor＋Playwright MCP </mark>　利用の場合</summary>
+  <div>
+    
+### 1. Cursor のインストール・ログイン
+- [Cursor公式](https://www.cursor.com/) からインストールし、ログインする  
+- ログインアカウントがわからない場合、 PM に確認する
+  
+### 2. Node.js をインストール
+- [公式サイト](https://nodejs.org/en) から **v18.0.0 以上**をインストールする
+
+※既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br>
+ターミナルを開いて、次のコマンドを実行する
+```bash
+node --version
+```
+
+### 3. Playwright MCPサーバーをインストール
+- ターミナルを開いて、次のコマンドを実行する
+- Windows（PowerShell）
+```PowerShell
+npm install @playwright/mcp
+```
+
+### 4. Cursor に Playwright MCP を追加（mcp.json 設定）
+Cursor の設定画面 → Settings → MCP & Integrations → New MCP Server（`mcp.json` を開く）で、以下の設定を追加・保存する。
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    }
+  }
+}
+```
+
+### 5. Cursorを再起動する
+- `mcp.json` 保存後、Cursor を完全終了 → 再起動
+- 再起動後、Settings → MCP & Integrations で playwright が表示されることを確認
+<img width="749" height="336" alt="image" src="https://github.com/user-attachments/assets/3d64db0b-f05f-4649-952f-f8379bf6eb7d" />
+
+
+- Playwright MCPが動いているか確認する方法
+Cursor のチャットで以下を質問して、実行できるか確認する
+```
+https://www.google.com/を開いてスクリーンショットを取って。
+```
+
+  </div>
+</details>
+
+## 🧩 2.プロンプトの指示内容
 ### 1. テストシナリオの作成
 - **担当:** BA  
 - **内容:** 全体を通した最終確認のためのシナリオ作成  
@@ -82,7 +138,7 @@ https://www.google.com/を開いてスクリーンショットを取って。
 - 1ファイルにつき 1 シナリオ
 - ファイル名: `scn-システム名.html`
 ```
-- **成果物:** `テストシナリオ'
+- **成果物:** テストシナリオ
 - 適宜修正依頼、手修正を加える
 
 ### 2. テストの実行
