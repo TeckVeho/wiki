@@ -1,71 +1,93 @@
-# 🤖 Cursor AI Development Flow 📜
+# 🤖 Cursor AI Development Workflow 📜
 
-> This document defines a consistent development process, covering everything from client requests to release and self-evolving document management.
+> This document defines a consistent development process, covering everything from client requests to release, and includes a self-evolving document management system.
 
 ---
 
-### Phase 0 : 🏛️ Foundational Work (Reverse Engineering)
+### Phase 0: 🏛️ Foundation (Reverse Engineering)
 
-This phase lays the foundation for the project's start.
+This is the phase for laying the groundwork for the project.
 
 -   **🔍 Project Analysis**: Reverse engineer the source code and behavior of the existing project.
 -   **✍️ Document Generation**: Based on the analysis, document the entire project's specifications in **`Markdown (.md)`** format to establish an initial development baseline.
 
 ---
 
-### Phase 1 : 💡 Issue Materialization
+### Phase 1: 💡 Clarifying Issues
 
-Transforms client requests into developable Issues.
+This phase transforms client requests into developable issues.
 
-1.  **🗣️ Issue Creation**: The **Client** directly records development requests into **`Issuebot`**.
-2.  **⚙️ Automatic Issue Generation**: **`Issuebot`** references the latest documentation and automatically generates a detailed **GitHub Issue** from the client's request.
+1.  **🗣️ Issue Occurrence**: The **Client** directly records development requests into the **`Issuebot`**.
+2.  **⚙️ Automatic Issue Generation**: The **`Issuebot`** references the latest documentation to automatically generate a detailed **GitHub Issue** from the client's request.
 
 > **Note**
-> At this point, the requirements, background, and objectives necessary for development are consolidated into the Issue, unifying the understanding of all stakeholders.
+> At this point, the necessary requirements, background, and objectives for development are consolidated in the Issue, unifying the understanding among all stakeholders.
 
 ---
 
-### Phase 2 : 🛠️ Development Prep & Implementation
+### Phase 2: 🛠️ Development Preparation and Implementation
 
-The engineer proceeds with development by sequentially executing predefined `Cursor commands` within `Cursor`.
+Engineers proceed with development by sequentially executing predefined `Cursor commands` within `Cursor`. The development process is structured by the following commands.
 
-1.  **📥 Fetching the Issue**
-    -   `> cursor issue confirm`
-    -   Fetches the assigned Issue into `Cursor` to accurately grasp the development requirements.
-2.  **📜 Spec Creation**
-    -   `> cursor spec create`
-    -   Generates a **specification document (`spec.md`)** based on the Issue to solidify functional requirements and the UI/UX framework.
-3.  **🗺️ Plan Creation**
-    -   `> cursor plan create`
-    -   Generates an **implementation plan (`plan.md`)** based on `spec.md` to flesh out tasks and technical approaches.
-4.  **💻 Implementation**
-    -   `> cursor implement`
-    -   Starts **coding** according to `plan.md`.
+1.  **📥 Fetch Issue**
+    -   `> cursor issue`
+    -   Saves the assigned Issue locally as `issue.md` to accurately grasp the development requirements.
+2.  **🌿 Create Branch**
+    -   `> cursor branch`
+    -   Automatically creates a working branch corresponding to the Issue, following naming conventions.
+3.  **📜 Create Spec**
+    -   `> cursor spec`
+    -   Generates a **specification document (`spec.md`)** from a template based on `issue.md` to solidify functional requirements and UI/UX outlines.
+4.  **🗺️ Create Plan**
+    -   `> cursor plan`
+    -   Generates an **implementation plan (`plan.md`)** from a template based on `spec.md` to detail tasks and technical approaches.
+5.  **💻 Implement**
+    -   `> cursor dev`
+    -   Interactively proceeds with TDD or direct implementation according to `plan.md`.
+6.  **🧪 Test**
+    -   `> cursor test`
+    -   Executes tests for the implemented code and saves the results as evidence.
+7.  **🚀 Create Pull Request**
+    -   `> cursor pr`
+    -   Efficiently creates a **Pull Request** for the code that has passed tests, using a template.
+
+---
+#### **Command Details**
+
+| Command  | Description |
+| :--- | :--- |
+| **issue** | Fetches GitHub issue information and saves it to `issue.md`. Creates a structured document summarizing the title, body, labels, assignees, and status. |
+| **branch** | Creates a new branch corresponding to the Issue. If there are uncommitted changes, it prompts the user to choose between stash/discard/commit/cancel and creates a branch with a name following conventions. |
+| **spec** | Creates a specification document for the Issue. Fetches Issue information from GitHub and generates `spec.md` based on `.cursor/templates/spec-template.md` to organize requirements and criteria. |
+| **plan** | Creates an implementation plan. Fetches Issue information and uses `.cursor/templates/plan-template.md` to generate `plan.md`, including directory structure and task breakdowns. |
+| **dev** | Assists in the development phase. Uses `.cursor/templates/dev-template.md` to interactively develop code by choosing between TDD or direct implementation, including validation and refactoring. |
+| **test** | Executes tests and saves the results. Identifies the framework, runs the tests, and saves logs and reports under `docs/issues/{issue_number}/evidence/`. |
+| **pr** | Creates a Pull Request. Proceeds in three steps: ① Git status check and user approval, ② PR document creation (`pr.md`), ③ GitHub PR creation via `gh pr create`. |
 
 ---
 
-### Phase 3 : ✅ Testing & Release
+### Phase 3: ✅ Testing and Release
 
-Ensures quality and delivers the final product to the production environment.
+This phase ensures quality and delivers the product to the production environment.
 
-1.  **🧪 Testing by Engineer (at Dev)**
-    -   After implementation is complete, the engineer performs basic operational checks in the `Dev environment`.
-2.  **🚦 Testing by PM/BA (at Stg)**
-    -   In the `Stg environment`, the PM/BA conducts a final check to ensure it meets the client's required specifications.
+1.  **🧪 Engineer Testing (at Dev)**
+    -   After implementation is complete, engineers perform basic operational checks in the `Dev environment`.
+2.  **🚦 PM/BA Testing (at Stg)**
+    -   In the `Stg environment`, the PM/BA performs a final confirmation to ensure it meets the client's required specifications.
 3.  **🚀 Production Release**
-    -   After clearing all tests, the changes are deployed to the `production environment` to complete the release.
+    -   After clearing all tests, the changes are deployed to the `Production environment`, completing the release.
 
 ---
 
-### Phase 4 : 🔄 Self-Evolving Documentation
+### Phase 4: 🔄 Self-Evolving Documentation
 
-The development process itself establishes a cycle for improving future development.
+The development process itself builds a cycle for improving future development.
 
-1.  **🤖 Periodic Automated Execution**: After a release or on a regular schedule, **reverse engineering is automatically performed** on the latest codebase.
-2.  **✨ Document Updates**: Based on the results, the **`.md` documents created in Phase 0 are automatically updated to the latest state**.
+1.  **🤖 Periodic Automatic Execution**: After a release or on a regular schedule, **reverse engineering is automatically executed** on the latest codebase.
+2.  **✨ Document Updates**: Based on the results, the **`.md` document set created in Phase 0 is automatically updated to the latest state**.
 
 > **Point**
-> This prevents the technical debt of "outdated documentation" and enables development that is always based on accurate information.
+> This prevents the "outdating of documentation," a form of technical debt, and enables development to always be based on accurate information.
 
 ---
 ---
@@ -74,7 +96,7 @@ The development process itself establishes a cycle for improving future developm
 
 ```mermaid
 sequenceDiagram
-    %% Actor characters (Blue tones)
+    %% Human Actors (Blue tones)
     participant Client as "Client" #B0C4DE
     participant Engineer as "Engineer" #87CEEB
     participant PMBA as "PM/BA" #1E90FF
@@ -89,10 +111,10 @@ sequenceDiagram
     participant StgEnv as "StgEnv" #FFB347
     participant Production as "Production" #FF8C00
 
-    Note over Production,Github: Reverse engineering has been executed in advance<br/>and documentation (.md) has been generated
+    Note over Production,Github: Reverse engineering has been run in advance<br>to generate documents (.md)
 
     rect rgba(200, 200, 255, 0.2)
-    Note right of Client: Phase 1: Issue Organization & Materialization
+    Note right of Client: Phase 1: Issue Clarification & Detailing
         Client->>PMBA: Share development request
         activate PMBA
         PMBA->>Issuebot: Request detailed Issue generation
@@ -102,17 +124,20 @@ sequenceDiagram
     end
 
     rect rgba(200, 255, 200, 0.2)
-    Note right of Engineer: Phase 2: Development Prep & Implementation
-        Note over Engineer: The following is executed with Cursor commands
-        Engineer->>Github: Confirm Issue
-        Engineer->>Engineer: cursor issue check
+    Note right of Engineer: Phase 2: Dev Prep & Implementation
+        Note over Engineer: Executed via Cursor commands below
+        Engineer->>Github: Check Issue
+        Engineer->>Engineer: cursor issue
         activate Engineer
-        Engineer->>Engineer: cursor spec create
+        Engineer->>Engineer: cursor branch
+        Engineer->>Engineer: cursor spec
         Engineer->>Github: Generate spec.md
-        Engineer->>Engineer: cursor plan create
+        Engineer->>Engineer: cursor plan
         Engineer->>Github: Generate plan.md
-        Engineer->>Engineer: cursor implement
+        Engineer->>Engineer: cursor dev
         Engineer->>Github: Push implementation code
+        Engineer->>Engineer: cursor test
+        Engineer->>Engineer: cursor pr
         deactivate Engineer
     end
 
@@ -120,30 +145,25 @@ sequenceDiagram
     Note right of DevEnv: Phase 3: Testing & Release
         Engineer->>DevEnv: Deploy to Dev environment
         activate DevEnv
-        Engineer->>DevEnv: Conduct manual testing
+        Engineer->>DevEnv: Perform manual testing
         deactivate DevEnv
 
         Engineer->>StgEnv: Deploy to Stg environment
         activate StgEnv
-        PMBA->>StgEnv: Conduct manual testing
+        PMBA->>StgEnv: Perform manual testing
         deactivate StgEnv
 
-        Engineer->>Production: Release to production environment
+        Engineer->>Production: Release to Production environment
     end
 
     rect rgba(255, 255, 200, 0.2)
-    Note right of AutoProcess: Phase 4: Document Updation (Loop)
+    Note right of AutoProcess: Phase 4: Documentation Update (Loop)
         loop Periodic Automatic Execution
             AutoProcess->>Production: Analyze latest codebase
             AutoProcess->>Github: Update documentation (.md)
         end
     end
 ```
-
-
-
-承知いたしました。
-ご指定のCursorコマンド定義を、元のMarkdown形式を維持したまま追記し、各コマンドの説明表も追加しました。
 
 ---
 
