@@ -142,6 +142,11 @@ sequenceDiagram
 
 
 
+承知いたしました。
+ご指定のCursorコマンド定義を、元のMarkdown形式を維持したまま追記し、各コマンドの説明表も追加しました。
+
+---
+
 # 🤖 Cursor AI 開発フロー 📜
 
 > このドキュメントは、クライアントの要望からリリース、そして自己進化するドキュメント管理までを網羅した、一貫性のある開発プロセスを定義します。
@@ -171,20 +176,42 @@ sequenceDiagram
 
 ### Phase 2 : 🛠️ 開発準備と実装
 
-エンジニアが`Cursor`上で、定義済みの`Cursorコマンド`を順次実行して開発を進めます。
+エンジニアが`Cursor`上で、定義済みの`Cursorコマンド`を順次実行して開発を進めます。開発プロセスは以下のコマンドで体系化されています。
 
-1.  **📥 Issueの呼び出し**
-    -   `> cursor issue confirm`
-    -   アサインされたIssueを`Cursor`上に呼び出し、開発要件を正確に把握します。
-2.  **📜 Spec作成**
-    -   `> cursor spec create`
-    -   Issueを基にした**仕様書 (`spec.md`)** を生成し、機能要件やUI/UXの骨子を固めます。
-3.  **🗺️ Plan作成**
-    -   `> cursor plan create`
-    -   `spec.md`を基にした**実装計画書 (`plan.md`)** を生成し、タスクや技術的アプローチを具体化します。
-4.  **💻 実装**
-    -   `> cursor implement`
-    -   `plan.md`に沿って**コーディング**を開始します。
+1.  **📥 Issueの取得**
+    -   `/cursor issue`
+    -   アサインされたIssueを`issue.md`としてローカルに保存し、開発要件を正確に把握します。
+2.  **🌿 ブランチの作成**
+    -   `/cursor branch`
+    -   Issueに対応する作業ブランチを、規約に沿って自動で作成します。
+3.  **📜 Spec作成**
+    -   `/cursor spec`
+    -   `issue.md`を基にした**仕様書 (`spec.md`)** をテンプレートから生成し、機能要件やUI/UXの骨子を固めます。
+4.  **🗺️ Plan作成**
+    -   `/cursor plan`
+    -   `spec.md`を基にした**実装計画書 (`plan.md`)** をテンプレートから生成し、タスクや技術的アプローチを具体化します。
+5.  **💻 実装**
+    -   `/cursor dev`
+    -   `plan.md`に沿って、TDDまたは直接実装をインタラクティブに進めます。
+6.  **🧪 テスト**
+    -   `/cursor test`
+    -   実装したコードのテストを実行し、結果をエビデンスとして保存します。
+7.  **🚀 プルリクエスト作成**
+    -   `>/cursor pr`
+    -   テストをパスしたコードの**Pull Request**を、テンプレートを用いて効率的に作成します。
+
+---
+#### **コマンド詳細**
+
+| コマンド | 概要 |
+| :--- | :--- |
+| **issue** | GitHub issue 情報を取得して `issue.md` に保存する。タイトル・本文・ラベル・担当者・状態などをまとめ、構造化したドキュメントを作成する。 |
+| **branch** | Issue に対応する新しいブランチを作成する。未コミット変更がある場合は stash/discard/commit/cancel を選択させ、命名規則に従ったブランチ名で作成する。 |
+| **spec** | Issue の仕様書を作成する。GitHub から Issue 情報を取得し、`.cursor/templates/spec-template.md` をもとに要件や基準を整理した `spec.md` を生成する。 |
+| **plan** | 実装計画を作成する。Issue 情報を取得し、`.cursor/templates/plan-template.md` を利用してディレクトリ構造やタスク分解を含む `plan.md` を生成する。 |
+| **dev** | 開発フェーズを支援する。`.cursor/templates/dev-template.md` を利用し、TDD か直接実装を選んでインタラクティブにコードを開発。検証・リファクタリングも含む。 |
+| **test** | テストを実行して結果を保存する。フレームワークを特定しテストを実行、ログやレポートを `docs/issues/{issue_number}/evidence/` 以下に保存する。 |
+| **pr** | Pull Request を作成する。3ステップで進行：①Git ステータス確認とユーザー承認、②PR ドキュメント作成 (`pr.md`)、③`gh pr create` による GitHub PR 作成。 |
 
 ---
 
@@ -249,14 +276,17 @@ sequenceDiagram
     Note right of Engineer: Phase 2: 開発準備と実装
         Note over Engineer: 以下、Cursorコマンドで実行
         Engineer->>Github: Issueを確認
-        Engineer->>Engineer: cursor issue check
+        Engineer->>Engineer: cursor issue
         activate Engineer
-        Engineer->>Engineer: cursor spec create
+        Engineer->>Engineer: cursor branch
+        Engineer->>Engineer: cursor spec
         Engineer->>Github: spec.md を生成
-        Engineer->>Engineer: cursor plan create
+        Engineer->>Engineer: cursor plan
         Engineer->>Github: plan.md を生成
-        Engineer->>Engineer: cursor implement
+        Engineer->>Engineer: cursor dev
         Engineer->>Github: 実装コードをプッシュ
+        Engineer->>Engineer: cursor test
+        Engineer->>Engineer: cursor pr
         deactivate Engineer
     end
 
