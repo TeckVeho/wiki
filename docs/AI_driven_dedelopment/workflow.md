@@ -29,26 +29,26 @@ This phase transforms client requests into developable issues.
 
 Engineers proceed with development by sequentially executing predefined `Cursor commands` within `Cursor`. The development process is structured by the following commands.
 
-1.  **📥 Fetch Issue**
-    -   `> cursor issue`
-    -   Saves the assigned Issue locally as `issue.md` to accurately grasp the development requirements.
-2.  **🌿 Create Branch**
-    -   `> cursor branch`
-    -   Automatically creates a working branch corresponding to the Issue, following naming conventions.
-3.  **📜 Create Spec**
-    -   `> cursor spec`
+1.  **📥 Fetch Issue (with Branch Creation)**
+    -   `/issue {issue_number}`
+    -   Fetches the assigned Issue from GitHub, saves it locally as `issue.md`, and automatically creates a working branch following naming conventions.
+    -   Options:
+        -   `--auto` : Executes the full workflow automatically (issue → spec → plan → dev → test → pr)
+        -   `--skip-spec --skip-plan` : Skips spec/plan for rapid development
+2.  **📜 Create Spec**
+    -   `/spec {issue_number}`
     -   Generates a **specification document (`spec.md`)** from a template based on `issue.md` to solidify functional requirements and UI/UX outlines.
-4.  **🗺️ Create Plan**
-    -   `> cursor plan`
+3.  **🗺️ Create Plan**
+    -   `/plan {issue_number}`
     -   Generates an **implementation plan (`plan.md`)** from a template based on `spec.md` to detail tasks and technical approaches.
-5.  **💻 Implement**
-    -   `> cursor dev`
+4.  **💻 Implement**
+    -   `/dev {issue_number}`
     -   Interactively proceeds with TDD or direct implementation according to `plan.md`.
-6.  **🧪 Test**
-    -   `> cursor test`
+5.  **🧪 Test**
+    -   `/test {issue_number}`
     -   Executes tests for the implemented code and saves the results as evidence.
-7.  **🚀 Create Pull Request**
-    -   `> cursor pr`
+6.  **🚀 Create Pull Request**
+    -   `/pr {issue_number}`
     -   Efficiently creates a **Pull Request** for the code that has passed tests, using a template.
 
 ---
@@ -56,13 +56,13 @@ Engineers proceed with development by sequentially executing predefined `Cursor 
 
 | Command  | Description |
 | :--- | :--- |
-| **issue** | Fetches GitHub issue information and saves it to `issue.md`. Creates a structured document summarizing the title, body, labels, assignees, and status. |
-| **branch** | Creates a new branch corresponding to the Issue. If there are uncommitted changes, it prompts the user to choose between stash/discard/commit/cancel and creates a branch with a name following conventions. |
-| **spec** | Creates a specification document for the Issue. Fetches Issue information from GitHub and generates `spec.md` based on `.cursor/templates/spec-template.md` to organize requirements and criteria. |
-| **plan** | Creates an implementation plan. Fetches Issue information and uses `.cursor/templates/plan-template.md` to generate `plan.md`, including directory structure and task breakdowns. |
+| **issue** | Fetches GitHub issue information, saves it to `issue.md`, and creates a branch corresponding to the Issue. Supports `--auto` option for full pipeline execution, and `--skip-spec --skip-plan` for rapid development. |
+| **spec** | Creates a specification document for the Issue. Uses `.cursor/templates/spec-template.md` to generate `spec.md` organizing requirements and criteria. |
+| **plan** | Creates an implementation plan. Uses `.cursor/templates/plan-template.md` to generate `plan.md`, including directory structure and task breakdowns. |
 | **dev** | Assists in the development phase. Uses `.cursor/templates/dev-template.md` to interactively develop code by choosing between TDD or direct implementation, including validation and refactoring. |
 | **test** | Executes tests and saves the results. Identifies the framework, runs the tests, and saves logs and reports under `docs/issues/{issue_number}/evidence/`. |
 | **pr** | Creates a Pull Request. Proceeds in three steps: ① Git status check and user approval, ② PR document creation (`pr.md`), ③ GitHub PR creation via `gh pr create`. |
+
 
 ---
 
