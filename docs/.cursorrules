@@ -1,0 +1,78 @@
+# Health Checker Project Rules
+
+## Custom Commands
+
+This project uses Cursor Dev Commands located in `.cursor/commands/` directory.
+
+Available commands:
+- `/issue` - Get GitHub issue information, create branch, and save to issue.md (with optional auto-workflow)
+- `/sp` - Calculate Story Points for a given issue
+- `/spec` - Generate feature specification document
+- `/plan` - Create implementation plan
+- `/dev` - Execute development tasks with tests
+- `/test` - Run tests and save evidence
+- `/pr` - Create pull request
+
+## Development Workflow
+
+### Standard Workflow
+1. `/issue {issue_number}` - Fetch issue, create branch, and document
+2. `/sp {issue_number}` - Calculate Story Points for a given issue
+3. `/spec {issue_number}` - Write specification
+4. `/plan {issue_number}` - Create implementation plan
+5. `/dev {issue_number}` - Implement with tests
+6. `/test {issue_number}` - Run tests and collect evidence
+7. `/pr {issue_number}` - Create pull request
+
+### Auto-Workflow (New)
+1. `/issue {issue_number} --auto` - Execute full pipeline automatically (issue → sp → spec → plan → dev → test → pr)
+2. `/issue {issue_number} --auto --skip-spec --skip-plan` - Skip spec/plan for rapid development
+
+## File Creation Restrictions
+
+### Verification and Data Files
+- **PROHIBITED locations for verification files:**
+  - `docs/issues/{issue_number}/evidence/` (except for final reports)
+  - Project root directory
+  - `backend/` or `frontend/` directories
+  - Any other project directories
+
+## Project Structure
+```
+backend/
+├── src/
+│   ├── domain/
+│   │   └── alert/
+│   │       ├── alertSchema.ts
+│   │       ├── alertModel.ts
+│   │       └── alertService.ts
+│   └── api/
+│       └── alertRoutes.ts
+└── tests/
+
+frontend/
+├── src/
+│   ├── components/
+│   │   └── AuthorGroupedTable.vue
+│   └── pages/
+│       └── index.vue
+└── tests/
+```
+## Project Context
+
+- Language: Japanese responses preferred
+- Tech Stack: Node.js, TypeScript, Nuxt.js, PostgreSQL, Jest
+- Follow existing project conventions and patterns
+
+## Commands
+```bash
+# Backend
+yarn dev        # Start development server
+yarn test:unit          # Run tests
+yarn db:migrate   # Run database migrations
+yarn build  # Build for production
+# Frontend
+yarn dev          # Start development server
+yarn test         # Run tests
+yarn build        # Build for production
+```
