@@ -1,4 +1,4 @@
-# Health Checker Project Rules
+# {project name} Project Rules
 
 ## Custom Commands
 
@@ -7,7 +7,6 @@ This project uses Cursor Dev Commands located in `.cursor/commands/` directory.
 Available commands:
 - `/issue` - Get GitHub issue information, create branch, and save to issue.md (with optional auto-workflow)
 - `/sp` - Calculate Story Points for a given issue
-- `/spec` - Generate feature specification document
 - `/plan` - Create implementation plan
 - `/dev` - Execute development tasks with tests
 - `/test` - Run tests and save evidence
