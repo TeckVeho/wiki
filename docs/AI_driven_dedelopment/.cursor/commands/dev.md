@@ -10,6 +10,7 @@ Develop code using flexible development methodology with AI Agent
 ## Parameters
 - `issue_number` (optional): Issue number. If omitted, uses the most recently processed issue from previous `/issue` command
 - `output_path` (optional): Output directory path (defaults to current directory)
+- `--parent` (optional): Parent issue number (for child issues created by `/breakdown`)
 
 ## Workflow Position
 - This command should be run **after `/issue` (issue creation)** and **before `/test` (validation)**
@@ -30,29 +31,45 @@ Develop code using flexible development methodology with AI Agent
    - If omitted: Look for the most recently created issue document in `docs/issues/*/issue.md`
    - Verify that `docs/issues/{issue_number}/issue.md` exists
 
-2. **Choose Development Approach**
+2. **Check Parent-Child Relationship** (if applicable)
+   - If `--parent` is specified or issue body contains "Relates to #" or "Parent Issue":
+     - Extract parent issue number
+     - Verify `docs/issues/{parent_issue_number}/breakdown.md` exists
+     - Load parent context (plan.md, breakdown.md) for reference
+     - Display parent issue link and relationship type ([FE]/[BE])
+     - Identify dependencies from breakdown report
+   - If this is a standalone issue:
+     - Load plan.md if available for context
+     - Proceed with standard development workflow
+
+3. **Choose Development Approach**
    - TDD (Test-Driven Development) or Direct Implementation
    - Decide based on complexity and testability of functionality
+   - For child issues: Follow task specifications from parent plan
 
-3. **Interactive Development Process**
+4. **Interactive Development Process**
    - Guide the user through the chosen approach
    - Provide implementation support with explanations
+   - Reference parent plan and dependencies if applicable
 
-4. **Code Implementation**
+5. **Code Implementation**
    - Assist in implementing required functionality
    - Ensure code quality, readability, and maintainability
+   - Follow architecture decisions from parent plan
 
-5. **Validation**
+6. **Validation**
    - Guide user through manual or automated validation
    - Do NOT commit during validation
+   - Verify integration points with related issues if applicable
 
-6. **Refactoring**
+7. **Refactoring**
    - Suggest and apply improvements
    - Maintain working functionality
 
-7. **Final Check**
+8. **Final Check**
    - Confirm all changes remain uncommitted
    - Record development details in `docs/issues/{issue_number}/dev.md`
+   - Include parent issue reference if applicable
 
 ---
 
