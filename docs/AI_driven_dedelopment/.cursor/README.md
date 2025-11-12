@@ -6,6 +6,31 @@
 
 Cursor Devコマンドを使用する前に、以下のセットアップを完了してください：
 
+### 0. Cursorカスタムコマンドのセットアップ
+
+`.cursor`ディレクトリと`.cursorrules`ファイルは専用のWikiリポジトリで管理されています。
+
+**リポジトリから取得してセットアップ:**
+```bash
+# 1. カスタムコマンドリポジトリをクローン
+git clone https://github.com/your-org/cursor-commands.git /tmp/cursor-commands
+
+# 2. プロジェクトルートに移動
+cd /path/to/your/project
+
+# 3. .cursorディレクトリをコピー
+cp -r /tmp/cursor-commands/.cursor .
+
+# 4. .cursorrulesファイルをコピー
+cp /tmp/cursor-commands/.cursorrules .
+
+# 5. 一時ディレクトリを削除
+rm -rf /tmp/cursor-commands
+
+# 6. スクリプトに実行権限を付与（macOS/Linux）
+chmod +x .cursor/script/setsp.ps
+```
+
 ### 1. GitHub CLI認証
 ```bash
 # GitHub CLIのインストール（未インストールの場合）
