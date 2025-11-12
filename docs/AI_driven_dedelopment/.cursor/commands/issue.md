@@ -10,8 +10,8 @@ Get GitHub issue information, create development branch first, then save issue.m
 
 ## Parameters
 - `issue_number` or `issue_url` (required): GitHub issue number (e.g., "115") or full URL (e.g., "https://github.com/owner/repo/issues/115")
-- `--auto` / `--workflow` (optional): Run the full pipeline (`/issue → /spec → /plan → /dev → /test → /pr`)
-- `--skip-spec` / `--skip-plan` (optional): Skip specific phases in auto mode
+- `--auto` / `--workflow` (optional): Run the full pipeline (`/issue → /plan → /breakdown → /dev → /test → /pr`)
+- `--skip-plan` / `--skip-breakdown` (optional): Skip specific phases in auto mode
 
 ## Workflow Position
 - This command should be run **at the very beginning** of the workflow  
@@ -58,8 +58,8 @@ Get GitHub issue information, create development branch first, then save issue.m
 
 6. **Auto-Workflow (Optional)**
    - If `--auto` or `--workflow` is specified:
-     - Execute `/spec` → `/plan` → `/dev` → `/test` → `/pr`
-     - Respect `--skip-spec` and `--skip-plan`
+     - Execute `/issue` → `/plan` → `/breakdown` → `/dev` → `/test` → `/pr`
+     - Respect `--skip-plan` and `--skip-breakdown` flags
    - For details of each phase, refer to its dedicated command definition file  
 
 ---
@@ -88,6 +88,6 @@ Get GitHub issue information, create development branch first, then save issue.m
 ```
 /issue 129 --auto
 /issue 129 --workflow
-/issue 129 --auto --skip-spec
-/issue 129 --workflow --skip-plan
+/issue 129 --auto --skip-plan
+/issue 129 --workflow --skip-breakdown
 ```
