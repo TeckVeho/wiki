@@ -53,7 +53,18 @@ Generate a detailed implementation plan document for the specified issue through
 ## Implementation Tasks
 
 ### Task 1: {task_1_name}
-{task_1_description}
+**Type**: [Frontend | Backend | Fullstack]
+**Description**: {task_1_description}
+**Dependencies**: {comma_separated_task_numbers or "None"}
+**Estimated Effort**: {estimated_hours}h
+
+### Task 2: {task_2_name}
+**Type**: [Frontend | Backend | Fullstack]
+**Description**: {task_2_description}
+**Dependencies**: {comma_separated_task_numbers or "None"}
+**Estimated Effort**: {estimated_hours}h
+
+{Additional tasks as needed...}
 ```
 
 **Auto-Detection Process:**
@@ -67,6 +78,19 @@ Generate a detailed implementation plan document for the specified issue through
   - First: Try cached `docs/issues/{issue_number}/issue.md` file
   - Fallback: GitHub CLI if cached file not available
 - Analyze requirements and break down into implementable tasks
+- **Classify each task** by type:
+  - **Frontend**: UI components, client-side state, routing, forms, API client calls
+  - **Backend**: API endpoints, business logic, database operations, authentication
+  - **Fullstack**: Tasks spanning both layers (mark for potential splitting in `/breakdown`)
+- **Identify dependencies** between tasks:
+  - Mark which tasks must be completed before others can start
+  - Highlight parallel development opportunities
+  - Consider integration points between Frontend and Backend
+- **Estimate effort** for each task (in hours) based on:
+  - Code complexity and volume
+  - Testing requirements
+  - Integration complexity
+  - Technical uncertainty
 - Generate dynamic task structure based on issue content
 - Create directory structure and architecture design
 - Include functional requirements mapping
