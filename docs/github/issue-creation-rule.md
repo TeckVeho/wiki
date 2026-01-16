@@ -84,3 +84,45 @@ The following should generally have an Issue because they **leave deliverables, 
   - 失敗時のロールバックや関係者調整など **不確実性** が高い
   - 1時間を超えそう / 複数回の試行が見込まれる
   - 依存タスクや事前準備が必要（手順書更新、検証、リリースノート等）
+
+---
+
+# Định nghĩa các tác vụ cần tạo GitHub Issue / Được ghi nhận SP
+
+## Mục đích
+
+- Hiển thị hóa và theo dõi công việc (Ai / Làm gì / Khi nào xong / Vì mục đích gì)
+- Chuẩn hóa tiêu chí ghi nhận nỗ lực (SP) để giảm thiểu sự sai lệch trong các chỉ số KPI và quản lý tiến độ
+
+---
+
+## Các tác vụ yêu cầu tạo GitHub Issue (Mặc định: Phải tạo)
+
+Thông thường, các tác vụ sau đây cần phải có Issue vì chúng **để lại sản phẩm bàn giao (deliverables), có sự phụ thuộc hoặc ảnh hưởng đến phạm vi dự án, hoặc cần được ước tính (estimation)**.
+
+### Danh mục áp dụng
+
+- **Đọc / Xem xét tài liệu (Reading / Reviewing Materials)**
+  - Ví dụ: đọc tài liệu đặc tả (specifications), mã nguồn hiện có, PRs, logs, tài liệu thiết kế; nắm bắt trạng thái hiện tại
+- **Phát triển (Development)**
+  - Ví dụ: thêm tính năng, chỉnh sửa, tái cấu trúc (refactoring), thay đổi cấu hình (khi làm thay đổi hành vi hệ thống)
+- **Thiết kế (Design)**
+  - Ví dụ: thiết kế giao diện, thiết kế DB, review kiến trúc, tạo sơ đồ trạng thái (state machines) / sơ đồ tuần tự (sequence diagrams), xử lý các phản hồi sau review thiết kế
+- **Kiểm thử (Testing)**
+  - Ví dụ: lập kế hoạch kiểm thử, viết E2E/integration tests, sửa lỗi test, thực hiện xác nhận (bao gồm tái hiện lỗi và xác nhận kết quả)
+- **Điều tra lỗi (Bug Investigation)**
+  - Ví dụ: phân tích nguyên nhân gốc rễ (root cause analysis), xác định phạm vi ảnh hưởng, viết các bước tái hiện lỗi, quyết định phương án khắc phục
+- **Nghiên cứu kỹ thuật (Technical Research)**
+  - Ví dụ: lựa chọn thư viện, PoC, xác thực hiệu năng/bảo mật, so sánh các giải pháp thay thế
+
+---
+
+## Các tác vụ không bắt buộc tạo GitHub Issue (Ngoại lệ: Không cần tạo)
+
+### Công việc triển khai môi trường Production (Hoàn thành trong vòng 1 giờ)
+- Ví dụ: các hoạt động triển khai định kỳ theo quy trình đã thiết lập và có tính lặp lại
+- Tuy nhiên, hãy tạo Issue nếu thuộc bất kỳ trường hợp nào sau đây:
+  - Việc triển khai bao gồm **công việc thay đổi** (thay đổi cấu hình, các bước chuyển đổi (cutover), điều chỉnh dữ liệu, v.v.)
+  - Có tính **không chắc chắn** cao (rủi ro rollback, cần điều phối với các bên liên quan, v.v.)
+  - Có khả năng kéo dài quá 1 giờ / cần thực hiện nhiều lần
+  - Có các sự phụ thuộc hoặc yêu cầu chuẩn bị (cập nhật runbooks, xác thực, viết release notes, v.v.)
