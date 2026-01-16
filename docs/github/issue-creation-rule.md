@@ -4,6 +4,46 @@ title: GitHub Issue を作成するタスク / SP 計上対象の定義
 version: 0.1.0
 updated: 2026-01-16
 ---
+# Definition of Tasks That Require a GitHub Issue / Eligible for SP Logging
+
+## Purpose
+
+- Make tasks visible and trackable (who / what / by when / for what)
+- Standardize the criteria for logging effort (SP) to reduce variance in KPIs and progress tracking
+
+---
+
+## Tasks That Require Creating a GitHub Issue (Default: Create One)
+
+The following should generally have an Issue because they **leave deliverables, have dependencies or impact scope, or require estimation**.
+
+### Covered Categories
+
+- **Reading / Reviewing Materials**
+  - Examples: reading specifications, existing implementations, PRs, logs, design docs; understanding the current state
+- **Development**
+  - Examples: feature additions, modifications, refactoring, configuration changes (when behavior changes)
+- **Design**
+  - Examples: interface design, DB design, architecture review, creating state machines / sequence diagrams, addressing design review comments
+- **Testing**
+  - Examples: test planning, writing E2E/integration tests, fixing tests, verification work (including reproduction and confirmation)
+- **Bug Investigation**
+  - Examples: root cause analysis, identifying impact scope, writing reproduction steps, deciding a fix approach
+- **Technical Research**
+  - Examples: library selection, PoC, performance/security validation, comparing alternatives
+
+---
+
+## Tasks That Do Not Require Creating a GitHub Issue (Exception: Do Not Create One)
+
+### Production Deployment Work (Finishes Within 1 Hour)
+- Examples: routine deployments with an established, repeatable procedure
+- However, create an Issue if any of the following apply:
+  - Deployment involves **change work** (config changes, cutover steps, data adjustments, etc.)
+  - High **uncertainty** (rollback risk, coordination with stakeholders, etc.)
+  - Likely to exceed 1 hour / requires multiple attempts
+  - Has dependencies or requires preparation (updating runbooks, validation, release notes, etc.)
+
 
 # GitHub Issue を作成するタスク / SP 計上対象の定義
 
