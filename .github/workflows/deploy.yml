@@ -14,12 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOYSERVERSECRET }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 57.180.91.172 >> ~/.ssh/known_hosts
+      
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 57.180.91.172
           username: ec2-user
-          key: ${{ secrets.DEPLOYSERVERSECRET }}
+          key_path: ~/.ssh/id_rsa
           port: 22
           script: |
             cd /home/ec2-user/wiki
