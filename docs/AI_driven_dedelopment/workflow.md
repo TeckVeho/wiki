@@ -1,175 +1,8 @@
-# 🤖 Cursor AI Development Workflow 📜
 
-> This document defines a consistent development process, covering everything from client requests to release, and includes a self-evolving document management system.
+# 🤖 Cursor AI Modern Development Flow 📜
 
----
-
-### Phase 0: 🏛️ Foundation (Reverse Engineering)
-
-This is the phase for laying the groundwork for the project.
-
--   **🔍 Project Analysis**: Reverse engineer the source code and behavior of the existing project.
--   **✍️ Document Generation**: Based on the analysis, document the entire project's specifications in **`Markdown (.md)`** format to establish an initial development baseline.
-
----
-
-### Phase 1: 💡 Clarifying Issues
-
-This phase transforms client requests into developable issues.
-
-1.  **🗣️ Issue Occurrence**: The **Client** directly records development requests into the **`Issuebot`**.
-2.  **⚙️ Automatic Issue Generation**: The **`Issuebot`** references the latest documentation to automatically generate a detailed **GitHub Issue** from the client's request.
-
-> **Note**
-> At this point, the necessary requirements, background, and objectives for development are consolidated in the Issue, unifying the understanding among all stakeholders.
-
----
-
-### Phase 2: 🛠️ Development Preparation and Implementation
-
-Engineers proceed with development by sequentially executing predefined `Cursor commands` within `Cursor`. The development process is structured by the following commands.
-
-1.  **📥 Fetch Issue (with Branch Creation)**
-    -   `/issue {issue_number}`
-    -   Fetches the assigned Issue from GitHub, saves it locally as `issue.md`, and automatically creates a working branch following naming conventions.
-    -   Options:
-        -   `--auto` : Executes the full workflow automatically (issue → spec → plan → dev → test → pr)
-        -   `--skip-spec --skip-plan` : Skips spec/plan for rapid development
-2.  **📜 Create Spec**
-    -   `/spec {issue_number}`
-    -   Generates a **specification document (`spec.md`)** from a template based on `issue.md` to solidify functional requirements and UI/UX outlines.
-3.  **🗺️ Create Plan**
-    -   `/plan {issue_number}`
-    -   Generates an **implementation plan (`plan.md`)** from a template based on `spec.md` to detail tasks and technical approaches.
-4.  **💻 Implement**
-    -   `/dev {issue_number}`
-    -   Interactively proceeds with TDD or direct implementation according to `plan.md`.
-5.  **🧪 Test**
-    -   `/test {issue_number}`
-    -   Executes tests for the implemented code and saves the results as evidence.
-6.  **🚀 Create Pull Request**
-    -   `/pr {issue_number}`
-    -   Efficiently creates a **Pull Request** for the code that has passed tests, using a template.
-
----
-#### **Command Details**
-
-| Command  | Description |
-| :--- | :--- |
-| **issue** | Fetches GitHub issue information, saves it to `issue.md`, and creates a branch corresponding to the Issue. Supports `--auto` option for full pipeline execution, and `--skip-spec --skip-plan` for rapid development. |
-| **spec** | Creates a specification document for the Issue. Uses `.cursor/templates/spec-template.md` to generate `spec.md` organizing requirements and criteria. |
-| **plan** | Creates an implementation plan. Uses `.cursor/templates/plan-template.md` to generate `plan.md`, including directory structure and task breakdowns. |
-| **dev** | Assists in the development phase. Uses `.cursor/templates/dev-template.md` to interactively develop code by choosing between TDD or direct implementation, including validation and refactoring. |
-| **test** | Executes tests and saves the results. Identifies the framework, runs the tests, and saves logs and reports under `docs/issues/{issue_number}/evidence/`. |
-| **pr** | Creates a Pull Request. Proceeds in three steps: ① Git status check and user approval, ② PR document creation (`pr.md`), ③ GitHub PR creation via `gh pr create`. |
-
-
----
-
-### Phase 3: ✅ Testing and Release
-
-This phase ensures quality and delivers the product to the production environment.
-
-1.  **🧪 Engineer Testing (at Dev)**
-    -   After implementation is complete, engineers perform basic operational checks in the `Dev environment`.
-2.  **🚦 PM/BA Testing (at Stg)**
-    -   In the `Stg environment`, the PM/BA performs a final confirmation to ensure it meets the client's required specifications.
-3.  **🚀 Production Release**
-    -   After clearing all tests, the changes are deployed to the `Production environment`, completing the release.
-
----
-
-### Phase 4: 🔄 Self-Evolving Documentation
-
-The development process itself builds a cycle for improving future development.
-
-1.  **🤖 Periodic Automatic Execution**: After a release or on a regular schedule, **reverse engineering is automatically executed** on the latest codebase.
-2.  **✨ Document Updates**: Based on the results, the **`.md` document set created in Phase 0 is automatically updated to the latest state**.
-
-> **Point**
-> This prevents the "outdating of documentation," a form of technical debt, and enables development to always be based on accurate information.
-
----
----
-
-### 📊 Sequence Diagram
-
-```mermaid
-sequenceDiagram
-    %% Human Actors (Blue tones)
-    participant Client as "Client" #B0C4DE
-    participant Engineer as "Engineer" #87CEEB
-    participant PMBA as "PM/BA" #1E90FF
-
-    %% Tools/Services (Green tones)
-    participant Issuebot as "Issuebot" #90EE90
-    participant Github as "Github" #32CD32
-    participant AutoProcess as "AutoProcess" #228B22
-
-    %% Environments (Orange tones)
-    participant DevEnv as "DevEnv" #FFD580
-    participant StgEnv as "StgEnv" #FFB347
-    participant Production as "Production" #FF8C00
-
-    Note over Production,Github: Reverse engineering has been run in advance<br>to generate documents (.md)
-
-    rect rgba(200, 200, 255, 0.2)
-    Note right of Client: Phase 1: Issue Clarification & Detailing
-        Client->>PMBA: Share development request
-        activate PMBA
-        PMBA->>Issuebot: Request detailed Issue generation
-        Issuebot->>Github: Reference documentation
-        Issuebot->>Github: Generate detailed Issue
-        deactivate PMBA
-    end
-
-    rect rgba(200, 255, 200, 0.2)
-    Note right of Engineer: Phase 2: Dev Prep & Implementation
-        Note over Engineer: Executed via Cursor commands below
-        Engineer->>Github: Check Issue
-        Engineer->>Engineer: cursor issue
-        activate Engineer
-        Engineer->>Engineer: cursor branch
-        Engineer->>Engineer: cursor spec
-        Engineer->>Github: Generate spec.md
-        Engineer->>Engineer: cursor plan
-        Engineer->>Github: Generate plan.md
-        Engineer->>Engineer: cursor dev
-        Engineer->>Github: Push implementation code
-        Engineer->>Engineer: cursor test
-        Engineer->>Engineer: cursor pr
-        deactivate Engineer
-    end
-
-    rect rgba(255, 230, 200, 0.2)
-    Note right of DevEnv: Phase 3: Testing & Release
-        Engineer->>DevEnv: Deploy to Dev environment
-        activate DevEnv
-        Engineer->>DevEnv: Perform manual testing
-        deactivate DevEnv
-
-        Engineer->>StgEnv: Deploy to Stg environment
-        activate StgEnv
-        PMBA->>StgEnv: Perform manual testing
-        deactivate StgEnv
-
-        Engineer->>Production: Release to Production environment
-    end
-
-    rect rgba(255, 255, 200, 0.2)
-    Note right of AutoProcess: Phase 4: Documentation Update (Loop)
-        loop Periodic Automatic Execution
-            AutoProcess->>Production: Analyze latest codebase
-            AutoProcess->>Github: Update documentation (.md)
-        end
-    end
-```
-
----
-
-# 🤖 Cursor AI 開発フロー 📜
-
-> このドキュメントは、クライアントの要望からリリース、そして自己進化するドキュメント管理までを網羅した、一貫性のある開発プロセスを定義します。
+> このドキュメントは、**「管理コストの最小化」**と**「実績データの透明化」**を両立する、最新のCursor駆動開発プロセスを定義します。
+> GitHub Projectには「親課題」のみを表示し、実装やバグ修正はすべて「子課題」として親に注入（Injection）される構造を採用しています。
 
 ---
 
@@ -177,158 +10,164 @@ sequenceDiagram
 
 プロジェクト開始の土台を築くフェーズです。
 
--   **🔍 プロジェクトの解析**: 既存プロジェクトのソースコードや動作をリバースエンジニアリングします。
--   **✍️ ドキュメントの生成**: 解析結果を基に、プロジェクト全体の仕様を **`Markdown (.md)`** 形式でドキュメント化し、開発の初期ベースラインを確立します。
+* **🔍 プロジェクトの解析**: 既存プロジェクトのソースコードや動作をリバースエンジニアリングします。
+* **✍️ ドキュメントの生成**: 解析結果を基に、プロジェクト全体の仕様を **`Markdown (.md)`** 形式でドキュメント化し、開発の初期ベースラインを確立します。
 
 ---
 
-### Phase 1 : 💡 課題の具体化
+### Phase 1 : 📝 要件定義と親課題作成
 
-クライアントの要望を、開発可能なIssueへと変換します。
+プロジェクトボードの視認性を保つため、PMが管理単位となる「親Issue」を作成します。
 
-1.  **🗣️ 課題の発生**: **クライアント**が開発要望を直接 **`Issuebot`** に記録します。
-2.  **⚙️ Issueの自動生成**: **`Issuebot`** が、最新のドキュメントを参照し、クライアントの要望から詳細な **GitHub Issue** を自動で生成します。
+1. **🗣️ 親Issueの作成**: **PM** が機能要件をまとめた **Parent Issue** を作成します。
+* GitHub Project Boardに表示されるのは、このIssueのみです。
+* 初期状態ではSP（Story Point）は空、または概算です。
 
-> **Note**
-> この時点で、開発に必要な要件、背景、目的がIssueに集約され、関係者全員の認識が統一されます。
 
----
-
-### Phase 2 : 🛠️ 開発準備と実装
-
-エンジニアが`Cursor`上で、定義済みの`Cursorコマンド`を順次実行して開発を進めます。開発プロセスは以下のコマンドで体系化されています。
-
-1.  **📥 Issueの取得**
-    -   `/cursor issue`
-    -   アサインされたIssueを`issue.md`としてローカルに保存し、開発要件を正確に把握します。
-2.  **🌿 ブランチの作成**
-    -   `/cursor branch`
-    -   Issueに対応する作業ブランチを、規約に沿って自動で作成します。
-3.  **📜 Spec作成**
-    -   `/cursor spec`
-    -   `issue.md`を基にした**仕様書 (`spec.md`)** をテンプレートから生成し、機能要件やUI/UXの骨子を固めます。
-4.  **🗺️ Plan作成**
-    -   `/cursor plan`
-    -   `spec.md`を基にした**実装計画書 (`plan.md`)** をテンプレートから生成し、タスクや技術的アプローチを具体化します。
-5.  **💻 実装**
-    -   `/cursor dev`
-    -   `plan.md`に沿って、TDDまたは直接実装をインタラクティブに進めます。
-6.  **🧪 テスト**
-    -   `/cursor test`
-    -   実装したコードのテストを実行し、結果をエビデンスとして保存します。
-7.  **🚀 プルリクエスト作成**
-    -   `>/cursor pr`
-    -   テストをパスしたコードの**Pull Request**を、テンプレートを用いて効率的に作成します。
-
----
-#### **コマンド詳細**
-
-| コマンド | 概要 |
-| :--- | :--- |
-| **issue** | GitHub issue 情報を取得して `issue.md` に保存する。タイトル・本文・ラベル・担当者・状態などをまとめ、構造化したドキュメントを作成する。 |
-| **branch** | Issue に対応する新しいブランチを作成する。未コミット変更がある場合は stash/discard/commit/cancel を選択させ、命名規則に従ったブランチ名で作成する。 |
-| **spec** | Issue の仕様書を作成する。GitHub から Issue 情報を取得し、`.cursor/templates/spec-template.md` をもとに要件や基準を整理した `spec.md` を生成する。 |
-| **plan** | 実装計画を作成する。Issue 情報を取得し、`.cursor/templates/plan-template.md` を利用してディレクトリ構造やタスク分解を含む `plan.md` を生成する。 |
-| **dev** | 開発フェーズを支援する。`.cursor/templates/dev-template.md` を利用し、TDD か直接実装を選んでインタラクティブにコードを開発。検証・リファクタリングも含む。 |
-| **test** | テストを実行して結果を保存する。フレームワークを特定しテストを実行、ログやレポートを `docs/issues/{issue_number}/evidence/` 以下に保存する。 |
-| **pr** | Pull Request を作成する。3ステップで進行：①Git ステータス確認とユーザー承認、②PR ドキュメント作成 (`pr.md`)、③`gh pr create` による GitHub PR 作成。 |
+2. **📋 ステータス遷移**: 仕様が固まり次第、開発チームへアサインし、ステータスを `Ready` に変更します。
 
 ---
 
-### Phase 3 : ✅ テストとリリース
+### Phase 2 : 🧩 技術設計とブレイクダウン
 
-品質を保証し、成果物を本番環境へと届けます。
+エンジニアは親Issueを受け取り、Cursor上のコマンドでタスクを分解・注入します。
 
-1.  **🧪 エンジニアによるテスト (at Dev)**
-    -   実装完了後、`Dev環境`でエンジニアが基本的な動作確認を行います。
-2.  **🚦 PM/BAによるテスト (at Stg)**
-    -   `Stg環境`でPM/BAが、クライアントの要求仕様を満たしているか最終確認を行います。
-3.  **🚀 本番リリース**
-    -   全てのテストをクリアした後、`本番環境`へ反映し、リリースを完了します。
+1. **🔨 ブレイクダウン**: エンジニアは以下のコマンドを実行します。
+* `/breakdown {ParentID}`
+* **自動処理**: FE（フロントエンド）とBE（バックエンド）の実装用Issueが作成され、**親IssueのTasklistに自動的にリンクが追記**されます。
+* *※子Issue自体はProject Boardには表示されません。*
+
+
+2. **🗺️ Plan作成**:
+* `/plan {ParentID}`
+* AIが親Issueの要件を読み込み、技術的な実装計画書（`plan.md`）のドラフトを作成します。
+
+
+
+---
+
+### Phase 3 : 💻 実装 (Child Issue Driven)
+
+エンジニアはProject Board上の親Issueを経由して、個別の子Issueに取り組みます。
+
+1. **📥 タスク着手**: 親IssueのTasklistから、自分の担当（FE/BE）のリンクをクリックして子Issueへ移動します。
+2. **🛠️ 実装サイクル**:
+* `/cursor dev`: 子Issue上でブランチを作成し、`plan.md` に沿ってTDDまたは直接実装を行います。
+* `/cursor test`: 実装コードのテストを実行し、エビデンスを保存します。
+* `/cursor pr`: 実装完了後、PRを作成してマージします。
+
+
+3. **✅ 完了同期**: 子IssueがCloseされたら、**親Issueに戻りTasklistのチェックボックスを手動でON** にします。
 
 ---
 
-### Phase 4 : 🔄 自己進化するドキュメント
+### Phase 4 : 🕵️‍♀️ 受入テストとバグ報告 (BA Team)
 
-開発プロセス自体が、未来の開発をより良くするためのサイクルを構築します。
+BA（Business Analyst）チームによる検証フェーズです。不具合は「新しい子課題」として注入されます。
 
-1.  **🤖 定期的な自動実行**: リリース後、または定期スケジュールで、最新のコードベースに対する**リバースエンジニアリングが自動実行**されます。
-2.  **✨ ドキュメントの更新**: 実行結果を基に、**Phase0で作成された`.md`ドキュメント群が自動で最新の状態に更新**されます。
+1. **⚡️ Slack報告**: BAは検証中に不具合や仕様変更を見つけた場合、Slackの `⚡️ Report Bug` ワークフローから報告します。
+* 入力: 親Issue番号、内容、想定SP。
 
-> **Point**
-> これにより、「ドキュメントの陳腐化」という技術的負債を未然に防ぎ、常に正確な情報に基づいた開発が可能になります。
+
+2. **💉 自動インジェクション**:
+* GitHub Actionsが起動し、修正用Issueを自動作成。
+* 親IssueのTasklist末尾に即座に追加されます。
+* **SP Rollup**: 追加されたSPは親Issueの `Total SP` に自動加算されます。
+
+
+3. **🔄 修正対応**: エンジニアは追加されたタスクをPhase 3と同様に処理します。
 
 ---
+
+### Phase 5 : 🚀 リリース (Release Gate)
+
+承認とデプロイのプロセスです。
+
+1. **🚪 Release Gate確認**:
+* PM/エンジニアは親IssueのTasklist（FE, BE, BA指摘分）が全て `[x]` であることを確認します。
+* 「Deploy Gate」のチェックボックスをONにします。
+
+
+2. **🤖 CI/CD自動発火**:
+* 全てのチェックが埋まった瞬間、GitHub Actionsがトリガーされ、開発環境へのデプロイパイプラインが自動実行されます。
+
+
+
+---
+
+### Phase 6 : 🔄 自己進化するドキュメント
+
+開発完了後、次期開発のためにドキュメントを最新化します。
+
+1. **🤖 定期的な自動実行**: リリース後、最新のコードベースに対するリバースエンジニアリングが自動実行されます。
+2. **✨ ドキュメントの更新**: Phase 0の `.md` ドキュメント群が自動更新され、仕様書とコードの乖離を防ぎます。
+
+---
+
+#### **コマンド詳細 (Cursor / Slack)**
+
+| 実行環境 | コマンド / Action | 概要 |
+| --- | --- | --- |
+| **Cursor** | `/breakdown {id}` | 親Issueに対してFE/BEタスクを作成し、Tasklistに注入する。 |
+| **Cursor** | `/plan {id}` | AIが要件を解析し、実装計画 (`plan.md`) を生成する。 |
+| **Cursor** | `/cursor dev` | 開発支援。TDD/実装を選択しインタラクティブにコーディング。 |
+| **Cursor** | `/cursor test` | テストを実行し、結果をログとして保存する。 |
+| **Cursor** | `/cursor pr` | PRドキュメント作成から `gh pr create` までを自動化。 |
+| **Slack** | `⚡️ Report Bug` | BA用。フォーム入力内容をGitHub Issue化し、親Issueに注入・SP加算する。 |
+
 ---
 
 ### 📊 シーケンス図
 
 ```mermaid
 sequenceDiagram
-    %% 人キャラクター (青系)
-    participant Client as "Client" #B0C4DE
+    %% アクター定義
+    participant PM as "PM" #FFD700
     participant Engineer as "Engineer" #87CEEB
-    participant PMBA as "PM/BA" #1E90FF
+    participant BA as "BA Team" #FF69B4
 
-    %% ツール/サービス (緑系)
-    participant Issuebot as "Issuebot" #90EE90
-    participant Github as "Github" #32CD32
-    participant AutoProcess as "AutoProcess" #228B22
+    %% システム定義
+    participant Cursor as "Cursor / CLI" #333333
+    participant Slack as "Slack" #4A154B
+    participant GitHub as "GitHub (Issue/Project)" #181717
+    participant Actions as "GitHub Actions (CI/CD)" #2088FF
 
-    %% 環境 (オレンジ系)
-    participant DevEnv as "DevEnv" #FFD580
-    participant StgEnv as "StgEnv" #FFB347
-    participant Production as "Production" #FF8C00
+    Note over GitHub: Phase 0: ドキュメント生成済
 
-    Note over Production,Github: 事前にリバースエンジニアリングを実行し\nドキュメント(.md)を生成済
+    rect rgba(255, 255, 200, 0.2)
+        Note right of PM: Phase 1: 要件定義
+        PM->>GitHub: 親Issue作成 (Projectに追加)
+    end
 
-    rect rgba(200, 200, 255, 0.2)
-    Note right of Client: Phase 1: 課題整理と具体化
-        Client->>PMBA: 開発要望を共有
-        activate PMBA
-        PMBA->>Issuebot: 詳細なIssue生成を依頼
-        Issuebot->>Github: ドキュメントを参照
-        Issuebot->>Github: 詳細なIssueを生成
-        deactivate PMBA
+    rect rgba(200, 240, 255, 0.2)
+        Note right of Engineer: Phase 2: ブレイクダウン
+        Engineer->>Cursor: /breakdown {ParentID}
+        Cursor->>GitHub: 子Issue (FE/BE) 作成
+        Cursor->>GitHub: 親Issue Tasklist更新 (Injection)
     end
 
     rect rgba(200, 255, 200, 0.2)
-    Note right of Engineer: Phase 2: 開発準備と実装
-        Note over Engineer: 以下、Cursorコマンドで実行
-        Engineer->>Github: Issueを確認
-        Engineer->>Engineer: cursor issue
-        activate Engineer
-        Engineer->>Engineer: cursor branch
-        Engineer->>Engineer: cursor spec
-        Engineer->>Github: spec.md を生成
-        Engineer->>Engineer: cursor plan
-        Engineer->>Github: plan.md を生成
-        Engineer->>Engineer: cursor dev
-        Engineer->>Github: 実装コードをプッシュ
-        Engineer->>Engineer: cursor test
-        Engineer->>Engineer: cursor pr
-        deactivate Engineer
+        Note right of Engineer: Phase 3: 実装
+        Engineer->>GitHub: 親Issue経由で子Issueへ
+        Engineer->>Cursor: /cursor dev / test / pr
+        Cursor->>GitHub: PR作成 & マージ
+        Engineer->>GitHub: 親Issue Tasklistをチェック [x]
     end
 
-    rect rgba(255, 230, 200, 0.2)
-    Note right of DevEnv: Phase 3: テストとリリース
-        Engineer->>DevEnv: Dev環境へデプロイ
-        activate DevEnv
-        Engineer->>DevEnv: マニュアルテスト実施
-        deactivate DevEnv
-
-        Engineer->>StgEnv: Stg環境へデプロイ
-        activate StgEnv
-        PMBA->>StgEnv: マニュアルテスト実施
-        deactivate StgEnv
-
-        Engineer->>Production: 本番環境へリリース
+    rect rgba(255, 230, 230, 0.2)
+        Note right of BA: Phase 4: 受入テスト & バグ報告
+        BA->>Slack: ⚡️ Report Bug (Inputs)
+        Slack->>Actions: Webhook (Repository Dispatch)
+        Actions->>GitHub: バグIssue作成 & 親Tasklist注入
+        Actions->>GitHub: SP再計算 (Rollup)
+        Note over Engineer: 追加されたタスクを対応 (Phase 3へ)
     end
 
-    rect rgba(255, 255, 200, 0.2)
-    Note right of AutoProcess: Phase 4: ドキュメントの最新化 (ループ)
-        loop 定期的な自動実行
-            AutoProcess->>Production: 最新コードベースを解析
-            AutoProcess->>Github: ドキュメント(.md)を最新化
-        end
+    rect rgba(230, 230, 255, 0.2)
+        Note right of PM: Phase 5: リリース
+        PM->>GitHub: 全タスク完了確認 & Release Gateチェック [x]
+        GitHub->>Actions: Trigger Deployment
+        Actions->>Actions: Deploy to Production 🚀
     end
+
+```
