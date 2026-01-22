@@ -19,6 +19,15 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOYSERVERSECRET }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          # 秘密鍵の形式を確認（デバッグ用、内容は表示しない）
+          if [ ! -s ~/.ssh/id_rsa ]; then
+            echo "Error: SSH key file is empty"
+            exit 1
+          fi
+          if ! grep -q "BEGIN.*PRIVATE KEY" ~/.ssh/id_rsa; then
+            echo "Error: SSH key format is invalid"
+            exit 1
+          fi
           ssh-keyscan -H 57.180.91.172 >> ~/.ssh/known_hosts
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 << 'EOF'
             cd /home/ec2-user/wiki
