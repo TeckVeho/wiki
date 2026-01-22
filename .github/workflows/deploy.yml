@@ -1,0 +1,31 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch: # 手動実行も可能にする
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 57.180.91.172
+          username: ec2-user
+          key: ${{ secrets.DEPLOYSERVERSECRET }}
+          port: 22
+          script: |
+            cd /home/ec2-user/wiki
+            git fetch origin
+            git reset --hard origin/develop
+            git pull origin develop
+            yarn install --frozen-lockfile
+            yarn build
+            sudo systemctl reload httpd
