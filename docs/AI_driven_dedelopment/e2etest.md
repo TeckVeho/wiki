@@ -1,6 +1,6 @@
 # E2Eテスト自動化ガイド
 
-本ドキュメントは、 **①Claudeデスクトップアプリ＋Playwright MCP**　または　 **②Cursor＋Playwright MCP**　を利用して、<br>
+本ドキュメントは、 **①Claudeデスクトップアプリ＋Playwright MCP**　または　 **②Cursor＋Playwright MCP**　を利用して、<br />
 開発したWebシステムのE2Eテストを自動化するためのガイドです。
 
 ## 🛠 1.セットアップ手順
@@ -16,7 +16,7 @@
 ### 2. Node.jsをインストール
 - [公式サイト](https://nodejs.org/en)からインストールする
 
-※既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br>
+※既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br />
 ターミナルを開いて、次のコマンドを実行する
 ```
 node --version
@@ -29,7 +29,7 @@ npm install -g @executeautomation/playwright-mcp-server
 ```
 
 ### 4. ClaudeデスクトップアプリにPlaywrite MCPを追加
-- Claudeのデスクトップアプリのclaude_desktop_config.jsonファイルに以下の設定を追加する  　<br>
+- Claudeのデスクトップアプリのclaude_desktop_config.jsonファイルに以下の設定を追加する  　<br />
 ※Claudeのデスクトップアプリ　ファイル＞設定＞開発者＞設定を編集＞フォルダ内のclaude_desktop_config.jsonを開く
 ```
 {
@@ -67,7 +67,7 @@ https://www.google.com/を開いてスクリーンショットを取って。
 ### 2. Node.js をインストール
 - [公式サイト](https://nodejs.org/en) から **v18.0.0 以上**をインストールする
 
-※既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br>
+※既にインストール済みで、Node.js バージョンを確認する方法（18.0.0以上が必要）<br />
 ターミナルを開いて、次のコマンドを実行する
 ```bash
 node --version

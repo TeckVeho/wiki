@@ -7,22 +7,28 @@ const config: Config = {
   tagline: "Knowledge Base",
   favicon: "img/vehologo.png",
 
-  url: "https://your-docusaurus-site.example.com",
+  url: "https://wiki.vw-dev.com",
   baseUrl: "/",
+  trailingSlash: false,
 
   organizationName: "TeckVeho",
   projectName: "wiki",
 
   // グローバルな壊れたリンクの扱いを設定
   onBrokenLinks: "warn", // "throw"から"warn"に変更
-  onBrokenMarkdownLinks: "warn",
   onBrokenAnchors: "warn",
 
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
   },
-
+  themes: ["@docusaurus/theme-mermaid"],
+  markdown: {
+    mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
   presets: [
     [
       "classic",
