@@ -4,21 +4,25 @@ on:
   push:
     branches:
       - develop
-  workflow_dispatch: # 手動実行も可能にする
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Deploy to EC2
+        shell: bash
         run: |
+          set -euo pipefail
+
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOYSERVERSECRET }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
           # 秘密鍵の形式を確認（デバッグ用、内容は表示しない）
           if [ ! -s ~/.ssh/id_rsa ]; then
             echo "Error: SSH key file is empty"
@@ -28,13 +32,20 @@ jobs:
             echo "Error: SSH key format is invalid"
             exit 1
           fi
+
           ssh-keyscan -H 57.180.91.172 >> ~/.ssh/known_hosts
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 << 'EOF'
+
+          # リモート側で「失敗したら即終了」を有効化して、build NGなら reload しない
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 'bash -se' <<'EOF'
+            set -euo pipefail
+
             cd /home/ec2-user/wiki
+
             git fetch origin
             git reset --hard origin/develop
-            git pull origin develop
+
             yarn install --frozen-lockfile
             yarn build
+
             sudo systemctl reload httpd
-          EOF
+EOF
