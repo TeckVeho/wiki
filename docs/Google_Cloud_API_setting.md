@@ -11,7 +11,7 @@
 |       | ATMTC for XXXX     | 上階層を引き継ぐ    |
 
 ## グループ
-メニュー「IAMと管理」＞「グループ」から、グループの追加・削除やグループへのユーザー追加・削除を行う<br>
+メニュー「IAMと管理」＞「グループ」から、グループの追加・削除やグループへのユーザー追加・削除を行う<br />
 ※2024/10時点のグループ
 | グループ名      　  | グループのメール           　  　  | 目的　　　　　　　　　　　　　　|メンバー            |
 |------------------|---------------------------------|----------------------------|----------|
@@ -20,9 +20,9 @@
 | gcp-project-admin| gcp-project-admin@veho-works.com  | プロジェクト作成・管理    |　名和・城戸・Trang　　　|
 ![iam.png](/iam.png)
 
-※ユーザー自体の登録管理は、Daisei VEHO worksのWorkspaceの管理コンソールで設定する。<br>
-（「@veho-works.com」ドメインのユーザーのみ追加ができるように制限しているため）<br>
-https://admin.google.com/u/2/ac/users?hl=ja<br>
+※ユーザー自体の登録管理は、Daisei VEHO worksのWorkspaceの管理コンソールで設定する。<br />
+（「@veho-works.com」ドメインのユーザーのみ追加ができるように制限しているため）<br />
+https://admin.google.com/u/2/ac/users?hl=ja<br />
 （管理者：城戸・茂木・名和、ユーザー管理者：Trang）　
 
 ## IAM
@@ -32,7 +32,7 @@ https://admin.google.com/u/2/ac/users?hl=ja<br>
 # 新規プロジェクトの作成
 ## 1.請求先の作成
 新規プロジェクト作成時に、新規請求先に紐づけたい場合は、彦田さんに作成を依頼する(以下手順を案内)
-1. メニュー「課金」または「お支払い」を選択し、「請求先アカウント管理画面」に遷移<br>
+1. メニュー「課金」または「お支払い」を選択し、「請求先アカウント管理画面」に遷移<br />
    ※組織ではなくプロジェクトにいる場合は「請求先アカウントを管理」を選択
 1. 「アカウントを作成」を選択
 ![seikyu.png](/seikyu.png)
@@ -46,7 +46,7 @@ https://admin.google.com/u/2/ac/users?hl=ja<br>
 ## 2.請求先に予算アラートの設定
 新規請求先作成後、請求超過を検知するため、予算アラートを設定する
 1. メニュー「お支払い」＞「予算アラート」を選択
-1. 「予算を作成」を選択し、以下設定をする<br>
+1. 「予算を作成」を選択し、以下設定をする<br />
 - 名前：「予算アラート」
 - 期間：「月別」
 - フォルダと組織：全て選択されていることを確認
@@ -65,17 +65,17 @@ https://admin.google.com/u/2/ac/users?hl=ja<br>
 3. 予算アラートが作成される
 
 ## 3.新規プロジェクト作成
-新規プロジェクトを作成する<br>
-1. メニュー「APIとサービス」を選択後、「プロジェクトを作成」選択し、「新しいプロジェクト」作成画面に遷移<br>
+新規プロジェクトを作成する<br />
+1. メニュー「APIとサービス」を選択後、「プロジェクトを作成」選択し、「新しいプロジェクト」作成画面に遷移<br />
    ※組織ではなくプロジェクトにいる場合は、上部表示のプロジェクト名を選択し、「新しいプロジェクト」を選択
-1. プロジェクト名「ATMTC for (会社名)」、請求先アカウント「（1で作成した請求先or紐づけたい既存の請求先）」を入力し、「作成」を選択<br>
-※組織・場所が「veho-works.com」になっているか確認する<br>
+1. プロジェクト名「ATMTC for (会社名)」、請求先アカウント「（1で作成した請求先or紐づけたい既存の請求先）」を入力し、「作成」を選択<br />
+※組織・場所が「veho-works.com」になっているか確認する<br />
 ![project.png](/project.png)
 1. 新規プロジェクトが作成される
 
 ## 4.API keyの生成・設定
 1. メニュー「APIとサービス」＞「有効なAPIとサービス」を選択し、有効にしたいAPIを「ENABLE」にする
-1. メニュー「APIとサービス」＞「OAuth同意画面」を選択し、以下設定をする<br>
+1. メニュー「APIとサービス」＞「OAuth同意画面」を選択し、以下設定をする<br />
 - User Type：外部
 - アプリ名：「（任意のアプリ名を設定）」
 - ユーザーサポートメール：「gcp-admins@veho-works.com」
@@ -96,7 +96,7 @@ https://admin.google.com/u/2/ac/users?hl=ja<br>
 - APIの制限：制限するAPIを選択する
 ![api.png](/api.png)
 ![api2.png](/api2.png)
-3. 上記内容と生成されたAPI KeyをGoogleスプレッドシート「Google Could Platform_ATMTC」に記載し、エンジニアに共有する<br>
+3. 上記内容と生成されたAPI KeyをGoogleスプレッドシート「Google Could Platform_ATMTC」に記載し、エンジニアに共有する<br />
 https://docs.google.com/spreadsheets/d/1_ftIHqeWNDfgM28HtyPhG0sk7OoJJF8qsafT80tDOmk/edit?gid=0#gid=0
 
 # [English] Google Maps API Management
