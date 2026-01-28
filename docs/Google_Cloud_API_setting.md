@@ -20,7 +20,8 @@
 | gcp-project-admin| gcp-project-admin@veho-works.com  | プロジェクト作成・管理    |　名和・城戸・Trang　　　|
 ![iam.png](/iam.png)
 
-※ユーザー自体の登録管理は、Daisei VEHO worksのWorkspaceの管理コンソールで設定する。（「@veho-works.com」ドメインのユーザーのみ追加ができるように制限しているため）
+※ユーザー自体の登録管理は、Daisei VEHO worksのWorkspaceの管理コンソールで設定する。
+（「@veho-works.com」ドメインのユーザーのみ追加ができるように制限しているため）
 https://admin.google.com/u/2/ac/users?hl=ja
 （管理者：城戸・茂木・名和、ユーザー管理者：Trang）　
 
@@ -64,7 +65,8 @@ https://admin.google.com/u/2/ac/users?hl=ja
 
 ## 3.新規プロジェクト作成
 新規プロジェクトを作成する
-1. メニュー「APIとサービス」を選択後、「プロジェクトを作成」選択し、「新しいプロジェクト」作成画面に遷移　※組織ではなくプロジェクトにいる場合は、上部表示のプロジェクト名を選択し、「新しいプロジェクト」を選択
+1. メニュー「APIとサービス」を選択後、「プロジェクトを作成」選択し、「新しいプロジェクト」作成画面に遷移
+   ※組織ではなくプロジェクトにいる場合は、上部表示のプロジェクト名を選択し、「新しいプロジェクト」を選択
 1. プロジェクト名「ATMTC for (会社名)」、請求先アカウント「（1で作成した請求先or紐づけたい既存の請求先）」を入力し、「作成」を選択
 ※組織・場所が「veho-works.com」になっているか確認する
 ![project.png](/project.png)
