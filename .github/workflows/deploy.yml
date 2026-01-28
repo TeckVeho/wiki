@@ -35,17 +35,11 @@ jobs:
 
           ssh-keyscan -H 57.180.91.172 >> ~/.ssh/known_hosts
 
-          # リモート側で「失敗したら即終了」を有効化して、build NGなら reload しない
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 'bash -se' <<'EOF'
-            set -euo pipefail
-
-            cd /home/ec2-user/wiki
-
-            git fetch origin
-            git reset --hard origin/develop
-
-            yarn install --frozen-lockfile
-            yarn build
-
-            sudo systemctl reload httpd
-EOF
+          ssh -tt -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 \
+            'set -euo pipefail \
+            && cd /home/ec2-user/wiki \
+            && git fetch origin \
+            && git reset --hard origin/develop \
+            && yarn install --frozen-lockfile \
+            && yarn build \
+            && sudo systemctl reload httpd'
