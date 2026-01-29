@@ -1,4 +1,4 @@
-AWA_SES_SMTP_Configuration_Manual
+# AWA_SES_SMTP_Configuration_Manual
 # 【JP】Amazon SES 送信サーバー設定マニュアル
 
 ## 概要
