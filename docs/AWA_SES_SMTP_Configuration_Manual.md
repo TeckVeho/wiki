@@ -212,18 +212,10 @@ The following information will be shown **only once**:
 - Select the target email address
 - Enter the **IMAP password** (your email account password)
 
-<img width="509" height="417" alt="image" src="https://github.com/user-attachments/assets/d008dece-f21c-4030-a838-f2c826fbbe5a" />
-<img width="558" height="648" alt="image" src="https://github.com/user-attachments/assets/ac2493fd-5b6b-437a-b455-bc84444b27ba" />
 
 ### 3. Configure the Outgoing Server (Amazon SES)
 - Select **POP** under **Mail provider**
-
-<img width="521" height="629" alt="image" src="https://github.com/user-attachments/assets/767d42a1-b79b-4547-b533-49223e4c4877" />
-
 - Enter the outgoing server (Amazon SES) details
-
-<img width="544" height="638" alt="image" src="https://github.com/user-attachments/assets/7a720bed-cd9a-4e3d-90b3-75bbac63d083" />
-<img width="525" height="371" alt="image" src="https://github.com/user-attachments/assets/650a5c60-24da-46f7-8fb8-3a50f3bd959d" />
 
 | Item | Value |
 |---|---|
