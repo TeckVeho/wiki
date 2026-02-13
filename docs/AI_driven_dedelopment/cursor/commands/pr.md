@@ -15,12 +15,12 @@ Create Pull Request through interactive AI Agent collaboration with streamlined 
 
 **🔗 CRITICAL: AUTOMATIC ISSUE LINKING 🔗**
 - ALWAYS link PR to the corresponding issue
-- Use "Closes #{issue_number}" in commit messages and PR body
+- Use "Closes #&#123;issue_number&#125;" in commit messages and PR body
 - Ensure GitHub automatically closes the issue when PR is merged
 - This maintains proper issue tracking and project management
 
 **📄 CRITICAL: PR BODY SAVING 📄**
-- **CREATE pr.md FILES**: This command MUST create pr.md files in docs/issues/{issue_number}/ before committing
+- **CREATE pr.md FILES**: This command MUST create pr.md files in docs/issues/&#123;issue_number&#125;/ before committing
 - **Evidence Section**: Include test results and execution commands in PR body
 - **Pre-commit Documentation**: Save PR body content locally for tracking and review
 
@@ -31,25 +31,25 @@ Create Pull Request through interactive AI Agent collaboration with streamlined 
 1. **Determine Issue Number**: 
    - If `issue_number` is provided: Use the specified issue number
    - If `issue_number` is omitted: Look for the most recently created issue document in `docs/issues/*/issue.md` to determine the issue number
-   - Check for existing `docs/issues/{issue_number}/issue.md` file to ensure issue data is available
+   - Check for existing `docs/issues/&#123;issue_number&#125;/issue.md` file to ensure issue data is available
 
 ## Step 1: Git Status Validation and PR Body Generation
 
 1. **Check Git Status**: Run `git --no-pager status` to show current repository state (with pager disabled)
 2. **Display Status Summary**: Show all modified, added, and deleted files with status indicators using `git --no-pager diff --name-status origin/develop..HEAD`
-3. **Fetch Issue Data**: Get issue #{issue_number} information using optimized caching strategy (cached local file first, GitHub CLI fallback)
-4. **Load Test Results**: Read test results from `docs/issues/{issue_number}/evidence/test-results.json` if available
-5. **Load Screenshots**: Scan `docs/issues/{issue_number}/evidence/` directory for PNG/JPG image files:
+3. **Fetch Issue Data**: Get issue #&#123;issue_number&#125; information using optimized caching strategy (cached local file first, GitHub CLI fallback)
+4. **Load Test Results**: Read test results from `docs/issues/&#123;issue_number&#125;/evidence/test-results.json` if available
+5. **Load Screenshots**: Scan `docs/issues/&#123;issue_number&#125;/evidence/` directory for PNG/JPG image files:
    - Look for files with extensions: `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`
-   - Generate GitHub raw URLs with format: `https://github.com/TeckVeho/health-checker/blob/{current_branch}/docs/issues/{issue_number}/evidence/{filename}?raw=true`
+   - Generate GitHub raw URLs with format: `https://github.com/TeckVeho/health-checker/blob/&#123;current_branch&#125;/docs/issues/&#123;issue_number&#125;/evidence/&#123;filename&#125;?raw=true`
    - Create descriptive image titles from filenames (remove issue prefix, convert hyphens to spaces)
    - Sort images alphabetically by filename
 6. **Generate PR Body**: Create comprehensive PR body including:
-   - Issue reference and "Closes #{issue_number}" for automatic linking
+   - Issue reference and "Closes #&#123;issue_number&#125;" for automatic linking
    - Implementation summary and key changes
    - **Screenshots Section** with image links using raw GitHub URLs
    - **Evidence Section** with test results and execution details
-7. **Save PR Body**: Write PR body content to `docs/issues/{issue_number}/pr.md` **BEFORE** committing
+7. **Save PR Body**: Write PR body content to `docs/issues/&#123;issue_number&#125;/pr.md` **BEFORE** committing
 8. **Display PR Body Preview**: Show generated PR body content for user review
 9. **User Confirmation**: Ask user "Do you want to create a PR? (y/n)" and wait for confirmation
 10. **Proceed Only if Confirmed**: Continue to Step 2 only if user confirms with 'y' or 'yes'
@@ -60,28 +60,28 @@ Create Pull Request through interactive AI Agent collaboration with streamlined 
 2. **Stage and Commit Changes**: If uncommitted changes exist:
    - Run `git add . > $null 2>&1` to stage all changes (includes all source code AND documentation files)
    - **CRITICAL: Include Documentation**: Ensure all development documentation is committed:
-     - `docs/issues/{issue_number}/issue.md` - Issue details
-     - `docs/issues/{issue_number}/plan.md` - Implementation plan
-     - `docs/issues/{issue_number}/dev.md` - Development log
-     - `docs/issues/{issue_number}/test.md` - Test report
-     - `docs/issues/{issue_number}/pr.md` - PR body content
-     - `docs/issues/{issue_number}/evidence/` - Test evidence and coverage data
+     - `docs/issues/&#123;issue_number&#125;/issue.md` - Issue details
+     - `docs/issues/&#123;issue_number&#125;/plan.md` - Implementation plan
+     - `docs/issues/&#123;issue_number&#125;/dev.md` - Development log
+     - `docs/issues/&#123;issue_number&#125;/test.md` - Test report
+     - `docs/issues/&#123;issue_number&#125;/pr.md` - PR body content
+     - `docs/issues/&#123;issue_number&#125;/evidence/` - Test evidence and coverage data
    - Create comprehensive commit message including:
      - Issue reference and main changes
      - Key improvements and features
      - Test results summary
      - Documentation updates
-     - "Closes #{issue_number}" to auto-close issue
+     - "Closes #&#123;issue_number&#125;" to auto-close issue
    - Run `git commit -m "..." --no-edit --quiet > $null 2>&1` with detailed message
 3. **Push to Remote**: Check if local branch exists on remote:
-   - Run `git push origin {current_branch} --quiet --no-progress` to push commits
+   - Run `git push origin &#123;current_branch&#125; --quiet --no-progress` to push commits
    - Ensure remote branch is up to date before PR creation
    - **Documentation Tracking**: All development documentation will be available in the PR for review
 
 ## Step 3: GitHub Pull Request Creation with Issue Linking
 
 1. **Create GitHub PR**: Use `gh pr create` command to create pull request:
-   - Title: `{type}: {issue_title}`
+   - Title: `&#123;type&#125;: &#123;issue_title&#125;`
    - Body: Generated PR body with Evidence section
    - Base branch: `develop`
    - Head branch: Current branch
@@ -103,9 +103,9 @@ Step 1: Git Status Check and PR Body Generation
 ├── Run git --no-pager status (pager disabled)
 ├── Display file changes with git --no-pager diff --name-status origin/develop..HEAD
 ├── Fetch issue data for PR content generation
-├── Load test results from docs/issues/{issue_number}/evidence/test-results.json
+├── Load test results from docs/issues/&#123;issue_number&#125;/evidence/test-results.json
 ├── Generate PR body with Evidence section including test results
-├── Save PR body to docs/issues/{issue_number}/pr.md BEFORE committing
+├── Save PR body to docs/issues/&#123;issue_number&#125;/pr.md BEFORE committing
 ├── Display PR body preview for user review
 └── Ask: "Do you want to create a PR? (y/n)"
 
@@ -113,7 +113,7 @@ Step 2: Commit and Push Verification
 ├── Check git --no-pager status --porcelain 2>$null for uncommitted changes (pager disabled)
 ├── If changes exist: git add . > $null 2>&1 && git commit -m "..." --no-edit --quiet > $null 2>&1
 │   └── Includes ALL files: source code + documentation (issue.md, plan.md, dev.md, test.md, pr.md, evidence/)
-├── Push to remote: git push origin {current_branch} --quiet --no-progress
+├── Push to remote: git push origin &#123;current_branch&#125; --quiet --no-progress
 └── Verify remote branch is up to date
 
 Step 3: GitHub PR Creation with Issue Linking
@@ -134,9 +134,9 @@ Step 3: GitHub PR Creation with Issue Linking
 - **Speed Improvement**: 1-2 seconds faster execution by eliminating redundant API calls
 
 **🔗 Issue Linking Requirements:**
-- **Commit Messages**: MUST include "Closes #{issue_number}" for automatic issue closure
-- **PR Body**: MUST include "Closes #{issue_number}" to link PR to issue
-- **PR Title**: Should follow format "{type}: {issue_title}" for consistency
+- **Commit Messages**: MUST include "Closes #&#123;issue_number&#125;" for automatic issue closure
+- **PR Body**: MUST include "Closes #&#123;issue_number&#125;" to link PR to issue
+- **PR Title**: Should follow format `&#123;type&#125;: &#123;issue_title&#125;` for consistency
 - **Verification**: Confirm issue linking is successful after PR creation
 
 **Evidence Section Implementation Details:**
@@ -148,7 +148,7 @@ Step 3: GitHub PR Creation with Issue Linking
    - **Result format**: Use bullet points with key metrics and status
 
 2. **Test Results Loading**:
-   - Read `docs/issues/{issue_number}/evidence/test-results.json`
+   - Read `docs/issues/&#123;issue_number&#125;/evidence/test-results.json`
    - Parse backend and frontend test results
    - Extract test counts, pass/fail status, coverage data
    - **CRITICAL: NO TEST RESULT FALSIFICATION**: If test results are missing or unavailable, explicitly state "No test results available" - NEVER create fake or simulated test results
@@ -170,9 +170,9 @@ Step 3: GitHub PR Creation with Issue Linking
 - `git --no-pager status --porcelain 2>$null` - Check for uncommitted changes (with pager disabled)
 - `git --no-pager diff --name-status origin/develop..HEAD` - Show file changes (with pager disabled)
 - `git add . > $null 2>&1` - Stage all changes (if needed)
-- `git commit -m "..." --no-edit --quiet > $null 2>&1` - Commit changes with "Closes #{issue_number}" (if needed)
-- `git push origin {branch} --quiet --no-progress` - Push commits to remote (if needed)
-- `gh issue view {issue_number} --json title,body,labels,assignees,state,createdAt,updatedAt,url` - Get issue data for PR content
+- `git commit -m "..." --no-edit --quiet > $null 2>&1` - Commit changes with "Closes #&#123;issue_number&#125;" (if needed)
+- `git push origin &#123;branch&#125; --quiet --no-progress` - Push commits to remote (if needed)
+- `gh issue view &#123;issue_number&#125; --json title,body,labels,assignees,state,createdAt,updatedAt,url` - Get issue data for PR content
 - `gh pr create --title "..." --body "..." --base develop` - Create GitHub PR with issue linking
 - **File Operations**: Read test-results.json, write pr.md files, scan evidence directory for images
 
@@ -180,7 +180,7 @@ Step 3: GitHub PR Creation with Issue Linking
 ```markdown
 ## Screenshots
 
-{screenshot_links}
+&#123;screenshot_links&#125;
 
 Each image shows the implementation results and can be viewed by clicking the links above.
 
@@ -198,38 +198,38 @@ Each image shows the implementation results and can be viewed by clicking the li
 ### 1. Backend Testing
 **Command:**
 ```bash
-{backend_test_command}
+&#123;backend_test_command&#125;
 ```
 
 **Result:**
-{backend_test_results}
+&#123;backend_test_results&#125;
 
 ### 2. Build Verification
 **Command:**
 ```bash
-{build_command}
+&#123;build_command&#125;
 ```
 
 **Result:**
-{build_results}
+&#123;build_results&#125;
 
 ### 3. Type Checking
 **Command:**
 ```bash
-{type_check_command}
+&#123;type_check_command&#125;
 ```
 
 **Result:**
-{type_check_results}
+&#123;type_check_results&#125;
 
 ### 4. Code Linting
 **Command:**
 ```bash
-{lint_command}
+&#123;lint_command&#125;
 ```
 
 **Result:**
-{lint_results}
+&#123;lint_results&#125;
 ```
 
 **Command-Result Mapping:**
@@ -244,11 +244,11 @@ Each image shows the implementation results and can be viewed by clicking the li
 ⚠️ **No test results available**
 - Tests have not been executed or results are not accessible
 - Please run `/test` command to execute tests before creating PR
-- Test results file: `docs/issues/{issue_number}/evidence/test-results.json` not found
+- Test results file: `docs/issues/&#123;issue_number&#125;/evidence/test-results.json` not found
 ```
 
 **Key Features:**
-- **PR Body Saving**: Creates pr.md files in docs/issues/{issue_number}/ **BEFORE** committing
+- **PR Body Saving**: Creates pr.md files in docs/issues/&#123;issue_number&#125;/ **BEFORE** committing
 - **Evidence Section**: Includes comprehensive test results and execution details in command-result format
 - **Command-Result Pairing**: Each command is paired with its specific result for clear traceability
 - **Test Integration**: Automatically loads and formats test results from evidence files
@@ -261,5 +261,5 @@ Each image shows the implementation results and can be viewed by clicking the li
 - **Complete Documentation Tracking**: All development documentation (issue.md, plan.md, dev.md, test.md, pr.md, evidence/) is committed and pushed with the PR
 - **Documentation Review**: Reviewers can access complete development history and evidence through the PR
 
-**Issue**: {issue_number or auto-detected}
-**Auto Link**: {auto_link (defaults to true)}
+**Issue**: &#123;issue_number or auto-detected&#125;
+**Auto Link**: &#123;auto_link (defaults to true)&#125;

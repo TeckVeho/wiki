@@ -112,5 +112,5 @@ Develop code using flexible development methodology with AI Agent
 
 ---
 
-**Issue**: {issue_number or auto-detected}  
-**Output**: `docs/issues/{issue_number}/dev.md`
+**Issue**: &#123;issue_number or auto-detected&#125;  
+**Output**: `docs/issues/&#123;issue_number&#125;/dev.md`

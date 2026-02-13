@@ -20,11 +20,11 @@ Generate a detailed implementation plan document for the specified issue through
 1. **Determine Issue Number**: 
    - If `issue_number` is provided: Use the specified issue number
    - If `issue_number` is omitted: Look for the most recently created issue document in `docs/issues/*/issue.md` to determine the issue number
-   - Check for existing `docs/issues/{issue_number}/issue.md` file to ensure issue data is available
+   - Check for existing `docs/issues/&#123;issue_number&#125;/issue.md` file to ensure issue data is available
 2. **Fetch Issue Information**: Use optimized issue data retrieval (cached local file first, GitHub CLI fallback)
 3. **Interactive Analysis**: Analyze the issue content and discuss implementation approach with the user
 4. **Generate Implementation Plan**: Create a comprehensive implementation plan using the integrated template structure with dynamic task breakdown
-5. **Save Document**: Save the plan to {output_path} (default: docs/issues/{issue_number}/plan.md) (WITHOUT committing)
+5. **Save Document**: Save the plan to &#123;output_path&#125; (default: docs/issues/&#123;issue_number&#125;/plan.md) (WITHOUT committing)
 
 **🚨 CRITICAL: NEVER COMMIT CHANGES DURING PLANNING PHASE 🚨**
 
@@ -36,35 +36,35 @@ Generate a detailed implementation plan document for the specified issue through
 
 **Implementation Plan Document Structure:**
 ```markdown
-# Issue #{issue_number}: {title} - Implementation Plan
+# Issue #&#123;issue_number&#125;: &#123;title&#125; - Implementation Plan
 
 ## Functional Requirements Mapping
-{functional_requirements_mapping}
+&#123;functional_requirements_mapping&#125;
 
 ## Directory Structure and File List
-{directory_structure_and_files}
+&#123;directory_structure_and_files&#125;
 
 ## Architecture Design
-{architecture_design_details}
+&#123;architecture_design_details&#125;
 
 ## Data Model
-{data_model_specifications}
+&#123;data_model_specifications&#125;
 
 ## Implementation Tasks
 
-### Task 1: {task_1_name}
+### Task 1: &#123;task_1_name&#125;
 **Type**: [Frontend | Backend | Fullstack]
-**Description**: {task_1_description}
-**Dependencies**: {comma_separated_task_numbers or "None"}
-**Estimated Effort**: {estimated_hours}h
+**Description**: &#123;task_1_description&#125;
+**Dependencies**: &#123;comma_separated_task_numbers or "None"&#125;
+**Estimated Effort**: &#123;estimated_hours&#125;h
 
-### Task 2: {task_2_name}
+### Task 2: &#123;task_2_name&#125;
 **Type**: [Frontend | Backend | Fullstack]
-**Description**: {task_2_description}
-**Dependencies**: {comma_separated_task_numbers or "None"}
-**Estimated Effort**: {estimated_hours}h
+**Description**: &#123;task_2_description&#125;
+**Dependencies**: &#123;comma_separated_task_numbers or "None"&#125;
+**Estimated Effort**: &#123;estimated_hours&#125;h
 
-{Additional tasks as needed...}
+&#123;Additional tasks as needed...&#125;
 ```
 
 **Auto-Detection Process:**
@@ -75,7 +75,7 @@ Generate a detailed implementation plan document for the specified issue through
 **Content Generation Process:**
 - Determine issue number (from parameter or most recent `/issue` command)
 - Retrieve issue data using optimized caching strategy:
-  - First: Try cached `docs/issues/{issue_number}/issue.md` file
+  - First: Try cached `docs/issues/&#123;issue_number&#125;/issue.md` file
   - Fallback: GitHub CLI if cached file not available
 - Analyze requirements and break down into implementable tasks
 - **Classify each task** by type:
@@ -101,5 +101,5 @@ Generate a detailed implementation plan document for the specified issue through
 - **Fallback Support**: Automatic GitHub API fallback if cached data unavailable
 - **Speed Improvement**: 1-2 seconds faster execution by eliminating redundant API calls
 
-**Issue**: {issue_number or auto-detected}
-**Output**: {output_path}
+**Issue**: &#123;issue_number or auto-detected&#125;
+**Output**: &#123;output_path&#125;
