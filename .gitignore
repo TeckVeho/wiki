@@ -19,6 +19,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# docs
-docs/*
-!docs/index.mdx
+# docs (all tracked for wiki content)
