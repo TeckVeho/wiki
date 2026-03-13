@@ -15,6 +15,8 @@
 > **Important / 重要**  
 > - If remote work exceeds 2 days **without prior approval**, the additional days must be taken as either **Paid Time Off (PTO)** or **Unpaid Leave**.  
 > - 事前の承認なく月2回を超える場合は、超過分を**有給休暇**または**無給休暇**に振り替える必要があります。
+> - This rule is designed to protect employees by ensuring managers issue work requests appropriately, rather than to pressure anyone into unpaid overtime. If you feel pressured to work unpaid overtime, **please escalate the matter to your manager or the executive team**.
+> - サービス残業を強要する目的ではなく、管理者側に正しく依頼をさせ従業員を守るためのルールとなります。残業を強要されたと感じた場合は、**管理者または経営者へのエスカレーション**をお願いします。
 
 ---
 
