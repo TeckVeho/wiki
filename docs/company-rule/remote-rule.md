@@ -45,7 +45,6 @@ If you require additional remote days due to unavoidable circumstances, you must
 - リモートワーク登録と併せて、承認を取得した旨を **#0000_impress_veho_team** に投稿してください。
 
 **Example / 例**
-- `/bot remote, YYYY-MM-DD, Reason (approved by @Approver Name)`
 - `/vehobot remote, YYYY-MM-DD, Reason (approved by @Approver Name)`
 
 ---
