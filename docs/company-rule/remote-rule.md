@@ -1,8 +1,8 @@
 # Remote Work Policy / リモートワークルール
 
 ## Effective Date / 適用開始日
-- This remote work policy will be effective starting **March 1, 2026**.  
-- 新しいリモートワークのルールは、**2026年3月1日**より適用されます。
+- This remote work policy will be effective starting **April 1, 2026**.  
+- 新しいリモートワークのルールは、**2026年4月1日**より適用されます。
 
 ---
 
