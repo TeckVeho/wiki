@@ -39,7 +39,7 @@ https://admin.google.com/u/2/ac/users?hl=ja<br />
 
 1. 新規プロジェクトが作成される
 
-## 4.API keyの生成・設定
+## 2.API keyの生成・設定
 1. メニュー「APIとサービス」＞「有効なAPIとサービス」を選択し、有効にしたいAPIを「ENABLE」にする
 1. メニュー「APIとサービス」＞「OAuth同意画面」を選択し、以下設定をする<br />
 - User Type：外部
@@ -99,7 +99,7 @@ Create a new project.
    *Ensure the organization/location is "veho-works.com."*  
 3. A new project will be created.
 
-## 4. Generating and Setting the API Key
+## 2. Generating and Setting the API Key
 1. Select the "APIs & Services" menu > "Enabled APIs and Services" and enable the APIs you want.
 2. Select the "APIs & Services" menu > "OAuth Consent Screen," and configure the following settings:
    - User Type: External
