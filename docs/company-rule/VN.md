@@ -2,63 +2,63 @@
 
 **Ngày áp dụng: 01/04/2026**
 
-Các quy định này nhằm đảm bảo tất cả thành viên làm việc một cách công bằng và phù hợp.
+Các quy định này được ban hành nhằm đảm bảo tất cả thành viên làm việc một cách công bằng và phù hợp.
 
 ---
 
 ## ◇ Thời gian làm việc
 
 - Thời gian làm việc: 8 giờ  
-  - Thông thường: 08:30–18:00 (Nghỉ: 12:00–13:30)  
+  - Thời gian thông thường: 08:30–18:00 (Nghỉ: 12:00–13:30)  
   - Core time: 09:00–17:00  
 
 - Ví dụ:
   - 08:00–17:00  
   - 09:00–18:00  
 
-Nếu làm việc ngoài core time (đến sau 09:00 hoặc về trước 17:00), vui lòng báo cáo trong [00_impress_veho_team]
+Nếu làm việc ngoài core time (đến sau 09:00 hoặc rời trước 17:00), vui lòng báo cáo trên kênh Slack [00_impress_veho_team]
 
 ---
 
 ## ◇ Thời gian nghỉ
 
-- Trên 6 giờ: tối thiểu 30 phút  
-- Trên 10 giờ: tối thiểu 1 giờ  
+- Làm việc liên tục trên 6 giờ: tối thiểu 30 phút  
+- Làm việc trên 10 giờ/ngày: tối thiểu 1 giờ  
 - Làm việc ban đêm (22:00–06:00): tối thiểu 45 phút  
 
-Nếu khó nghỉ do công việc, vui lòng trao đổi với PM  
+Nếu khó khăn trong việc nghỉ do yêu cầu công việc, vui lòng trao đổi với PM  
 
 ---
 
 ## ◇ Địa điểm làm việc
 
-- Làm việc tại VEHO office  
+- Công việc phải được thực hiện tại văn phòng VEHO  
 
 ---
 
 ## ◇ Đi muộn / về sớm
 
-Vui lòng báo trước vào [00_impress_veho_team]:
+Vui lòng báo trước các thông tin sau trên [00_impress_veho_team]:
 
 - Thời gian  
 - Lý do  
 
-Việc lặp lại nhiều lần không có lý do hợp lý có thể ảnh hưởng đến đánh giá  
+Việc lặp lại nhiều lần mà không có lý do chính đáng có thể ảnh hưởng đến đánh giá  
 
 ---
 
-## ◇ Nghỉ phép / Remote
+## ◇ Nghỉ phép / đăng ký làm việc từ xa
 
-- Đăng ký trước qua Slack  
-- Kiểm tra bằng `/check`  
-- Nghỉ phép sẽ tự động trừ  
+- Vui lòng đăng ký trước qua Slack  
+- Số ngày nghỉ còn lại có thể kiểm tra bằng lệnh `/check` trên Slack  
+- Nghỉ phép sẽ được tự động trừ  
 
 ### ■ Nửa ngày
 
 - /vehobot take off morning, YYYY-MM-DD, lý do  
 - /vehobot take off afternoon, YYYY-MM-DD, lý do  
 
-Hai lần nửa ngày = 1 ngày  
+Hai lần nghỉ nửa ngày được tính là một ngày  
 
 ### ■ 1 ngày
 
@@ -72,44 +72,78 @@ Hai lần nửa ngày = 1 ngày
 
 ---
 
-## ◇ Nghỉ phép
+## ◇ Nghỉ có lương / nghỉ không lương
 
-- Cần có sự phê duyệt trước từ PM
+- Nghỉ có lương:
+  - Làm việc trên 1 năm: 12 ngày/năm  
+  - Dưới 1 năm: 1 ngày/tháng  
+
+- Nghỉ đặc biệt:
+  - Kết hôn bản thân: 3 ngày  
+  - Con kết hôn: 1 ngày  
+  - Cha mẹ / vợ chồng / con qua đời: 3 ngày  
+  - Cha mẹ nuôi (bao gồm cha mẹ vợ/chồng) qua đời: 3 ngày  
+
+- Nghỉ không lương:
+  - Ông bà / anh chị em qua đời: 1 ngày  
+  - Cha mẹ / anh chị em kết hôn: 1 ngày  
+
+Việc xin nghỉ trong ngày hoặc nghỉ không có lý do hợp lý có thể ảnh hưởng đến đánh giá  
+
+---
+
+## ◇ Làm thêm giờ / làm việc ngày nghỉ
+
+Cần có sự phê duyệt trước từ PM  
 
 ---
 
 ## ◇ Quy định làm việc từ xa
 
-### 1) Giới hạn
+### 1) Giới hạn số ngày làm việc từ xa
 
-Tối đa 2 ngày/tháng  
+Làm việc từ xa được phép tối đa 2 ngày mỗi tháng.
 
 #### Quan trọng
 
-Vượt quá sẽ chuyển thành nghỉ phép  
+Nếu làm việc từ xa vượt quá 2 ngày mà không có sự phê duyệt trước, số ngày vượt quá phải được chuyển thành nghỉ phép có lương hoặc nghỉ không lương.
+
+Quy định này được thiết kế nhằm bảo vệ nhân viên bằng cách đảm bảo quản lý giao việc một cách phù hợp, không nhằm gây áp lực làm thêm giờ không lương. Nếu bạn cảm thấy bị ép buộc làm thêm giờ không lương, vui lòng báo cáo với quản lý hoặc ban điều hành.
 
 ---
 
-### 2) Ảnh hưởng
+### 2) Ảnh hưởng đến đánh giá và tăng lương
 
-Ảnh hưởng đánh giá và tăng lương  
+Việc vượt quá 2 ngày làm việc từ xa trong tháng có thể làm giảm đánh giá hiệu suất và ảnh hưởng tiêu cực đến việc xét tăng lương hàng năm.
 
 ---
 
 ### 3) Trường hợp đặc biệt
 
-Cần phê duyệt trước  
+Nếu cần làm việc từ xa vượt quá số ngày quy định do lý do bất khả kháng, bạn phải xin phê duyệt trước qua Slack.
 
-- Engineer → PM  
-- PM → CEO  
+#### Quy trình phê duyệt
 
-Trước 09:00  
+- Engineer: xin phê duyệt từ PM  
+- PM: xin phê duyệt từ CEO  
+
+#### Thời hạn
+
+Tất cả yêu cầu phê duyệt phải được gửi trước 09:00 sáng trong ngày làm việc từ xa.
+
+#### Thông báo đăng ký
+
+Khi đăng ký làm việc từ xa, vui lòng đăng tin nhắn lên #0000_impress_veho_team để xác nhận rằng bạn đã được phê duyệt.
+
+#### Ví dụ
+
+/vehobot remote, YYYY-MM-DD, lý do (đã được phê duyệt bởi @Tên)
 
 ---
 
-### 4) Sức khỏe
+### 4) Trường hợp sức khỏe
 
-Ưu tiên nghỉ  
+Nếu bạn cảm thấy không khỏe và khó làm việc, thay vì làm việc từ xa, về nguyên tắc bạn nên ưu tiên nghỉ bệnh hoặc nghỉ phép.
 
 ---
 
