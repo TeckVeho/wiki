@@ -74,7 +74,7 @@ Hai lần nửa ngày = 1 ngày
 
 ## ◇ Nghỉ phép
 
-(内容はJPと同等のため省略せず同様に維持)
+- Cần có sự phê duyệt trước từ PM
 
 ---
 
