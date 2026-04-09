@@ -30,40 +30,11 @@ https://admin.google.com/u/2/ac/users?hl=ja<br />
 
 
 # 新規プロジェクトの作成
-## 1.請求先の作成
-新規プロジェクト作成時に、新規請求先に紐づけたい場合は、彦田さんに作成を依頼する(以下手順を案内)
-1. メニュー「課金」または「お支払い」を選択し、「請求先アカウント管理画面」に遷移<br />
-   ※組織ではなくプロジェクトにいる場合は「請求先アカウントを管理」を選択
-1. 「アカウントを作成」を選択
-
-1. 名前「(請求先企業名を指定 ex:Daisei Souko)」、国「日本」を入力/選択
-
-1. 課金情報の設定で、DX研究所のクレジットカードを入力し、「送信して課金を有効にする」を選択
-
-1. 新規請求先が作成される
-※請求先は組織「veho-works.com」配下に作成する
-
-## 2.請求先に予算アラートの設定
-新規請求先作成後、請求超過を検知するため、予算アラートを設定する
-1. メニュー「お支払い」＞「予算アラート」を選択
-1. 「予算を作成」を選択し、以下設定をする<br />
-- 名前：「予算アラート」
-- 期間：「月別」
-- フォルダと組織：全て選択されていることを確認
-- プロジェクト：全て選択されていることを確認
-- 全てのサービス：全て選択されていることを確認
-- クレジット：チェック「割引」「プロモーションなど」
-- 金額：「指定額」
-- 目標金額：￥「50,000」
-- 操作：予算の割合：「100」％、金額：「50,000」、トリガー対象：「実値」
-- 通知の管理：チェック「メール通知アラートを課金管理者とユーザーに送信する」
-3. 予算アラートが作成される
-
-## 3.新規プロジェクト作成
+## 1.新規プロジェクト作成
 新規プロジェクトを作成する<br />
 1. メニュー「APIとサービス」を選択後、「プロジェクトを作成」選択し、「新しいプロジェクト」作成画面に遷移<br />
    ※組織ではなくプロジェクトにいる場合は、上部表示のプロジェクト名を選択し、「新しいプロジェクト」を選択
-1. プロジェクト名「ATMTC for (会社名)」、請求先アカウント「（1で作成した請求先or紐づけたい既存の請求先）」を入力し、「作成」を選択<br />
+1. プロジェクト名「ATMTC for (会社名)」、請求先アカウント「（紐づけたい既存の請求先）」を入力し、「作成」を選択<br />
 ※組織・場所が「veho-works.com」になっているか確認する<br />
 
 1. 新規プロジェクトが作成される
@@ -121,36 +92,10 @@ From the "IAM & Admin" menu > "IAM," you can assign and manage roles for groups 
 
 # Creating a New Project
 
-## 1. Creating a Billing Account
-When creating a new project, if you want to link it to a new billing account, request Hikota to create it (follow the steps below).
-1. Select the "Billing" or "Payments" menu and navigate to the "Billing Account Management" screen. *If you are in a project rather than an organization, select "Manage billing accounts."*
-2. Select "Create Account"  
-3. Enter/Select the name "(Specify the billing company name ex: Daisei Souko)" and country "Japan."  
-4. In the billing information settings, enter the credit card for DX Research Institute and select "Submit to enable billing."  
-5. A new billing account will be created.  
-   *The billing account will be created under the organization "veho-works.com."*
-
-## 2. Setting Budget Alerts for the Billing Account
-After creating a new billing account, set up budget alerts to detect billing overages.
-1. Select the "Payments" menu > "Budget Alerts."
-2. Select "Create Budget" and configure the following settings:
-   - Name: "Budget Alert"
-   - Period: "Monthly"
-   - Folder and Organization: Ensure all are selected
-   - Projects: Ensure all are selected
-   - All Services: Ensure all are selected
-   - Credit: Check "Discounts," "Promotions," etc.
-   - Amount: "Specified amount"
-   - Target Amount: ￥"50,000"
-   - Actions: Budget percentage: "100%," Amount: "50,000," Trigger target: "Actual value"
-   - Notification Management: Check "Send email notification alerts to billing administrators and users."  
-
-3. The budget alert will be created.
-
-## 3. Creating a New Project
+## 1. Creating a New Project
 Create a new project.
 1. Select the "APIs & Services" menu and then select "Create Project," navigating to the "Create New Project" screen. *If you are in a project rather than an organization, select the project name displayed at the top and select "New Project."*
-2. Enter the project name "ATMTC for (Company Name)" and the billing account "(the one created in step 1 or an existing one you want to link)" and select "Create."  
+2. Enter the project name "ATMTC for (Company Name)" and the billing account "(an existing one you want to link)" and select "Create."  
    *Ensure the organization/location is "veho-works.com."*  
 3. A new project will be created.
 
