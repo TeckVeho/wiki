@@ -55,5 +55,6 @@ GitHub の運用ルールとツールです。
 | ドキュメント | 説明 |
 |-------------|------|
 | [リソース命名ルール](infrastructure/resource-naming-rules) | S3・EC2・PM2・GitHub・DB・GCP などの命名規約 |
+| [権限ユースケース（AWS / GCP）](infrastructure/permission-use-cases) | 共通ルール・ポリシー設計とユースケース別手順（ベトナム語・英語・日本語の同一ページ） |
 | [AWS SES / SMTP](infrastructure/aws-ses-smtp) | Amazon SES 送信サーバー設定マニュアル |
 | [Google Cloud API](infrastructure/google-cloud-api) | GCP IAM・API（Google Maps 等）の管理と設定 |
