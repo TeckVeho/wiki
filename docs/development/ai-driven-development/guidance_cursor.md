@@ -1,4 +1,8 @@
-# 🚀 Cursor 利用ガイドライン
+---
+title: Cursor Usage Guidelines
+---
+
+# Cursor Usage Guidelines
 
 ---
 

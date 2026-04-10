@@ -1,3 +1,7 @@
+---
+title: Directory structure template
+---
+
 #### ディレクトリ構成テンプレート
 ```md
 .

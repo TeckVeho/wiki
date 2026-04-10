@@ -1,6 +1,6 @@
 ---
 id: issue-and-sp-definition
-title: GitHub Issue を作成するタスク / SP 計上対象の定義
+title: GitHub Issue tasks and SP logging definition
 version: 0.1.0
 updated: 2026-01-16
 ---
@@ -45,7 +45,7 @@ The following should generally have an Issue because they **leave deliverables, 
   - Has dependencies or requires preparation (updating runbooks, validation, release notes, etc.)
 
 
-# GitHub Issue を作成するタスク / SP 計上対象の定義
+# GitHub Issue tasks and SP logging definition (Japanese)
 
 ## 目的
 

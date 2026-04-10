@@ -1,4 +1,8 @@
-# E2Eテスト自動化ガイド
+---
+title: E2E Test Automation Guide
+---
+
+# E2E Test Automation Guide
 
 本ドキュメントは、 **①Claudeデスクトップアプリ＋Playwright MCP**　または　 **②Cursor＋Playwright MCP**　を利用して、<br />
 開発したWebシステムのE2Eテストを自動化するためのガイドです。

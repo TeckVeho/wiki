@@ -217,7 +217,7 @@ Repository Menu **"Settings"** → **Advanced Security** → **Dependabot**
 
 
 
-# Dependabot バージョンチェック設定（dependabot.yml）
+# Dependabot version check settings (dependabot.yml)
 
 このドキュメントは、GitHub Dependabot を使って **依存パッケージの更新PR（version updates / security updates）を自動作成**するための設定内容を説明します。  
 設定ファイル（`dependabot.yml`）自体は ChatGPT などの LLM を使って生成・調整して構いません。

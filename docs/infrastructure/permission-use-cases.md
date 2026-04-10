@@ -1,7 +1,7 @@
 ---
 sidebar_position: 15
 id: permission-use-cases
-title: 権限ユースケース（AWS / GCP）
+title: Permission use cases (AWS / GCP)
 ---
 
 Tài liệu được sắp xếp theo thứ tự **Tiếng Việt → English → 日本語**.  

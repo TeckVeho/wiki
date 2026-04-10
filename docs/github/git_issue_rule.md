@@ -1,3 +1,6 @@
+---
+title: GitHub label and Story Point rules
+---
 
 ## ラベル定義
 

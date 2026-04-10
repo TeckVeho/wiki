@@ -1,3 +1,7 @@
+---
+title: DB schema template (sample)
+---
+
 ## エンティティ一覧
 | テーブル | 目的 | 備考 |
 |----------|------|------|
@@ -10,7 +14,9 @@ erDiagram
   users ||--o{ posts : author
 ```
 
-# サンプル
+---
+
+# Sample
 
 ## エンティティ一覧
 | テーブル | 目的 | 備考 |

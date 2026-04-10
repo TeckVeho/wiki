@@ -1,4 +1,8 @@
-# サンプル
+---
+title: Detail logic template (sample)
+---
+
+# Sample
 ## ロジック：ルート最適化（Simplified VRP）
 
 ```mermaid

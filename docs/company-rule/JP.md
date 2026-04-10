@@ -1,4 +1,8 @@
-# VEHO 就業ルール・リモートワークルール
+---
+title: VEHO Working & Remote Work Policy (Japanese)
+---
+
+# VEHO Working & Remote Work Policy (Japanese)
 
 **適用開始日：2026年4月1日**
 

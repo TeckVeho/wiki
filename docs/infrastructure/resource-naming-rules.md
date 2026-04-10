@@ -1,7 +1,7 @@
 ---
 sidebar_position: 10
 id: resource-naming-rules
-title: リソース命名ルール
+title: Resource naming rules
 ---
 
 Tài liệu được sắp xếp theo thứ tự **Tiếng Việt → English → 日本語**.  

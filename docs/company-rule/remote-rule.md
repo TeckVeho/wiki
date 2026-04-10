@@ -1,4 +1,8 @@
-# Remote Work Policy / リモートワークルール
+---
+title: Remote Work Policy
+---
+
+# Remote Work Policy
 
 ## Effective Date / 適用開始日
 - This remote work policy will be effective starting **April 1, 2026**.  

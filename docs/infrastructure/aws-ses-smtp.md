@@ -1,4 +1,9 @@
-# AWA_SES_SMTP_Configuration_Manual 
+---
+title: Amazon SES SMTP configuration manual
+---
+
+# Amazon SES SMTP configuration manual
+
 （Amazon SES 送信サーバー設定マニュアル）
 
 ## 概要

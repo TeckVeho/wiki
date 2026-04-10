@@ -1,4 +1,8 @@
-# サンプル
+---
+title: Batch design template (sample)
+---
+
+# Sample
 
 | 項目 | 内容 |
 |------|------|
@@ -15,7 +19,4 @@ flowchart TB
   B --> C[XLSX生成]
   C --> D[S3アップロード]
   D --> E[Slack通知]
-yaml
-コピーする
-編集する
 ```

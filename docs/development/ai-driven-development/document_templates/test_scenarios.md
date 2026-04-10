@@ -1,4 +1,8 @@
-# サンプル
+---
+title: Test scenarios template (sample)
+---
+
+# Sample
 
 ```md
 | ID | タイトル | 事前条件 | 手順 | 期待結果 | 種別 |
