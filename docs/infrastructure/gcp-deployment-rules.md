@@ -126,6 +126,7 @@ Truy cập không thường xuyên và chấp nhận cold start 30〜90 giây?
 | **Hạ Tier** | Mục đích giảm chi phí → PR + review bởi SRE |
 | **Nâng Tier khẩn cấp** | Kỹ sư trực có thể thực hiện ngay; PR phải tạo vào ngày làm việc kế tiếp |
 | **Ghi nhận thay đổi** | Ghi lý do và thời gian vào kênh Slack `#infra-ops` |
+| **Cập nhật module ref** | Khi áp dụng phiên bản mới của `terraform-modules`, cần tạo PR cập nhật `ref=vX.Y.Z` cùng lúc |
 
 ---
 
@@ -476,6 +477,56 @@ Truy cập prod được quản lý bằng **Privileged Access Manager (PAM)**:
 
 ## 6. Quản lý IaC (Terraform)
 
+### Cấu trúc repository
+
+Các module dùng chung được tập trung vào repository riêng (`terraform-modules`) và được tham chiếu từ Terraform của từng dự án qua Git source. Vì cấu trúc giữa các dự án khá giống nhau, việc quản lý module tại một nơi giúp đảm bảo tính nhất quán và giảm chi phí bảo trì.
+
+```
+terraform-modules/                  # Repository chứa module dùng chung
+├── modules/
+│   ├── cloud-run/
+│   ├── cloud-sql/
+│   ├── project-iam/
+│   ├── networking/
+│   └── project-tier/              # Định nghĩa Tier (T1～T4)
+└── examples/
+    └── standard-service/
+
+{org}-{service}-infra/              # Repository của từng dự án
+├── environments/
+│   ├── dev/main.tf                 # Tham chiếu terraform-modules qua Git source
+│   ├── stg/main.tf
+│   └── prod/main.tf
+└── ...
+```
+
+### Cách tham chiếu module (Git source)
+
+```hcl
+# environments/prod/main.tf
+
+module "app" {
+  source = "git::https://github.com/your-org/terraform-modules.git//modules/project-tier?ref=v1.2.0"
+
+  tier       = "T3"
+  service    = "kumu"
+  env        = "prod"
+  project_id = "veho-kumu-prod"
+}
+```
+
+Dùng `ref=` để cố định phiên bản, tránh ảnh hưởng đến các dự án hiện có khi cập nhật module.
+
+### Quản lý phiên bản module
+
+| Thao tác | Quy trình |
+|---|---|
+| **Cải tiến module** | PR vào `terraform-modules` → merge → tạo Git tag (ví dụ: `v1.3.0`) |
+| **Áp dụng vào dự án** | PR cập nhật `ref=v1.3.0` trong `main.tf` của từng dự án |
+| **Áp dụng khẩn cấp** | Tạo hotfix tag (ví dụ: `v1.2.1`), dự án cập nhật ref trong ngày |
+
+### Nguyên tắc cơ bản
+
 - Tất cả IAM binding được quản lý bằng Terraform, lưu trong repository.
 - Terraform state lưu trong GCS bucket của `my-project-common`.
 - Thay đổi phải qua **PR → review → merge → auto-apply**.
@@ -631,6 +682,7 @@ Cloud SQL（DB）
 | **Tier ダウン** | コスト削減目的 → PR + SRE レビュー必須 |
 | **緊急 Tier アップ** | オンコール担当者が即時実行可。翌営業日中に PR を作成する |
 | **変更記録** | Slack `#infra-ops` に変更理由と期間を記録する |
+| **モジュール ref 更新** | `terraform-modules` の新バージョン適用時は `ref=vX.Y.Z` の更新 PR を同時に提出する |
 
 ---
 
@@ -1020,34 +1072,55 @@ Cloud SQL（環境ごとに独立）
 | 環境間の差異が生まれる | モジュール再利用で同一構成を保証 |
 | 不正変更に気づかない | Drift 検出で週次に自動検知 |
 
-### ディレクトリ構成
+### リポジトリ構成
+
+共通モジュールは専用リポジトリ（`terraform-modules`）に集約し、各案件の Terraform から Git source で参照します。案件間でアーキテクチャが近いため、モジュールを1箇所で管理することで一貫性の確保とメンテナンスコストの削減を両立します。
 
 ```
-terraform/
+terraform-modules/                  # 共通モジュール専用リポジトリ
+├── modules/
+│   ├── cloud-run/                  # Cloud Run + Tier スペック
+│   ├── cloud-sql/                  # Cloud SQL + HA 設定
+│   ├── project-iam/                # IAM バインディング
+│   ├── networking/                 # VPC / Cloud NAT
+│   └── project-tier/              # Tier 定義（T1〜T4 スペックマップ）
+└── examples/
+    └── standard-service/           # 標準構成のサンプル
+
+{org}-{service}-infra/              # 案件ごとのリポジトリ
 ├── environments/
 │   ├── dev/
-│   │   ├── backend.tf       # state: gs://my-project-tfstate/dev/
-│   │   └── iam.tf
+│   │   ├── backend.tf             # state: gs://my-project-tfstate/dev/
+│   │   └── main.tf                # terraform-modules を Git source で参照
 │   ├── stg/
 │   │   ├── backend.tf
-│   │   └── iam.tf
+│   │   └── main.tf
 │   └── prod/
-│       ├── backend.tf       # state: gs://my-project-tfstate/prod/
-│       └── iam.tf
-└── modules/
-    └── project-iam/
-        ├── main.tf
-        └── variables.tf
+│       ├── backend.tf             # state: gs://my-project-tfstate/prod/
+│       └── main.tf
+└── ...
 ```
 
-### IAM バインディングの書き方
+### モジュール参照方法（Git source）
+
+各案件の `main.tf` では `ref=` でバージョンを固定して参照します。これにより、モジュールを更新しても既存案件に影響しません。
 
 ```hcl
-# environments/prod/iam.tf
+# environments/prod/main.tf
+
+module "app" {
+  source = "git::https://github.com/your-org/terraform-modules.git//modules/project-tier?ref=v1.2.0"
+
+  tier       = "T3"
+  service    = "kumu"
+  env        = "prod"
+  project_id = "veho-kumu-prod"
+}
 
 module "prod_iam" {
-  source     = "../../modules/project-iam"
-  project_id = "my-project-prod"
+  source = "git::https://github.com/your-org/terraform-modules.git//modules/project-iam?ref=v1.2.0"
+
+  project_id = "veho-kumu-prod"
 
   iam_bindings = {
     logging_viewer = {
@@ -1062,10 +1135,20 @@ module "prod_iam" {
 - prod 環境は `google_project_iam_binding`（上書きモード）を使い、Terraform 管理外の付与を許さない。
 - dev・stg は `google_project_iam_member` でも可。
 
+### モジュールのバージョン管理
+
+| 操作 | 手順 |
+|---|---|
+| **モジュール改善** | `terraform-modules` リポジトリへ PR → merge → Git tag（例: `v1.3.0`） |
+| **案件への適用** | 各案件の `main.tf` で `ref=v1.3.0` に更新する PR を提出 |
+| **緊急適用** | hotfix タグ（例: `v1.2.1`）を切り、案件側も同日中に ref を更新する |
+
+> 案件側は任意のタイミングでモジュールをアップデートできます。強制アップデートは原則禁止とし、メジャーバージョン変更時のみ告知します。
+
 ### 変更フロー
 
 ```
-IAM 変更を PR で提出
+IAM / リソース変更を PR で提出（案件 infra repo）
   ↓
 GitHub Actions が自動で terraform plan を実行
   ↓
@@ -1137,4 +1220,5 @@ app-backend@my-project-prod.iam.gserviceaccount.com
 | 2026-04-11 | 利用リソース一覧（§2）をサービスごとのサブセクション形式に変更、環境別スペックを追記 |
 | 2026-04-11 | 利用リソース一覧（§2）に各サービスの月額コスト目安とコスト概算サマリを追記（asia-northeast1 基準） |
 | 2026-04-11 | 利用リソース一覧（§2）にリソース Tier 表（T1〜T4）を追加：Tier 別スペック・選択フロー・変更ルールを記載 |
+| 2026-04-11 | IaC 管理（§6）を更新：共通モジュールを `terraform-modules` 専用リポジトリで管理する方針に変更、Git source 参照・バージョン管理方法を追記 |
 | 2026-04-12 | Tier4（On-Demand）を新設：dev / stg 専用で Cloud SQL を Cloud Run 起動時に API 連動して起動する構成を追加。稼働ルール（§4）の Cloud SQL 制御を Cloud Scheduler から Cloud Run 起動連動方式に変更。緊急時の例外対応から Slack 記録義務を削除。 |
