@@ -491,14 +491,33 @@ Cloud SQL (mỗi môi trường độc lập)
 
 ### Cấu trúc nhóm
 
+#### Danh sách nhóm và quyền GCP
+
 
 | Nhóm                  | Dự án   | Vai trò                                   |
 | --------------------- | ------- | ----------------------------------------- |
 | `gcp-dev-developers@` | dev     | `roles/editor`                            |
 | `gcp-dev-developers@` | stg     | `roles/viewer`                            |
+| `gcp-infra@`          | common  | `roles/editor`                            |
 | `gcp-prod-approvers@` | prod    | Người phê duyệt PAM (Tech Lead / SRE)     |
 | `gcp-org-admins@`     | Tổ chức | `roles/resourcemanager.organizationAdmin` |
+| `gcp-billing-admins@` | Thanh toán | `roles/billing.admin`                  |
 
+
+#### Cấu trúc lồng nhóm (Google Groups nesting)
+
+```
+gcp-dev-developers@   (dev: roles/editor / stg: roles/viewer)
+  ├── gcp-backend@    Kỹ sư thông thường
+  └── gcp-infra@      Kỹ sư hạ tầng (+ common: roles/editor)
+
+gcp-prod-approvers@   (Người phê duyệt PAM cho prod)
+  └── gcp-infra@      Kỹ sư hạ tầng là ứng viên phê duyệt
+```
+
+- Thêm/xóa thành viên chỉ thực hiện ở phía Google Groups. Không cần thay đổi cấu hình GCP.
+- `gcp-infra@` có thêm quyền `roles/editor` đối với dự án `common` (Artifact Registry / Cloud Build / Terraform state).
+- Entitlement PAM như `prod-db-admin` và `prod-break-glass` chỉ dành cho `gcp-infra@` hoặc thành viên `gcp-prod-approvers@`.
 
 ### Truy cập vào prod (PAM)
 
@@ -1243,18 +1262,33 @@ Cloud SQL（環境ごとに独立）
 
 ### グループ設計
 
+#### グループ一覧と GCP 権限
+
 
 | グループ                                 | プロジェクト | ロール                                       |
 | ------------------------------------ | ------ | ----------------------------------------- |
 | `gcp-dev-developers@your-domain.com` | dev    | `roles/editor`                            |
 | `gcp-dev-developers@your-domain.com` | stg    | `roles/viewer`                            |
+| `gcp-infra@your-domain.com`          | common | `roles/editor`                            |
 | `gcp-prod-approvers@your-domain.com` | prod   | PAM 承認者（Tech Lead / SRE）                  |
 | `gcp-org-admins@your-domain.com`     | 組織     | `roles/resourcemanager.organizationAdmin` |
 | `gcp-billing-admins@your-domain.com` | 請求     | `roles/billing.admin`                     |
 
 
-- グループのネストを活用してチーム単位で管理する（例: `gcp-dev-developers@` の中に `gcp-backend@` を含める）。
+#### グループのネスト構成（Google Groups nesting）
+
+```
+gcp-dev-developers@   (dev: roles/editor / stg: roles/viewer)
+  ├── gcp-backend@    通常エンジニア
+  └── gcp-infra@      インフラ担当（+ common: roles/editor）
+
+gcp-prod-approvers@   (prod の PAM 承認者)
+  └── gcp-infra@      インフラ担当が承認者候補
+```
+
 - メンバーの追加・削除は Google Groups 側のみで行う。GCP 側は変更不要。
+- `gcp-infra@` は `common` プロジェクトに対して `roles/editor` を追加で持つ（Artifact Registry / Cloud Build / Terraform state の管理担当）。
+- `prod-db-admin` / `prod-break-glass` などの高権限 PAM Entitlement は `gcp-infra@` または `gcp-prod-approvers@` のメンバーのみ申請可能とする。
 
 ### prod へのアクセス（PAM）
 
