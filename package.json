@@ -16,17 +16,17 @@
     "sync": "ts-node scripts/sync.js"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.9.2",
-    "@docusaurus/plugin-client-redirects": "^3.9.2",
-    "@docusaurus/preset-classic": "^3.9.2",
+    "@docusaurus/core": "^3.10.0",
+    "@docusaurus/plugin-client-redirects": "^3.10.0",
+    "@docusaurus/preset-classic": "^3.10.0",
     "@docusaurus/theme-classic": "^3.9.2",
-    "@docusaurus/theme-mermaid": "^3.9.2",
+    "@docusaurus/theme-mermaid": "^3.10.0",
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.0.0",
-    "mermaid": "^11.13.0",
+    "mermaid": "^11.14.0",
     "prism-react-renderer": "^2.3.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.9.2",
