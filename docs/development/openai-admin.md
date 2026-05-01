@@ -44,7 +44,7 @@ Project Manager（PM）が、プロジェクト単位で OpenAI API キーを発
 4. **API keys**（**View all API keys** など）から、**Create new secret key** を選択する。
 5. 可能なら **キーのスコープを対象 Project に限定**する（UI に「Restrict to project」やプロジェクト選択がある場合）。
 6. **名前**は利用方針に合わせる（例: `{project-name}-dev`, `{project-name}-stg`, `{project-name}-prod`）。
-7. 生成された **シークレット** をコピーし、**ソースコードやチャットに貼らず**、Secret Manager / GitHub Secrets / 環境変数の安全な登録先に保存する。
+7. 生成された **シークレット** をコピーし、**ソースコードやチャットに貼らず**、**GCP Secret Manager** に保存する（もしくはエンジニアに依頼してキーを更新する）。
 8. **prod / stg / dev** で別キーを使う場合は、**キー作成を環境ごとに繰り返す**。
 
 ### 補足
@@ -87,7 +87,7 @@ README の手順の概要は次のとおりです（**詳細・更新は `openai
 1. **`projects/<名前>.yml`** にプロジェクト定義を用意する。雛形は `projects/_template.yml`。**フィールドの意味・禁止事項・削除時の扱いは `docs/key-management.md`**（実データの YAML はリポジトリに載せない運用のため、README も併読）。
 2. **`npm run issue-keys -- projects/<名前>.yml`** で、定義に従いプロジェクト作成・環境別キーの払い出しなどを実行する（README のコマンド表。ログにシークレットは出さない設計）。
 3. 必要に応じ **`npm run list-projects`** 等で組織内の OpenAI プロジェクトを確認する（オプションは README 参照）。
-4. 発行結果の扱いは **`docs/key-management.md`** に従う（例: YAML の `key` に平文が保存される点、Secret Manager / GitHub Secrets への転記、ローカルファイルの取り扱い）。**再表示できない前提で、受け取り後すぐ安全な保管先へ移す。**
+4. 発行結果の扱いは **`docs/key-management.md`** に従う（例: YAML の `key` に平文が保存される点、ローカルファイルの取り扱い）。**GCP Secret Manager** へ登録するか、**エンジニアに依頼してキーを更新**する。**再表示できない前提**で、受け取り後すぐ移す。
 5. [OpenAI API 利用方針](./openapi-use-policy) の「新規利用時の手順」に沿って動作確認し、**Usage** で利用量が想定どおりの Project に載っているか確認する。
 
 権限や Organization の設定で詰まった場合は、**@Kido** に相談してください。
