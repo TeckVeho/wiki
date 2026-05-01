@@ -56,11 +56,11 @@ Project Manager（PM）が、プロジェクト単位で OpenAI API キーを発
 
 ## 2. openai-admin-tool を使う {#openai-admin-tool}
 
-本ページの **openai-admin-tool** は、社内リポジトリ **openai-admin**（Node 製 CLI。YAML 定義に沿って OpenAI Project と環境別 API キーを扱う）を指します。
+本ページの **openai-admin-tool** は、[TeckVeho/openai-admin-tool](https://github.com/TeckVeho/openai-admin-tool)（Node 製 CLI。YAML 定義に沿って OpenAI Project と環境別 API キーを扱う）を指します。
 
 組織レベルの操作に **OpenAI API Admin Key** が必要です。
 
-**コマンド・ファイル構成・注意事項の正本は、clone 先の `openai-admin/README.md` と `openai-admin/docs/key-management.md` です。** 以下は PM が初めて触る際の抜粋にすぎないので、操作前に README を読むか、**Cursor** で当該ファイルを開いて確認してください（`openai-admin` をワークスペースに追加する、エクスプローラー／**@** で `README.md` を参照する、など）。
+**コマンド・ファイル構成・注意事項の正本は、clone 先の `README.md` と `docs/key-management.md` です。** 以下は PM が初めて触る際の抜粋にすぎないので、操作前に README を読むか、**Cursor** で当該リポジトリを開き **`README.md`** を確認してください（クローンした **`openai-admin-tool`** フォルダをワークスペースに追加する、チャットで **`@README.md`** 等を参照する、など）。
 
 ### OpenAI API Admin Key の準備
 
@@ -72,19 +72,30 @@ openai-admin-tool は **OpenAI API Admin Key**（Admin API 用のキー）なし
 - **@Kido に依頼する**  
   上記の権限がない、または運用上こちらに任せる場合は、**@Kido** に Slack 等で依頼し、発行・受け渡しをしてもらう。
 
-### openai-admin のセットアップ（.env など）
+### openai-admin-tool の入手とセットアップ（git clone 〜 .env）
 
-README の手順の概要は次のとおりです（**詳細・更新は `openai-admin/README.md` 優先**）。
+まずリポジトリを **clone** します。続きの詳細・変更は **[openai-admin-tool リポジトリ](https://github.com/TeckVeho/openai-admin-tool)** の README を最優先で確認してください。
 
-- リポジトリを **clone** し、ルートで `npm install` を実行する。
-- **`.env.example` をコピーして `.env` を作成**する（Windows 例: `copy .env.example .env`。macOS / Linux は `cp`）。
-- **`.env` の `OPENAI_ADMIN_API_KEY`** に、Admin API キー（`sk-admin-...`）を記入する。
-- **`.env` は Git にコミットしない**（`.gitignore` 対象）。Admin キーは権限が強いため漏洩に注意（README にも記載あり）。
-- 接続確認の例: `npm run verify-admin`
+1. **clone** して作業ディレクトリに移動する。
+
+   ```bash
+   git clone https://github.com/TeckVeho/openai-admin-tool.git
+   cd openai-admin-tool
+   ```
+
+2. ルートで **`npm install`** を実行する。
+
+3. **`.env.example` をコピーして `.env` を作成**する（Windows 例: `copy .env.example .env`。macOS / Linux は `cp .env.example .env`）。
+
+4. **`.env` の `OPENAI_ADMIN_API_KEY`** に、Admin API キー（`sk-admin-...`）を記入する。
+
+5. **`.env` は Git にコミットしない**（`.gitignore` 対象）。Admin キーは権限が強いため漏洩に注意（README にも記載あり）。
+
+6. 接続確認の例: `npm run verify-admin`
 
 ### ツールでの作業の流れ（発行）
 
-1. **`projects/<名前>.yml`** にプロジェクト定義を用意する。雛形は `projects/_template.yml`。**フィールドの意味・禁止事項・削除時の扱いは `docs/key-management.md`**（実データの YAML はリポジトリに載せない運用のため、README も併読）。
+1. **`projects/<名前>.yml`** にプロジェクト定義を用意する。雛形は `projects/_template.yml`。**フィールドの意味・禁止事項・削除時の扱いは `docs/key-management.md`**（実データの YAML はリポジトリに載せない運用のため、README も併読）。作業は **`openai-admin-tool` のルート**（`git clone` したディレクトリ）で行う。
 2. **`npm run issue-keys -- projects/<名前>.yml`** で、定義に従いプロジェクト作成・環境別キーの払い出しなどを実行する（README のコマンド表。ログにシークレットは出さない設計）。
 3. 必要に応じ **`npm run list-projects`** 等で組織内の OpenAI プロジェクトを確認する（オプションは README 参照）。
 4. 発行結果の扱いは **`docs/key-management.md`** に従う（例: YAML の `key` に平文が保存される点、ローカルファイルの取り扱い）。**GCP Secret Manager** へ登録するか、**エンジニアに依頼してキーを更新**する。**再表示できない前提**で、受け取り後すぐ移す。
@@ -97,4 +108,4 @@ README の手順の概要は次のとおりです（**詳細・更新は `openai
 ## 関連ドキュメント
 
 - [OpenAI API 利用方針](./openapi-use-policy)（Project／キー命名・モデル・移行ルール）
-- **openai-admin** リポジトリ: `README.md`（セットアップ・`npm run`）、`docs/key-management.md`（YAML 仕様・シークレット運用）
+- [openai-admin-tool（GitHub）](https://github.com/TeckVeho/openai-admin-tool)：`README.md`（セットアップ・`npm run`）、`docs/key-management.md`（YAML 仕様・シークレット運用）
