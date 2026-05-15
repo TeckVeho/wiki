@@ -60,3 +60,4 @@ GitHub の運用ルールとツールです。
 | [権限ユースケース（AWS / GCP）](infrastructure/permission-use-cases) | 共通ルール・ポリシー設計とユースケース別手順（ベトナム語・英語・日本語の同一ページ） |
 | [AWS SES / SMTP](infrastructure/aws-ses-smtp) | Amazon SES 送信サーバー設定マニュアル |
 | [Google Cloud API](infrastructure/google-cloud-api) | GCP IAM・API（Google Maps 等）の管理と設定 |
+| [CI/CD デプロイパターン（EC2 / Laravel / Cloud Run）](infrastructure/cicd-deployment-patterns) | GitHub Actions・EC2（AWS）・Cloud Run（GCP）の標準フロー（ベトナム語・英語・日本語の同一ページ） |

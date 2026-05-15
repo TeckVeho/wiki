@@ -739,6 +739,7 @@ Tự động chạy `terraform plan` vào mỗi thứ Hai hàng tuần. Nếu ph
 
 - Đặt tên tài nguyên: [Resource naming rules](./resource-naming-rules.md)
 - Checklist sau triển khai: [Post-Deploy Checklist](./post-deploy-checklist.md)
+- Luồng CI/CD (GitHub Actions · EC2 · Cloud Run): [CI/CD deployment patterns](./cicd-deployment-patterns.md)
 
 ---
 
@@ -1633,6 +1634,7 @@ app-backend@my-project-prod.iam.gserviceaccount.com
 - リソース命名: [Resource naming rules](./resource-naming-rules.md)
 - GCP の API・IAM・グループ運用の参考: [Google Maps API and GCP IAM](./google-cloud-api.md)
 - デプロイ後の確認観点（汎用）: [Post-Deploy Checklist](./post-deploy-checklist.md)
+- CI/CD の標準フロー（EC2 / Laravel / Cloud Run）: [CI/CD デプロイパターン](./cicd-deployment-patterns.md)
 
 ## 改訂履歴
 
