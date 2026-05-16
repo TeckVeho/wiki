@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to XServer
 
 on:
   push:
@@ -14,16 +14,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Deploy to EC2
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy build to XServer
         shell: bash
+        env:
+          SSH_HOST: 183.181.98.149
+          SSH_PORT: "10022"
+          SSH_USER: veho
+          REMOTE_PATH: /home/veho/vw-dev.com/public_html/wiki
         run: |
           set -euo pipefail
 
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOYSERVERSECRET }}" | tr -d '\r' > ~/.ssh/id_rsa
+          echo "${{ secrets.XSERVERKEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          # 秘密鍵の形式を確認（デバッグ用、内容は表示しない）
           if [ ! -s ~/.ssh/id_rsa ]; then
             echo "Error: SSH key file is empty"
             exit 1
@@ -33,13 +49,8 @@ jobs:
             exit 1
           fi
 
-          ssh-keyscan -H 57.180.91.172 >> ~/.ssh/known_hosts
+          ssh-keyscan -p "${SSH_PORT}" -H "${SSH_HOST}" >> ~/.ssh/known_hosts
 
-          ssh -tt -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ec2-user@57.180.91.172 \
-            'set -euo pipefail \
-            && cd /home/ec2-user/wiki \
-            && git fetch origin \
-            && git reset --hard origin/develop \
-            && yarn install --frozen-lockfile \
-            && yarn build \
-            && sudo systemctl reload httpd'
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_rsa -p ${SSH_PORT} -o StrictHostKeyChecking=yes" \
+            build/ "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}/"
