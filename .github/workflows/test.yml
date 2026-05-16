@@ -1,0 +1,49 @@
+name: Test SSH Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SSH connection to XServer
+        shell: bash
+        env:
+          SSH_HOST: 183.181.98.149
+          SSH_PORT: "10022"
+          SSH_USER: veho
+        run: |
+          set -euo pipefail
+
+          mkdir -p ~/.ssh
+
+          printf '%s\n' "${{ secrets.XSERVERKEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "=== Validate private key ==="
+
+          if [ ! -s ~/.ssh/id_rsa ]; then
+            echo "ERROR: SSH key file is empty"
+            exit 1
+          fi
+
+          if ! grep -q "BEGIN OPENSSH PRIVATE KEY" ~/.ssh/id_rsa; then
+            echo "ERROR: Invalid SSH private key format"
+            exit 1
+          fi
+
+          echo "=== Add known_hosts ==="
+
+          ssh-keyscan -p "${SSH_PORT}" -H "${SSH_HOST}" >> ~/.ssh/known_hosts
+
+          echo "=== SSH connection test ==="
+
+          ssh -vvv \
+            -i ~/.ssh/id_rsa \
+            -p "${SSH_PORT}" \
+            -o StrictHostKeyChecking=yes \
+            "${SSH_USER}@${SSH_HOST}" \
+            "echo 'SSH connection successful'; whoami; pwd"
