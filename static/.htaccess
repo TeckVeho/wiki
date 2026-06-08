@@ -1,2 +1,19 @@
 Require all granted
 Satisfy any
+
+# Docusaurus (trailingSlash: false) emits page.html files.
+# Map clean URLs like /infrastructure/xserver-api to the matching .html file.
+<IfModule mod_rewrite.c>
+  Options -MultiViews
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteRule ^index\.html$ - [L]
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
