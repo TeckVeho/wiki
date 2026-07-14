@@ -57,6 +57,7 @@ Không được dùng chung một API key cho nhiều hệ thống vì sẽ khô
 * Khóa cá nhân **chỉ** dùng cho phát triển và kiểm tra trên máy cục bộ của chính người đó
 * Không chia sẻ khóa cá nhân giữa nhiều người
 * Không dán khóa cá nhân lên GitHub, Slack, tài liệu, v.v.
+* Tuy nhiên, **ngoại lệ duy nhất**: khi quản trị viên chia sẻ khóa cá nhân cho chính người nhận, cho phép gửi qua DM
 * Không dùng khóa cá nhân trên môi trường máy chủ như dev / stg / prod
 * Trên máy chủ, dùng API key được phát hành **theo từng dự án và từng môi trường**
 * Khi cần API key cho môi trường máy chủ, **liên hệ PM để được phát hành**
@@ -194,6 +195,7 @@ Sharing one API key across systems is prohibited because it prevents attributing
 * Personal keys are **limited** to development and verification on that person's local PC only
 * Do not share personal keys among multiple people
 * Do not paste personal keys into GitHub, Slack, documentation, or similar
+* Exception: when an administrator shares a personal key with the intended recipient only, sending it via DM is permitted
 * Do not use personal keys on server environments such as dev / stg / prod
 * On servers, use API keys issued **per project and per environment**
 * When an API key is needed for a server environment, **request issuance from the PM**
@@ -331,6 +333,7 @@ APIキーを複数システムで使い回すと、どのシステムがどの�
 * 個人キーは、**本人のローカルPC**での開発・検証用途に限定する
 * 個人キーを複数人で共有しない
 * 個人キーを GitHub、Slack、ドキュメントなどに貼り付けない
+* ただし、管理者から本人へ個人キーを共有する場合に限り、DMでの送付を許可する
 * dev / stg / prod などの**サーバー環境**では、個人キーを使用しない
 * サーバー環境では、**各プロジェクト・各環境ごとに発行された** APIキーを使用する
 * APIキーが必要な場合は、**PMに発行を依頼する**
