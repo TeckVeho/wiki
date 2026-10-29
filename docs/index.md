@@ -51,6 +51,7 @@ Quy tắc & công cụ GitHub / GitHub operations & tooling / GitHub の運用�
 | [git_issue_rule](github/git_issue_rule) | Định nghĩa label & Story Points | Label definitions and Story Points | ラベル定義と Story Point の考え方 |
 | [dependabot](github/dependabot) | Cấu hình & vận hành Dependabot | Dependabot configuration and usage | Dependabot の設定と運用 |
 | [issue-creator-tool](github/issue-creator-tool) | Tạo hàng loạt Issue từ Google Spreadsheet | Bulk Issue creation via spreadsheet | スプレッドシート連携での Issue 一括作成 |
+| [auto-add-to-project](github/auto-add-to-project) | Tự động thêm Issue vào GitHub Project *(VI / EN / JA một trang)* | Auto-add repository Issues to a Project *(same page)* | Repository の Issue を Project へ自動追加（同一ページで VI / EN / JA） |
 
 ---
 
