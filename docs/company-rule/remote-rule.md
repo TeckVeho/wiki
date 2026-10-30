@@ -7,6 +7,8 @@ title: Remote Work Policy
 ## Effective Date / 適用開始日
 - This remote work policy will be effective starting **April 1, 2026**.  
 - 新しいリモートワークのルールは、**2026年4月1日**より適用されます。
+- **Revised: November 1, 2026.** Remote work beyond 2 days per month is subject to deduction in the annual evaluation, including when carried out with approval.  
+- **改定：2026年11月1日。** 月2回を超えるリモートは、許可を得た場合も年次評価の減点対象とします。
 
 ---
 
@@ -25,14 +27,21 @@ title: Remote Work Policy
 ---
 
 ### 2) Impact on Evaluation and Salary Increases / 評価および昇給への影響
-- Exceeding the 2-day remote work limit may result in a **lower performance evaluation**, which could negatively impact your **annual salary review**.  
-- 月2回を超えるリモートワークを行うと、**評価が下がり**、**毎年の昇給**に悪影響が出ます。
+- Up to 2 remote-work days per month remain allowed and are not subject to deduction in the annual evaluation.  
+- 月2回までのリモートワークは、これまでどおり認められ、年次評価の減点対象には含まれません。
+- From November 1, 2026, remote work beyond 2 days in a month is subject to deduction in the annual evaluation, including when it is carried out with prior approval.  
+- 2026年11月1日以降、月2回を超えるリモートワークは、事前の許可を得て実施した場合でも、年次評価の減点対象となります。
+- Approval decides whether the additional remote work may take place. The annual-evaluation deduction applies whether or not approval was given.  
+- 許可は、そのリモートワークを実施してよいかの判断です。年次評価上の減点は、許可の有無にかかわらず適用されます。
 
 ---
 
 ### 3) Special Circumstances for Exceeding Remote Work Days / 特別な理由がある場合の対応
 If you require additional remote days due to unavoidable circumstances, you must obtain **prior approval via Slack**.  
 月2回を超えての取得が必要な場合、**Slackで事前の承認**をもらってください。
+
+From November 1, 2026, remote work beyond 2 days is still subject to deduction in the annual evaluation when it is carried out with this approval.  
+2026年11月1日以降、この許可を得て実施した場合も、月2回を超える分は年次評価の減点対象です。
 
 **Approval flow / 承認ルート**
 - Engineers: request approval from your respective **PM**.  

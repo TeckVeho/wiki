@@ -2,6 +2,8 @@
 
 **Ngày áp dụng: 01/04/2026**
 
+**Sửa đổi: 01/11/2026** (làm việc từ xa vượt quá 2 ngày/tháng thuộc diện trừ điểm trong đánh giá năm, kể cả khi đã được phê duyệt)
+
 Các quy định này được ban hành nhằm đảm bảo tất cả thành viên làm việc một cách công bằng và phù hợp.
 
 ---
@@ -114,13 +116,17 @@ Quy định này được thiết kế nhằm bảo vệ nhân viên bằng các
 
 ### 2) Ảnh hưởng đến đánh giá và tăng lương
 
-Việc vượt quá 2 ngày làm việc từ xa trong tháng có thể làm giảm đánh giá hiệu suất và ảnh hưởng tiêu cực đến việc xét tăng lương hàng năm.
+- Làm việc từ xa tối đa 2 ngày/tháng vẫn được phép và không thuộc diện trừ điểm trong đánh giá năm.
+- Từ 01/11/2026, làm việc từ xa vượt quá 2 ngày/tháng thuộc diện trừ điểm trong đánh giá năm, kể cả khi đã được phê duyệt trước.
+- Phê duyệt chỉ quyết định việc có được làm từ xa thêm hay không. Việc trừ điểm trong đánh giá năm được áp dụng dù đã được phê duyệt hay chưa.
 
 ---
 
 ### 3) Trường hợp đặc biệt
 
 Nếu cần làm việc từ xa vượt quá số ngày quy định do lý do bất khả kháng, bạn phải xin phê duyệt trước qua Slack.
+
+Từ 01/11/2026, phần làm việc từ xa vượt quá 2 ngày/tháng vẫn thuộc diện trừ điểm trong đánh giá năm ngay cả khi đã được phê duyệt.
 
 #### Quy trình phê duyệt
 
