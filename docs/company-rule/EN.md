@@ -2,6 +2,8 @@
 
 **Effective Date: April 1, 2026**
 
+**Revised: November 1, 2026** (remote work beyond 2 days per month is subject to deduction in the annual evaluation, including when carried out with approval)
+
 These rules are defined to ensure fair and appropriate working practices for all members.
 
 ---
@@ -114,13 +116,17 @@ This rule is designed to protect employees by ensuring managers issue work reque
 
 ### 2) Impact on Evaluation and Salary Increases
 
-Exceeding the limit may negatively affect performance evaluation and annual salary increases.
+- Up to 2 remote-work days per month remain allowed and are not subject to deduction in the annual evaluation.
+- From November 1, 2026, remote work beyond 2 days in a month is subject to deduction in the annual evaluation, including when it is carried out with prior approval.
+- Approval decides whether the additional remote work may take place. The annual-evaluation deduction applies whether or not approval was given.
 
 ---
 
 ### 3) Special Circumstances
 
 If you need to exceed the limit, prior approval via Slack is required.
+
+From November 1, 2026, remote work beyond 2 days is still subject to deduction in the annual evaluation when it is carried out with this approval.
 
 #### Approval flow
 
