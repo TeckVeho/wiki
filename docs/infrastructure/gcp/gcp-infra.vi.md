@@ -8,7 +8,8 @@ Tài liệu này tóm tắt kiến thức và kiến trúc triển khai ứng d�
 
 1. [Tóm tắt](#tóm-tắt)
 2. [Kiến trúc](#kiến-trúc)
-3. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
+3. [Service account](#service-account)
+4. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
 
 ## Tóm tắt
 
@@ -87,6 +88,19 @@ Cloud Scheduler → Cloud Run (OIDC, đúng endpoint nội bộ)
 - User SQL của từng môi trường khác nhau nếu nhiều môi trường gắn một instance.
 - Backup production bật. Point-in-time recovery là tùy chọn, cần binary log.
 
+## Service account
+
+Cloud Run không chạy bằng service account mặc định `PROJECT_NUMBER-compute@developer.gserviceaccount.com`. Cloud Build không chạy bằng SA legacy `PROJECT_NUMBER@cloudbuild.gserviceaccount.com`. Mỗi việc một danh tính. Runtime tách theo môi trường, nên dev không mang danh tính của prod.
+
+| Danh tính | Phạm vi | Được làm | Không cấp |
+|-----------|---------|----------|-----------|
+| Runtime `{project}-run-{env}` | Một SA cho API, web và job của đúng môi trường đó | Ghi log và metric. Đọc secret của môi trường. `cloudsql.client`. `objectAdmin` trên bucket upload của môi trường. `serviceAccountTokenCreator` trên chính nó để ký URL | Build, deploy, role editor cấp project |
+| Scheduler `{service}-cron-api-{env}` | Một SA mỗi môi trường | `run.invoker` trên API của môi trường đó, gọi bằng OIDC | Đọc secret, nối SQL |
+| WIF (GitHub Actions) | Một SA cho repo. Pool chỉ nhận OIDC của đúng repository và đúng nhánh deploy | `cloudbuild.builds.editor`, `serviceusage.serviceUsageConsumer`, `artifactregistry.writer`. Đọc và ghi bucket `gs://PROJECT_ID_cloudbuild`. `serviceAccountUser` chỉ trên SA build | `run.admin`, `storage.admin`, `serviceAccountUser` cấp project |
+| Build `{project}-cd-build` | YAML Cloud Build khai báo `serviceAccount` trỏ tới SA này | `logging.logWriter`, `artifactregistry.writer`, `run.developer`. Cùng quyền bucket Cloud Build như SA WIF. `serviceAccountUser` chỉ trên SA runtime từng môi trường. Cloud Build agent được actAs SA này | `run.admin`, `storage.admin` cấp project, `serviceAccountUser` cấp project |
+
+`serviceAccountUser` gắn trên từng SA đích, không gắn ở project. Sau khi CD chạy bằng SA build, gỡ IAM còn lại trên SA compute mặc định và SA Cloud Build legacy nếu không còn dùng.
+
 ## Ví dụ: DriveeLink
 
 Repo: [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2), nhánh `develop`.
@@ -98,6 +112,15 @@ Repo: [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2), nhán
 | Topology SQL | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
 DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveelink`, region `asia-northeast1`.
+
+| Danh tính | Email |
+|-----------|--------|
+| Runtime dev / stg / prod | `dx-driveelink-run-dev@`, `dx-driveelink-run-stg@`, `dx-driveelink-run-prod@` |
+| Scheduler | `driveelink-cron-api-{env}@dx-driveelink.iam.gserviceaccount.com` |
+| WIF (GitHub Actions) | `github-actions-dx-driveelink@dx-driveelink.iam.gserviceaccount.com` |
+| Thực thi Cloud Build | `dx-driveelink-cd-build@dx-driveelink.iam.gserviceaccount.com` |
+
+Pool `github-pool` / provider `github-provider` chỉ tin OIDC của `TeckVeho/drivee-link-2` trên nhánh `develop`, `staging`, `production`. SA WIF được `workloadIdentityUser` theo `attribute.repository`, rồi chỉ `serviceAccountUser` trên `dx-driveelink-cd-build`. SA build chỉ `serviceAccountUser` trên ba SA runtime ở bảng trên. Mọi file `google_cloud/cloudbuild/cloudbuild.*.yaml` khai báo `serviceAccount` là SA build. Script tạo và siết các binding này: [`google_cloud/scripts/setup-github-actions-wif.sh`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/scripts/setup-github-actions-wif.sh).
 
 | Hạng mục | Giá trị |
 |----------|---------|

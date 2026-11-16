@@ -8,7 +8,8 @@
 
 1. [概要](#概要)
 2. [構成](#構成)
-3. [例: DriveeLink](#例-driveelink)
+3. [サービスアカウント](#サービスアカウント)
+4. [例: DriveeLink](#例-driveelink)
 
 ## 概要
 
@@ -87,6 +88,19 @@ Cloud Scheduler → Cloud Run（OIDC、内部エンドポイント）
 - 複数環境が一つのインスタンスを共有するときは、環境ごとに SQL ユーザーを分ける。
 - 本番のバックアップは有効にする。ポイントインタイムリカバリは任意で、バイナリログが必要。
 
+## サービスアカウント
+
+Cloud Run はデフォルトの `PROJECT_NUMBER-compute@developer.gserviceaccount.com` では動かさない。Cloud Build はレガシーの `PROJECT_NUMBER@cloudbuild.gserviceaccount.com` では動かさない。役割ごとに ID を分ける。ランタイムは環境ごとに分ける。dev が prod の ID を持たない。
+
+| ID | 範囲 | 許可すること | 付与しないこと |
+|----|------|--------------|----------------|
+| ランタイム `{project}-run-{env}` | その環境の API、Web、ジョブが共有する一つの SA | ログとメトリクスの書き込み。その環境の secret の読み取り。`cloudsql.client`。その環境のアップロードバケットへの `objectAdmin`。署名付き URL のため自分自身への `serviceAccountTokenCreator` | ビルド、デプロイ、プロジェクトの editor |
+| Scheduler `{service}-cron-api-{env}` | 環境ごとの一つの SA | その環境の API への `run.invoker`。OIDC で呼ぶ | secret の読み取り、SQL への接続 |
+| WIF（GitHub Actions） | リポジトリにつき一つの SA。プールは対象リポジトリとデプロイブランチの OIDC だけを受ける | `cloudbuild.builds.editor`、`serviceusage.serviceUsageConsumer`、`artifactregistry.writer`。バケット `gs://PROJECT_ID_cloudbuild` の読み書き。ビルド SA への `serviceAccountUser` のみ | `run.admin`、`storage.admin`、プロジェクトスコープの `serviceAccountUser` |
+| ビルド `{project}-cd-build` | Cloud Build の YAML が `serviceAccount` でこの SA を指定する | `logging.logWriter`、`artifactregistry.writer`、`run.developer`。WIF と同じ Cloud Build バケット権限。各環境のランタイム SA への `serviceAccountUser` のみ。Cloud Build エージェントはこの SA を actAs できる | `run.admin`、プロジェクトスコープの `storage.admin` と `serviceAccountUser` |
+
+`serviceAccountUser` は対象の SA に付ける。プロジェクトには付けない。CD がビルド SA で通ったあと、未使用ならデフォルトの compute SA とレガシー Cloud Build SA の IAM を外す。
+
 ## 例: DriveeLink
 
 リポジトリ: [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2)、ブランチ `develop`。
@@ -98,6 +112,15 @@ Cloud Scheduler → Cloud Run（OIDC、内部エンドポイント）
 | SQL トポロジ | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
 DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、リージョン `asia-northeast1` で使っている。
+
+| ID | メール |
+|----|--------|
+| ランタイム dev / stg / prod | `dx-driveelink-run-dev@`、`dx-driveelink-run-stg@`、`dx-driveelink-run-prod@` |
+| Scheduler | `driveelink-cron-api-{env}@dx-driveelink.iam.gserviceaccount.com` |
+| WIF（GitHub Actions） | `github-actions-dx-driveelink@dx-driveelink.iam.gserviceaccount.com` |
+| Cloud Build 実行 | `dx-driveelink-cd-build@dx-driveelink.iam.gserviceaccount.com` |
+
+プール `github-pool` / プロバイダ `github-provider` は、`TeckVeho/drivee-link-2` のブランチ `develop`、`staging`、`production` の OIDC だけを信頼する。WIF の SA は `attribute.repository` で `workloadIdentityUser` を受け、`serviceAccountUser` は `dx-driveelink-cd-build` にだけ付く。ビルド SA の `serviceAccountUser` は上の三つのランタイム SA にだけ付く。`google_cloud/cloudbuild/cloudbuild.*.yaml` はすべてビルド SA を `serviceAccount` に書く。これらの binding を作り、広い権限を外すスクリプトは [`google_cloud/scripts/setup-github-actions-wif.sh`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/scripts/setup-github-actions-wif.sh)。
 
 | 項目 | 値 |
 |------|-----|
