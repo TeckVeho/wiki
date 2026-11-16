@@ -9,7 +9,8 @@ Tài liệu này tóm tắt kiến thức và kiến trúc triển khai ứng d�
 1. [Tóm tắt](#tóm-tắt)
 2. [Kiến trúc](#kiến-trúc)
 3. [Service account](#service-account)
-4. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
+4. [Dọn dữ liệu và backup](#dọn-dữ-liệu-và-backup)
+5. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
 
 ## Tóm tắt
 
@@ -40,7 +41,7 @@ Terraform tạo và giữ resource. Cloud Build chỉ đổi image đang chạy 
 
 Cloud Run tới Cloud SQL bằng socket trên private IP. Service và database phải cùng VPC. Private IP không đi xuyên qua VPC khác. Vì vậy Cloud Run phải egress vào đúng VPC của instance mà nó gắn.
 
-Production bật backup tự động và chặn xóa instance.
+Production bật backup hàng ngày, giữ 30 ngày, và chặn xóa instance.
 
 ## Kiến trúc
 
@@ -86,7 +87,7 @@ Cloud Scheduler → Cloud Run (OIDC, đúng endpoint nội bộ)
 - Cloud SQL tắt IP public, `ssl_mode` là `ENCRYPTED_ONLY`.
 - Egress của Cloud Run là `PRIVATE_RANGES_ONLY` khi chỉ cần tới SQL và dải private.
 - User SQL của từng môi trường khác nhau nếu nhiều môi trường gắn một instance.
-- Backup production bật. Point-in-time recovery là tùy chọn, cần binary log.
+- Backup production chạy mỗi ngày và giữ 30 bản (30 ngày). Point-in-time recovery là tùy chọn, cần binary log.
 
 ## Service account
 
@@ -100,6 +101,17 @@ Cloud Run không chạy bằng service account mặc định `PROJECT_NUMBER-com
 | Build `{project}-cd-build` | YAML Cloud Build khai báo `serviceAccount` trỏ tới SA này | `logging.logWriter`, `artifactregistry.writer`, `run.developer`. Cùng quyền bucket Cloud Build như SA WIF. `serviceAccountUser` chỉ trên SA runtime từng môi trường. Cloud Build agent được actAs SA này | `run.admin`, `storage.admin` cấp project, `serviceAccountUser` cấp project |
 
 `serviceAccountUser` gắn trên từng SA đích, không gắn ở project. Sau khi CD chạy bằng SA build, gỡ IAM còn lại trên SA compute mặc định và SA Cloud Build legacy nếu không còn dùng.
+
+## Dọn dữ liệu và backup
+
+Stack `bootstrap` dọn hai loại dữ liệu build. Dữ liệu ứng dụng trên bucket upload không có lifecycle xóa.
+
+| Đối tượng | Quy tắc |
+|-----------|---------|
+| Image Docker trong Artifact Registry | Giữ tag có prefix `prod`, `stg`, `dev`. Giữ 10 bản mới nhất của mỗi package. Xóa image không tag sau 7 ngày. Xóa bản không khớp các rule KEEP |
+| Source Cloud Build | Xóa object dưới `source/` trong `gs://{project}_cloudbuild` sau 7 ngày |
+
+Backup database chỉ đặt trên instance production. Backup chạy mỗi ngày và giữ **30 bản**, tức 30 ngày. Instance dùng chung thì database staging nằm trong cùng các bản backup đó. Database dev trên SQL hub không thuộc backup của project ứng dụng. Point-in-time recovery là tùy chọn và cần binary log.
 
 ## Ví dụ: DriveeLink
 
@@ -137,7 +149,14 @@ Pool `github-pool` / provider `github-provider` chỉ tin OIDC của `TeckVeho/d
 | stg | Mạng chung stg/prod (`driveelink-vpc-prod`) | `dx-driveelink-prod` | `dx_driveelink_stg` | `driveelink_stg` |
 | prod | Mạng chung stg/prod (`driveelink-vpc-prod`) | `dx-driveelink-prod` | `dx_driveelink_prod` | `driveelink` |
 
-Prod sở hữu instance chung. Backup được ép bật, cửa sổ `17:00` UTC. Point-in-time recovery đang tắt.
+Prod sở hữu instance chung. Backup hàng ngày bắt đầu lúc `17:00` UTC và giữ 30 bản (`retained_backups = 30`). Point-in-time recovery đang tắt. Database stg nằm trên instance này nên cùng cửa sổ backup. Dev trên hub không dùng backup này.
+
+Dọn dữ liệu build của ví dụ này:
+
+| Đối tượng | Giá trị |
+|-----------|---------|
+| Artifact Registry `driveelink-docker` | Giữ prefix `prod`, `stg`, `dev`. Giữ 10 bản mới nhất mỗi package. Xóa image không tag sau 7 ngày |
+| `gs://dx-driveelink_cloudbuild/source/` | Xóa sau 7 ngày |
 
 ### Thứ tự triển khai
 

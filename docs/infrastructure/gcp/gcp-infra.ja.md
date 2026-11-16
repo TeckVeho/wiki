@@ -9,7 +9,8 @@
 1. [概要](#概要)
 2. [構成](#構成)
 3. [サービスアカウント](#サービスアカウント)
-4. [例: DriveeLink](#例-driveelink)
+4. [データの削除とバックアップ](#データの削除とバックアップ)
+5. [例: DriveeLink](#例-driveelink)
 
 ## 概要
 
@@ -40,7 +41,7 @@ Terraform がリソースを作り、維持する。Cloud Build は動いてい�
 
 Cloud Run から Cloud SQL へはプライベート IP 上のソケットでつなぐ。サービスとデータベースは同じ VPC にいる必要がある。プライベート IP は別の VPC を越えて届かない。Cloud Run は、接続先インスタンスがある VPC へ egress する。
 
-本番は自動バックアップを有効にし、インスタンスの削除を防ぐ。
+本番は毎日バックアップし、30 日分を残し、インスタンスの削除を防ぐ。
 
 ## 構成
 
@@ -86,7 +87,7 @@ Cloud Scheduler → Cloud Run（OIDC、内部エンドポイント）
 - Cloud SQL のパブリック IP は無効。`ssl_mode` は `ENCRYPTED_ONLY`。
 - SQL とプライベート範囲だけに届ければよいとき、Cloud Run の egress は `PRIVATE_RANGES_ONLY`。
 - 複数環境が一つのインスタンスを共有するときは、環境ごとに SQL ユーザーを分ける。
-- 本番のバックアップは有効にする。ポイントインタイムリカバリは任意で、バイナリログが必要。
+- 本番のバックアップは毎日取り、30 世代（30 日）残す。ポイントインタイムリカバリは任意で、バイナリログが必要。
 
 ## サービスアカウント
 
@@ -100,6 +101,17 @@ Cloud Run はデフォルトの `PROJECT_NUMBER-compute@developer.gserviceaccoun
 | ビルド `{project}-cd-build` | Cloud Build の YAML が `serviceAccount` でこの SA を指定する | `logging.logWriter`、`artifactregistry.writer`、`run.developer`。WIF と同じ Cloud Build バケット権限。各環境のランタイム SA への `serviceAccountUser` のみ。Cloud Build エージェントはこの SA を actAs できる | `run.admin`、プロジェクトスコープの `storage.admin` と `serviceAccountUser` |
 
 `serviceAccountUser` は対象の SA に付ける。プロジェクトには付けない。CD がビルド SA で通ったあと、未使用ならデフォルトの compute SA とレガシー Cloud Build SA の IAM を外す。
+
+## データの削除とバックアップ
+
+`bootstrap` stack がビルド成果物を二つ片付ける。アップロード用バケットのアプリデータには削除ライフサイクルを付けない。
+
+| 対象 | ルール |
+|------|--------|
+| Artifact Registry の Docker イメージ | プレフィックス `prod`、`stg`、`dev` のタグを残す。パッケージごとに最新 10 世代を残す。タグなしイメージは 7 日で削除する。KEEP に合わないものは削除する |
+| Cloud Build のソース | `gs://{project}_cloudbuild` の `source/` を 7 日で削除する |
+
+データベースのバックアップは本番インスタンスにだけ置く。毎日取り、**30 世代（30 日）**残す。インスタンスを共有している場合、staging のデータベースも同じバックアップに入る。SQL hub 上の dev データベースは、このプロジェクトのバックアップ対象外である。ポイントインタイムリカバリは任意で、バイナリログが必要。
 
 ## 例: DriveeLink
 
@@ -137,7 +149,14 @@ DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、�
 | stg | stg/prod 共通ネットワーク（`driveelink-vpc-prod`） | `dx-driveelink-prod` | `dx_driveelink_stg` | `driveelink_stg` |
 | prod | stg/prod 共通ネットワーク（`driveelink-vpc-prod`） | `dx-driveelink-prod` | `dx_driveelink_prod` | `driveelink` |
 
-共有インスタンスの所有者は prod である。バックアップは強制的に有効で、開始時刻は `17:00` UTC。ポイントインタイムリカバリは現在オフ。
+共有インスタンスの所有者は prod である。毎日のバックアップは `17:00` UTC に始まり、30 世代残す（`retained_backups = 30`）。ポイントインタイムリカバリは現在オフ。stg のデータベースは同じインスタンス上なので、同じバックアップに含まれる。hub 上の dev はこのバックアップを使わない。
+
+この例のビルドデータ削除:
+
+| 対象 | 値 |
+|------|-----|
+| Artifact Registry `driveelink-docker` | プレフィックス `prod`、`stg`、`dev` を残す。パッケージごとに最新 10 世代。タグなしイメージは 7 日で削除 |
+| `gs://dx-driveelink_cloudbuild/source/` | 7 日で削除 |
 
 ### デプロイ順
 
