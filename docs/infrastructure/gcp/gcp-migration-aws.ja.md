@@ -4,6 +4,8 @@
 
 GCP のインフラができてから、アプリケーションのデータを移す。環境は一つずつ行う。dev、次に stg、最後に prod。作業は三つ。環境変数を写す。SQL を dump して Console から import する。S3 のオブジェクトをローカルへ落としてから `gcloud` で Cloud Storage へ上げる。
 
+`gcloud` はローカルマシンだけで実行する。AWS のサーバーには入れず、サーバー上では実行しない。SQL の dump と S3 のコピーを先にローカルへ置く。そのあとローカルから `gcloud storage cp` または `gcloud storage rsync` する。
+
 移行先の構成: [gcp-infra.ja.md](gcp-infra.ja.md)。
 
 ## 目次
@@ -18,7 +20,8 @@ GCP のインフラができてから、アプリケーションのデータを�
 
 - その環境の Cloud SQL は apply 済みで、プライベート接続できる。dev は SQL hub 上にある。stg と prod は一つのインスタンスを共有し、環境ごとにデータベースとユーザーを分ける。
 - その環境のアップロード用バケットがある。Cloud Run のランタイムサービスアカウントはそのバケットへ書き込める。
-- 作業マシンは `gcloud auth login` 済みで、`aws` は正しいアカウントにログインしている。dump、S3 のコピー、値の入った env ファイルはコミットしない。
+- ローカルマシンは `gcloud auth login` 済みである。`aws` は、データがある場所に応じてローカルまたはサーバーで実行してよい。dump、S3 のコピー、値の入った env ファイルはコミットしない。
+- AWS のサーバーに `gcloud` は置かない。`.sql` と S3 のディレクトリは `scp` または `aws s3 sync` でローカルへ取り、GCP への送信はそのマシンから行う。
 
 一つの環境の中の順は、環境変数、データベース、ファイル。
 
@@ -45,11 +48,12 @@ bash google_cloud/scripts/gcp/create-app-secrets-bundle.sh dev \
 
 ## データベース
 
-### RDS または AWS 上の MySQL から dump する
+### サーバーで dump し、ファイルをローカルへ取る
 
-ソースデータベースへ接続できるマシンで実行する。データベースごとに一つのファイル。
+dump は MySQL に繋がるサーバーで実行する。この段階では `gcloud` を呼ばない。データベースごとに一つのファイル。
 
 ```bash
+# AWS のサーバー上
 mysqldump \
   --host=RDS_HOST \
   --user=RDS_USER \
@@ -59,17 +63,23 @@ mysqldump \
   --routines \
   --triggers \
   --databases DATABASE_NAME \
-  > DATABASE_NAME.sql
+  > /tmp/DATABASE_NAME.sql
 ```
 
-`--single-transaction` は、読み取りをロックせずに InnoDB の一貫した dump を取る。RDS のユーザーと権限は dump しない。Cloud SQL のユーザーは Terraform が作る。
+```bash
+# ローカルマシン上
+scp user@AWS_SERVER:/tmp/DATABASE_NAME.sql ./DATABASE_NAME.sql
+```
 
-### dump を Cloud Storage に置く
+`--single-transaction` は、読み取りをロックせずに InnoDB の一貫した dump を取る。RDS のユーザーと権限は dump しない。Cloud SQL のユーザーは Terraform が作る。`scp` が終わったらサーバーの `/tmp/DATABASE_NAME.sql` を消す。
 
-Cloud SQL の Console は Cloud Storage 上のオブジェクトだけを import する。ローカルファイルは直接選べない。ファイルはアプリケーションのアップロード用バケットとは別の、同じプロジェクトのバケットに置く。
+### ローカルの dump を Cloud Storage に置く
+
+Cloud SQL の Console は Cloud Storage 上のオブジェクトだけを import する。`gcloud` はローカルマシンで実行し、さっき取ったファイルを読む。
 
 ```bash
-gcloud storage cp DATABASE_NAME.sql gs://PROJECT_ID-sql-import/DATABASE_NAME.sql \
+# ローカルマシン上
+gcloud storage cp ./DATABASE_NAME.sql gs://PROJECT_ID-sql-import/DATABASE_NAME.sql \
   --project=PROJECT_ID
 ```
 
@@ -91,9 +101,11 @@ import は同じキーのデータを上書きする。初回の移行は空の�
 
 ## S3 のファイル
 
-S3 バケットをローカルディレクトリへ落とし、そのディレクトリを環境の GCS バケットへ `gcloud storage rsync` する。
+S3 バケットをローカルマシンのディレクトリへ落とす。サーバーでは `gcloud` を実行しない。ローカルのディレクトリが揃ってから、ローカルの `gcloud storage rsync` で環境の GCS バケットへ上げる。
 
 ```bash
+# ローカルマシン上。AWS CLI がサーバーにしか無い場合は、サーバーのディスクへ sync し、
+# scp -r でそのディレクトリをローカルへ取る。サーバーに gcloud は入れない。
 aws s3 sync s3://AWS_BUCKET ./s3-export --only-show-errors
 
 gcloud storage rsync ./s3-export gs://GCS_BUCKET \

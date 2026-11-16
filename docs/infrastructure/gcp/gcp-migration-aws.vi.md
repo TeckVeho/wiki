@@ -4,6 +4,8 @@
 
 Chuyển dữ liệu ứng dụng sau khi hạ tầng GCP đã có. Làm từng môi trường một: dev, rồi stg, rồi prod. Ba việc: chép biến môi trường, dump SQL rồi import bằng Console, tải object S3 về máy local rồi đẩy lên Cloud Storage bằng `gcloud`.
 
+`gcloud` chỉ chạy trên máy local. Không cài và không chạy `gcloud` trên server AWS. Dump SQL và bản sao S3 phải nằm trên máy local trước. Từ đó mới `gcloud storage cp` hoặc `gcloud storage rsync`.
+
 Kiến trúc đích: [gcp-infra.vi.md](gcp-infra.vi.md).
 
 ## Mục lục
@@ -18,7 +20,8 @@ Kiến trúc đích: [gcp-infra.vi.md](gcp-infra.vi.md).
 
 - Cloud SQL của môi trường đó đã apply và nhận kết nối private. Dev nằm trên SQL hub. Stg và prod dùng chung instance, mỗi môi trường một database và một user.
 - Bucket upload của môi trường đã có. Service account runtime của Cloud Run đã có quyền ghi bucket đó.
-- Máy làm việc đã `gcloud auth login` và `aws` login vào đúng account. Không commit file dump, bản sao S3, hay file env có giá trị thật.
+- Máy local đã `gcloud auth login`. Lệnh `aws` có thể chạy trên máy local hoặc trên server, tùy chỗ đang giữ dữ liệu. Không commit file dump, bản sao S3, hay file env có giá trị thật.
+- Server AWS không có `gcloud`. File `.sql` và thư mục S3 được tải về máy local bằng `scp` hoặc `aws s3 sync`, rồi mới đẩy lên GCP từ máy đó.
 
 Thứ tự trong một môi trường: biến môi trường, database, rồi file.
 
@@ -45,11 +48,12 @@ File `app-secrets.dev.env` chỉ chứa khóa bí mật, dạng `.env`. Không �
 
 ## Database
 
-### Dump từ RDS hoặc MySQL trên AWS
+### Dump trên server, rồi tải file về máy local
 
-Chạy từ máy được phép nối tới database nguồn. Một file cho một database.
+Dump chạy trên server, nơi nối được MySQL. Không gọi `gcloud` ở bước này. Một file cho một database.
 
 ```bash
+# Trên server AWS
 mysqldump \
   --host=RDS_HOST \
   --user=RDS_USER \
@@ -59,17 +63,23 @@ mysqldump \
   --routines \
   --triggers \
   --databases DATABASE_NAME \
-  > DATABASE_NAME.sql
+  > /tmp/DATABASE_NAME.sql
 ```
 
-`--single-transaction` giữ dump nhất quán với InnoDB mà không khóa bảng đọc. Không dump user và quyền của RDS. User trên Cloud SQL do Terraform tạo.
+```bash
+# Trên máy local
+scp user@AWS_SERVER:/tmp/DATABASE_NAME.sql ./DATABASE_NAME.sql
+```
 
-### Đưa file dump lên Cloud Storage
+`--single-transaction` giữ dump nhất quán với InnoDB mà không khóa bảng đọc. Không dump user và quyền của RDS. User trên Cloud SQL do Terraform tạo. Xóa `/tmp/DATABASE_NAME.sql` trên server sau khi `scp` xong.
 
-Console của Cloud SQL chỉ import từ một object trên Cloud Storage, không nhận file từ máy local. Đặt file vào một bucket của chính project, ngoài bucket upload của ứng dụng.
+### Đưa file dump từ máy local lên Cloud Storage
+
+Console của Cloud SQL chỉ import từ một object trên Cloud Storage. Lệnh `gcloud` chạy trên máy local, đọc file vừa tải về.
 
 ```bash
-gcloud storage cp DATABASE_NAME.sql gs://PROJECT_ID-sql-import/DATABASE_NAME.sql \
+# Trên máy local
+gcloud storage cp ./DATABASE_NAME.sql gs://PROJECT_ID-sql-import/DATABASE_NAME.sql \
   --project=PROJECT_ID
 ```
 
@@ -91,9 +101,11 @@ Sau khi ứng dụng đọc được dữ liệu, xóa object dump và file loca
 
 ## File trên S3
 
-Tải bucket S3 về một thư mục local, rồi `gcloud storage rsync` thư mục đó lên bucket GCS của môi trường.
+Tải bucket S3 về một thư mục trên máy local. Không chạy `gcloud` trên server. Sau khi thư mục local đã đủ, mới `gcloud storage rsync` từ máy local lên bucket GCS.
 
 ```bash
+# Trên máy local. Nếu AWS CLI chỉ có trên server thì sync ra đĩa server,
+# rồi scp -r thư mục đó về máy local. Không cài gcloud trên server.
 aws s3 sync s3://AWS_BUCKET ./s3-export --only-show-errors
 
 gcloud storage rsync ./s3-export gs://GCS_BUCKET \
