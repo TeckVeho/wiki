@@ -69,6 +69,7 @@ Hướng dẫn cloud & dịch vụ ngoài / Cloud & external services / 外部�
 | [cicd-deployment-patterns](infrastructure/cicd-deployment-patterns) | GitHub Actions, EC2, Cloud Run *(VI / EN / JA một trang)* | CI/CD patterns for Actions / EC2 / Cloud Run *(same page)* | GitHub Actions・EC2・Cloud Run の標準フロー（同一ページで VI / EN / JA） |
 | [gcp-deployment-rules](infrastructure/gcp-deployment-rules) | Chuẩn triển khai GCP (tier, IaC, CI/CD, secrets…) *(menu ngôn ngữ trong trang)* | GCP deployment standards *(toc/languages inside doc)* | GCP デプロイ規約（構成・IaC・CI/CD 等／ページ内で言語切替） |
 | [gcp-infra](infrastructure/gcp/gcp-infra.vi) | Kiến trúc GCP chung, ví dụ thứ tự triển khai lấy DriveeLink | GCP architecture summary; DriveeLink is the deploy example *(English pending)* | [日本語](infrastructure/gcp/gcp-infra.ja) — GCP 構成の概要。デプロイ手順の例は DriveeLink |
+| [gcp-migration-aws](infrastructure/gcp/gcp-migration-aws.vi) | Chuyển biến môi trường, dump SQL (import bằng Console), S3 về local rồi `gcloud` lên GCS | Move env vars, SQL dump via Console import, and S3 via local then `gcloud` *(Vietnamese and Japanese files)* | [日本語](infrastructure/gcp/gcp-migration-aws.ja) — 環境変数、SQL dump の Console import、S3 をローカル経由で GCS へ |
 | [post-deploy-checklist](infrastructure/post-deploy-checklist) | Checklist sau deploy dịch vụ web | Post-deploy verification checklist for web services | Web サービス公開後の確認チェックリスト |
 | [xserver-api](infrastructure/xserver-api) | Phát hành & sử dụng API key Xserver (DNS, mail, MySQL, …) | Xserver API key issuance and usage with Cursor | Xserver API キーの発行・利用（DNS・メール・MySQL 等） |
 
