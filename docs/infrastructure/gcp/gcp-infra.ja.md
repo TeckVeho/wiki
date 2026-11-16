@@ -8,9 +8,10 @@
 
 1. [概要](#概要)
 2. [構成](#構成)
-3. [サービスアカウント](#サービスアカウント)
-4. [データの削除とバックアップ](#データの削除とバックアップ)
-5. [例: DriveeLink](#例-driveelink)
+3. [Cloud Run の Tier](#cloud-run-の-tier)
+4. [サービスアカウント](#サービスアカウント)
+5. [データの削除とバックアップ](#データの削除とバックアップ)
+6. [例: DriveeLink](#例-driveelink)
 
 ## 概要
 
@@ -89,6 +90,24 @@ Cloud Scheduler → Cloud Run（OIDC、内部エンドポイント）
 - 複数環境が一つのインスタンスを共有するときは、環境ごとに SQL ユーザーを分ける。
 - 本番のバックアップは毎日取り、30 世代（30 日）残す。ポイントインタイムリカバリは任意で、バイナリログが必要。
 
+## Cloud Run の Tier
+
+すべてのプロジェクト、すべての環境（`dev`、`stg`、`prod`）は `resource_tier = "tier3"` にする。tfvars の `resource_tier` が `tier_specs` から Cloud Run のサイズを選ぶ。min instance は tier の値をそのまま使う。tier3 は API も Web も `min_instances = 0` である。
+
+`tier3` 以外は例外である。tier を上げる前に承認が必要である。
+
+`cloud_run_api_min_instances` と `cloud_run_web_min_instances` は tfvars に書かない。空なら Terraform は tier の min instance、つまり 0 を使う。
+
+コンテナがメモリ不足で起動しないときは、override 変数で memory を上げる。その対処に min instance は上げず、tier も変えない。
+
+```hcl
+resource_tier        = "tier3"
+cloud_run_api_memory = "512Mi"
+cloud_run_web_memory = "512Mi"
+```
+
+本番で `cloud_run_api_min_instances = 1` にするには、先に PM の承認がいる。承認は API から。Web は別の承認があるまで tier の min instance のままにする。
+
 ## サービスアカウント
 
 Cloud Run はデフォルトの `PROJECT_NUMBER-compute@developer.gserviceaccount.com` では動かさない。Cloud Build はレガシーの `PROJECT_NUMBER@cloudbuild.gserviceaccount.com` では動かさない。役割ごとに ID を分ける。ランタイムは環境ごとに分ける。dev が prod の ID を持たない。
@@ -123,7 +142,7 @@ Cloud Run はデフォルトの `PROJECT_NUMBER-compute@developer.gserviceaccoun
 | Terraform | [`google_cloud/terraform/README.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/README.md) |
 | SQL トポロジ | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
-DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、リージョン `asia-northeast1` で使っている。
+DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、リージョン `asia-northeast1` で使っている。すべての環境は `resource_tier = "tier3"`。Cloud Run の min instance は tier どおり 0。prod の `cloud_run_api_min_instances = 1` は PM の承認のあとだけ。`tier3` から tier を上げるには、先に承認がいる。
 
 | ID | メール |
 |----|--------|
