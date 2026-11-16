@@ -35,9 +35,9 @@ IaC chia ba stack, apply theo thứ tự phụ thuộc:
 
 Terraform tạo và giữ resource. Cloud Build chỉ đổi image đang chạy và kích hoạt job migrate. Giá trị bí mật không vào Terraform, không vào git, không vào biến thường của Cloud Run. Terraform cấp quyền đọc secret. Người vận hành ghi giá trị vào Secret Manager.
 
-Cloud Run tới Cloud SQL bằng socket trên private IP. Service và database phải cùng VPC. Private IP không đi xuyên qua VPC khác. Vì vậy môi trường nào gắn một instance SQL thì Cloud Run của môi trường đó phải egress vào đúng VPC của instance.
+Cloud Run tới Cloud SQL bằng socket trên private IP. Service và database phải cùng VPC. Private IP không đi xuyên qua VPC khác. Vì vậy Cloud Run phải egress vào đúng VPC của instance mà nó gắn.
 
-Production bật backup tự động và chặn xóa instance. Không đặt lịch tắt SQL lên instance mà môi trường khác còn dùng.
+Production bật backup tự động và chặn xóa instance.
 
 ## Kiến trúc
 
@@ -84,7 +84,6 @@ Cloud Scheduler → Cloud Run (OIDC, đúng endpoint nội bộ)
 - Egress của Cloud Run là `PRIVATE_RANGES_ONLY` khi chỉ cần tới SQL và dải private.
 - User SQL của từng môi trường khác nhau nếu nhiều môi trường gắn một instance.
 - Backup production bật. Point-in-time recovery là tùy chọn, cần binary log.
-- Lịch tắt đêm chỉ đặt trên instance mà đúng một môi trường sở hữu.
 
 ## Ví dụ: DriveeLink
 
@@ -104,28 +103,26 @@ DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveeli
 | Artifact Registry | `asia-northeast1-docker.pkg.dev/dx-driveelink/driveelink-docker` |
 | Cloud Run | `driveelink-api-{env}`, `driveelink-web-{env}` |
 | Job | `driveelink-migrate-{env}`, `driveelink-queue-{env}`, `driveelink-pdf-{env}` |
-| VPC | `driveelink-vpc-{env}`, subnet `driveelink-connector-{env}` |
+**Mạng và SQL.** Dev đi tới SQL hub `gcp-dev-sql-hub` qua Shared VPC của hub. Stg và prod dùng một mạng riêng, tách khỏi hub, và dùng chung một Cloud SQL instance. Trên instance đó mỗi môi trường có database và user riêng.
 
-SQL của ví dụ này không phải một instance mỗi môi trường:
+| Môi trường | Mạng | Instance | Database | User |
+|------------|------|----------|----------|------|
+| dev | Shared VPC của hub | `gcp-dev-sql-hub:asia-northeast1:dev-sql-hub` | `dx_driveelink_dev` | `driveelink_dev` |
+| stg | Mạng chung stg/prod (`driveelink-vpc-prod`) | `dx-driveelink-prod` | `dx_driveelink_stg` | `driveelink_stg` |
+| prod | Mạng chung stg/prod (`driveelink-vpc-prod`) | `dx-driveelink-prod` | `dx_driveelink_prod` | `driveelink` |
 
-| Môi trường | Instance | Database | User | Ghi chú |
-|------------|----------|----------|------|---------|
-| dev | `gcp-dev-sql-hub:asia-northeast1:dev-sql-hub` | `dx_driveelink_dev` | `driveelink_dev` | Gắn hub. Cloud Run egress vào Shared VPC của hub |
-| stg | `dx-driveelink-prod` | `dx_driveelink_stg` | `driveelink_stg` | Gắn instance prod, dùng VPC prod |
-| prod | `dx-driveelink-prod` | `dx_driveelink_prod` | `driveelink` | Sở hữu instance. Backup ép bật, cửa sổ `17:00` UTC. Point-in-time recovery đang tắt |
-
-`enable_sql_night_weekend_schedule` để `false` cả ba môi trường. Check trong `modules/app_compose/checks.tf` từ chối lịch tắt khi stack không sở hữu instance.
+Prod sở hữu instance chung. Backup được ép bật, cửa sổ `17:00` UTC. Point-in-time recovery đang tắt.
 
 ### Thứ tự triển khai
 
-Vì stg dùng VPC và instance của prod, ví dụ này apply prod trước stg.
+Mạng và instance dùng chung do stack prod tạo, nên apply prod trước stg. Dev gắn hub, không dùng mạng của stg/prod.
 
 | Bước | Stack | Điều kiện |
 |------|-------|-----------|
 | 1 | `google_cloud/terraform/live/bootstrap` | Project `dx-driveelink` đã có billing |
-| 2 | `live/prod/network` rồi `live/prod/app` | Bucket state đã có. Prod tạo VPC và instance SQL |
-| 3 | `live/stg/app` | State `network/prod` và instance prod đã có. Stg chỉ tạo database và user |
-| 4 | `live/dev/app` | Hub đã gắn project này vào Shared VPC. `live/dev/network` là tùy chọn khi tfvars trỏ `vpc_*_override` sang hub |
+| 2 | `live/prod/network` rồi `live/prod/app` | Bucket state đã có. Prod tạo mạng chung stg/prod và instance SQL dùng chung |
+| 3 | `live/stg/app` | Cùng state `network/prod` và cùng instance. Stg chỉ tạo database và user của mình |
+| 4 | `live/dev/app` | Hub đã gắn project này vào Shared VPC. Dev không apply mạng stg/prod |
 | 5 | Cloud Build | Registry và service Cloud Run đã có |
 
 ```bash
@@ -143,8 +140,8 @@ Sau đó `live/stg/app` và `live/dev/app`. `terraform.tfvars` copy từ file `*
 
 Prefix state mà app đọc:
 
-- prod và stg: `network/prod`
-- dev: không đọc state network local khi đã override sang VPC hub
+- stg và prod: `network/prod` (một mạng chung)
+- dev: VPC của SQL hub, không đọc mạng stg/prod
 
 Image:
 
