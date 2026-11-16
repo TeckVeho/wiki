@@ -102,6 +102,12 @@ Giữ object dump và file `.sql` local cho đến khi mục [Sau khi import](#s
 
 ## File trên S3
 
+Ghi tổng dung lượng S3 trước khi tải. Dòng `Total Size` là số byte.
+
+```bash
+aws s3 ls s3://AWS_BUCKET --recursive --summarize
+```
+
 Tải bucket S3 về một thư mục trên máy local. Không chạy `gcloud` trên server. Sau khi thư mục local đã đủ, mới `gcloud storage rsync` từ máy local lên bucket GCS.
 
 ```bash
@@ -132,6 +138,14 @@ Operation SQL là Done và `rsync` lên GCS xong thì chưa kết thúc việc c
 - App khởi động và thao tác chính chạy đúng: đăng nhập, danh sách, bản ghi lấy từ dump.
 - Ảnh và file đính kèm hiển thị đúng như bản đã lưu trên S3. Mở vài bản ghi có ảnh và so với cùng object trên S3: đúng file, không vỡ, không thiếu. URL không còn trỏ về bucket AWS.
 - Số file trên GCS khớp thư mục local đã tải từ S3.
+- Tổng dung lượng GCS tương đương tổng dung lượng S3. Chạy lại lệnh S3 và lệnh GCS, so hai số byte:
+
+```bash
+aws s3 ls s3://AWS_BUCKET --recursive --summarize
+gcloud storage du -s gs://GCS_BUCKET --project=PROJECT_ID
+```
+
+`Total Size` của S3 và số byte đầu dòng của `gcloud storage du -s` phải khớp. Bucket GCS đã có file cần giữ từ trước thì tổng GCS bằng tổng S3 cộng phần file đó. Chưa giải thích được phần lệch thì chưa xóa bản local.
 
 Chỉ xóa file dump, object import trên Cloud Storage và thư mục local sau khi các mục trên đúng.
 

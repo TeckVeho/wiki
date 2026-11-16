@@ -102,6 +102,12 @@ dump のオブジェクトとローカルの `.sql` は、[import のあと](#im
 
 ## S3 のファイル
 
+ダウンロードの前に S3 の合計サイズを記録する。`Total Size` の行がバイト数である。
+
+```bash
+aws s3 ls s3://AWS_BUCKET --recursive --summarize
+```
+
 S3 バケットをローカルマシンのディレクトリへ落とす。サーバーでは `gcloud` を実行しない。ローカルのディレクトリが揃ってから、ローカルの `gcloud storage rsync` で環境の GCS バケットへ上げる。
 
 ```bash
@@ -132,6 +138,14 @@ SQL の operation が Done になり、GCS への `rsync` が終わっても、�
 - アプリが起動し、主な操作が動く。ログイン、一覧、dump から入ったレコード。
 - 画像と添付ファイルが、S3 に保存されていたものと同じように表示される。画像のあるレコードをいくつか開き、S3 の同じオブジェクトと比べる。ファイルが一致し、壊れておらず、欠けていない。URL が AWS のバケットを指していない。
 - GCS のファイル数が、S3 から落としたローカルディレクトリと一致する。
+- GCS の合計サイズが S3 の合計サイズと同じである。S3 のコマンドと GCS のコマンドを再実行し、バイト数を比べる。
+
+```bash
+aws s3 ls s3://AWS_BUCKET --recursive --summarize
+gcloud storage du -s gs://GCS_BUCKET --project=PROJECT_ID
+```
+
+S3 の `Total Size` と、`gcloud storage du -s` の行頭のバイト数が一致する。GCS バケットに残す既存ファイルがある場合、GCS の合計は S3 の合計にその分を足した値になる。差を説明できるまでローカルのコピーは消さない。
 
 上の確認が通ってから、dump ファイル、Cloud Storage 上の import 用オブジェクト、ローカルディレクトリを消す。
 
