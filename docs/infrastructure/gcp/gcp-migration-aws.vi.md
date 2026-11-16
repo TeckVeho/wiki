@@ -2,7 +2,7 @@
 
 > **Language**: [🇻🇳 Tiếng Việt](gcp-migration-aws.vi.md) | [🇯🇵 日本語](gcp-migration-aws.ja.md)
 
-Chuyển dữ liệu ứng dụng sau khi hạ tầng GCP đã có. Làm từng môi trường một: dev, rồi stg, rồi prod. Ba việc: chép biến môi trường, dump SQL rồi import bằng Console, tải object S3 về máy local rồi đẩy lên Cloud Storage bằng `gcloud`.
+Chuyển dữ liệu ứng dụng sau khi hạ tầng GCP đã có. Làm từng môi trường một: dev, rồi stg, rồi prod. Chép biến môi trường, dump SQL rồi import bằng Console, tải object S3 về máy local rồi đẩy lên Cloud Storage bằng `gcloud`. Import xong thì mở app và kiểm tra dữ liệu cùng ảnh trước khi xóa file local.
 
 `gcloud` chỉ chạy trên máy local. Không cài và không chạy `gcloud` trên server AWS. Dump SQL và bản sao S3 phải nằm trên máy local trước. Từ đó mới `gcloud storage cp` hoặc `gcloud storage rsync`.
 
@@ -14,7 +14,8 @@ Kiến trúc đích: [gcp-infra.vi.md](gcp-infra.vi.md).
 2. [Biến môi trường](#biến-môi-trường)
 3. [Database](#database)
 4. [File trên S3](#file-trên-s3)
-5. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
+5. [Sau khi import](#sau-khi-import)
+6. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
 
 ## Trước khi chuyển
 
@@ -97,7 +98,7 @@ Service account của Cloud SQL instance cần đọc object đó. Trong Console
 
 Import ghi đè dữ liệu trùng khóa. Chạy trên database trống của lần chuyển đầu. Không import file stg vào database prod.
 
-Sau khi ứng dụng đọc được dữ liệu, xóa object dump và file local.
+Giữ object dump và file `.sql` local cho đến khi mục [Sau khi import](#sau-khi-import) xác nhận app đọc đúng dữ liệu.
 
 ## File trên S3
 
@@ -122,7 +123,17 @@ gcloud storage ls gs://GCS_BUCKET --recursive --project=PROJECT_ID | wc -l
 
 Không thêm `--delete-unmatched-destination-objects` ở lần đầu nếu bucket GCS đã có file cần giữ. Chỉ thêm cờ đó khi muốn GCS thành bản sao đúng của thư mục local.
 
-Xóa `./s3-export` sau khi số file khớp.
+Giữ `./s3-export` cho đến khi ảnh trên app hiển thị đúng. Số file khớp chưa đủ để xóa.
+
+## Sau khi import
+
+Operation SQL là Done và `rsync` lên GCS xong thì chưa kết thúc việc chuyển. Mở app của đúng môi trường đó và kiểm tra dữ liệu vừa đưa sang.
+
+- App khởi động và thao tác chính chạy đúng: đăng nhập, danh sách, bản ghi lấy từ dump.
+- Ảnh và file đính kèm hiển thị đúng như bản đã lưu trên S3. Mở vài bản ghi có ảnh và so với cùng object trên S3: đúng file, không vỡ, không thiếu. URL không còn trỏ về bucket AWS.
+- Số file trên GCS khớp thư mục local đã tải từ S3.
+
+Chỉ xóa file dump, object import trên Cloud Storage và thư mục local sau khi các mục trên đúng.
 
 ## Ví dụ: DriveeLink
 

@@ -2,7 +2,7 @@
 
 > **Language**: [🇻🇳 Tiếng Việt](gcp-migration-aws.vi.md) | [🇯🇵 日本語](gcp-migration-aws.ja.md)
 
-GCP のインフラができてから、アプリケーションのデータを移す。環境は一つずつ行う。dev、次に stg、最後に prod。作業は三つ。環境変数を写す。SQL を dump して Console から import する。S3 のオブジェクトをローカルへ落としてから `gcloud` で Cloud Storage へ上げる。
+GCP のインフラができてから、アプリケーションのデータを移す。環境は一つずつ行う。dev、次に stg、最後に prod。環境変数を写す。SQL を dump して Console から import する。S3 のオブジェクトをローカルへ落としてから `gcloud` で Cloud Storage へ上げる。import のあと、ローカルファイルを消す前にアプリを開き、データと画像を確認する。
 
 `gcloud` はローカルマシンだけで実行する。AWS のサーバーには入れず、サーバー上では実行しない。SQL の dump と S3 のコピーを先にローカルへ置く。そのあとローカルから `gcloud storage cp` または `gcloud storage rsync` する。
 
@@ -14,7 +14,8 @@ GCP のインフラができてから、アプリケーションのデータを�
 2. [環境変数](#環境変数)
 3. [データベース](#データベース)
 4. [S3 のファイル](#s3-のファイル)
-5. [例: DriveeLink](#例-driveelink)
+5. [import のあと](#import-のあと)
+6. [例: DriveeLink](#例-driveelink)
 
 ## 移行の前
 
@@ -97,7 +98,7 @@ Cloud SQL インスタンスのサービスアカウントがそのオブジェ�
 
 import は同じキーのデータを上書きする。初回の移行は空のデータベースに対して行う。stg のファイルを prod のデータベースへ import しない。
 
-アプリケーションがデータを読めたら、dump のオブジェクトとローカルファイルを消す。
+dump のオブジェクトとローカルの `.sql` は、[import のあと](#import-のあと) でアプリがデータを正しく読むまで残す。
 
 ## S3 のファイル
 
@@ -122,7 +123,17 @@ gcloud storage ls gs://GCS_BUCKET --recursive --project=PROJECT_ID | wc -l
 
 GCS に残したいファイルが既にある初回は、`--delete-unmatched-destination-objects` を付けない。ローカルディレクトリをバケットの完全なコピーにしたいときだけ付ける。
 
-ファイル数が一致したら `./s3-export` を消す。
+アプリ上の画像が正しく出るまで `./s3-export` は残す。ファイル数が一致しただけでは消さない。
+
+## import のあと
+
+SQL の operation が Done になり、GCS への `rsync` が終わっても、移行は完了していない。その環境のアプリを開き、移したデータを確認する。
+
+- アプリが起動し、主な操作が動く。ログイン、一覧、dump から入ったレコード。
+- 画像と添付ファイルが、S3 に保存されていたものと同じように表示される。画像のあるレコードをいくつか開き、S3 の同じオブジェクトと比べる。ファイルが一致し、壊れておらず、欠けていない。URL が AWS のバケットを指していない。
+- GCS のファイル数が、S3 から落としたローカルディレクトリと一致する。
+
+上の確認が通ってから、dump ファイル、Cloud Storage 上の import 用オブジェクト、ローカルディレクトリを消す。
 
 ## 例: DriveeLink
 
