@@ -92,19 +92,16 @@ Cloud Scheduler → Cloud Run（OIDC、内部エンドポイント）
 
 ## Cloud Run の Tier
 
-tfvars の `resource_tier` が `tier_specs` から Cloud Run のサイズを選ぶ。min instance は tier の値をそのまま使う。tier3 と tier4 は API も Web も `min_instances = 0` である。
+すべてのプロジェクト、すべての環境（`dev`、`stg`、`prod`）は `resource_tier = "tier3"` にする。tfvars の `resource_tier` が `tier_specs` から Cloud Run のサイズを選ぶ。min instance は tier の値をそのまま使う。tier3 は API も Web も `min_instances = 0` である。
 
-| 環境 | `resource_tier` |
-|------|-----------------|
-| dev | `tier4` |
-| stg と prod を両方動かすとき | `tier3` |
+`tier3` 以外は例外である。tier を上げる前に承認が必要である。
 
 `cloud_run_api_min_instances` と `cloud_run_web_min_instances` は tfvars に書かない。空なら Terraform は tier の min instance、つまり 0 を使う。
 
-コンテナがメモリ不足で起動しないときは、override 変数で memory を上げる。その対処に min instance は上げない。
+コンテナがメモリ不足で起動しないときは、override 変数で memory を上げる。その対処に min instance は上げず、tier も変えない。
 
 ```hcl
-resource_tier        = "tier3"   # dev は "tier4"
+resource_tier        = "tier3"
 cloud_run_api_memory = "512Mi"
 cloud_run_web_memory = "512Mi"
 ```
@@ -145,7 +142,7 @@ Cloud Run はデフォルトの `PROJECT_NUMBER-compute@developer.gserviceaccoun
 | Terraform | [`google_cloud/terraform/README.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/README.md) |
 | SQL トポロジ | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
-DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、リージョン `asia-northeast1` で使っている。dev は `resource_tier = "tier4"`。stg と prod は `tier3`。Cloud Run の min instance は tier どおり 0。prod の `cloud_run_api_min_instances = 1` は PM の承認のあとだけ。
+DriveeLink は上の構成を、一つのプロジェクト `dx-driveelink`、リージョン `asia-northeast1` で使っている。すべての環境は `resource_tier = "tier3"`。Cloud Run の min instance は tier どおり 0。prod の `cloud_run_api_min_instances = 1` は PM の承認のあとだけ。`tier3` から tier を上げるには、先に承認がいる。
 
 | ID | メール |
 |----|--------|

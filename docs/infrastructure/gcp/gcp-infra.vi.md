@@ -92,19 +92,16 @@ Cloud Scheduler → Cloud Run (OIDC, đúng endpoint nội bộ)
 
 ## Tier Cloud Run
 
-`resource_tier` trong tfvars chọn sizing Cloud Run từ module `tier_specs`. Min instance lấy đúng số của tier. Tier3 và tier4 đều để `min_instances = 0` cho API và web.
+Mọi project, mọi môi trường (`dev`, `stg`, `prod`) đặt `resource_tier = "tier3"`. `resource_tier` trong tfvars chọn sizing Cloud Run từ module `tier_specs`. Min instance lấy đúng số của tier. Tier3 để `min_instances = 0` cho API và web.
 
-| Môi trường | `resource_tier` |
-|------------|-----------------|
-| dev | `tier4` |
-| stg và prod, khi cả hai cùng chạy | `tier3` |
+Tier khác `tier3` là ngoại lệ. Phải có chấp thuận trước khi nâng tier.
 
 Không ghi `cloud_run_api_min_instances` hay `cloud_run_web_min_instances` trong tfvars. Để trống thì Terraform dùng min instance của tier, tức 0.
 
-Container không khởi động được vì thiếu memory thì tăng memory bằng biến override. Không nâng min instance để chữa lỗi đó.
+Container không khởi động được vì thiếu memory thì tăng memory bằng biến override. Không nâng min instance và không đổi tier để chữa lỗi đó.
 
 ```hcl
-resource_tier        = "tier3"   # dev thì "tier4"
+resource_tier        = "tier3"
 cloud_run_api_memory = "512Mi"
 cloud_run_web_memory = "512Mi"
 ```
@@ -145,7 +142,7 @@ Repo: [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2), nhán
 | Terraform | [`google_cloud/terraform/README.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/README.md) |
 | Topology SQL | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
-DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveelink`, region `asia-northeast1`. Dev để `resource_tier = "tier4"`. Stg và prod để `tier3`. Min instance Cloud Run giữ 0 theo tier. `cloud_run_api_min_instances = 1` trên prod chỉ sau khi PM duyệt.
+DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveelink`, region `asia-northeast1`. Mọi môi trường để `resource_tier = "tier3"`. Min instance Cloud Run giữ 0 theo tier. `cloud_run_api_min_instances = 1` trên prod chỉ sau khi PM duyệt. Nâng tier khỏi `tier3` cần chấp thuận trước.
 
 | Danh tính | Email |
 |-----------|--------|
