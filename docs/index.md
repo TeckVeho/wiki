@@ -68,6 +68,7 @@ Hướng dẫn cloud & dịch vụ ngoài / Cloud & external services / 外部�
 | [google-cloud-api](infrastructure/google-cloud-api) | IAM GCP & API (Google Maps, …) | GCP IAM and Google APIs management | GCP IAM・API（Google Maps 等）の管理と設定 |
 | [cicd-deployment-patterns](infrastructure/cicd-deployment-patterns) | GitHub Actions, EC2, Cloud Run *(VI / EN / JA một trang)* | CI/CD patterns for Actions / EC2 / Cloud Run *(same page)* | GitHub Actions・EC2・Cloud Run の標準フロー（同一ページで VI / EN / JA） |
 | [gcp-deployment-rules](infrastructure/gcp-deployment-rules) | Chuẩn triển khai GCP (tier, IaC, CI/CD, secrets…) *(menu ngôn ngữ trong trang)* | GCP deployment standards *(toc/languages inside doc)* | GCP デプロイ規約（構成・IaC・CI/CD 等／ページ内で言語切替） |
+| [gcp-infra](infrastructure/gcp/gcp-infra.vi) | Hạ tầng GCP DriveeLink (một project, Cloud Run, Cloud SQL) *(chỉ tiếng Việt)* | DriveeLink GCP infra *(Vietnamese only; translation pending)* | DriveeLink の GCP 構成 *(ベトナム語のみ。翻訳は後追記)* |
 | [post-deploy-checklist](infrastructure/post-deploy-checklist) | Checklist sau deploy dịch vụ web | Post-deploy verification checklist for web services | Web サービス公開後の確認チェックリスト |
 | [xserver-api](infrastructure/xserver-api) | Phát hành & sử dụng API key Xserver (DNS, mail, MySQL, …) | Xserver API key issuance and usage with Cursor | Xserver API キーの発行・利用（DNS・メール・MySQL 等） |
 
