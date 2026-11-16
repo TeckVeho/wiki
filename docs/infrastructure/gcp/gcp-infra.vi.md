@@ -8,9 +8,10 @@ Tài liệu này tóm tắt kiến thức và kiến trúc triển khai ứng d�
 
 1. [Tóm tắt](#tóm-tắt)
 2. [Kiến trúc](#kiến-trúc)
-3. [Service account](#service-account)
-4. [Dọn dữ liệu và backup](#dọn-dữ-liệu-và-backup)
-5. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
+3. [Tier Cloud Run](#tier-cloud-run)
+4. [Service account](#service-account)
+5. [Dọn dữ liệu và backup](#dọn-dữ-liệu-và-backup)
+6. [Ví dụ: DriveeLink](#ví-dụ-driveelink)
 
 ## Tóm tắt
 
@@ -89,6 +90,27 @@ Cloud Scheduler → Cloud Run (OIDC, đúng endpoint nội bộ)
 - User SQL của từng môi trường khác nhau nếu nhiều môi trường gắn một instance.
 - Backup production chạy mỗi ngày và giữ 30 bản (30 ngày). Point-in-time recovery là tùy chọn, cần binary log.
 
+## Tier Cloud Run
+
+`resource_tier` trong tfvars chọn sizing Cloud Run từ module `tier_specs`. Min instance lấy đúng số của tier. Tier3 và tier4 đều để `min_instances = 0` cho API và web.
+
+| Môi trường | `resource_tier` |
+|------------|-----------------|
+| dev | `tier4` |
+| stg và prod, khi cả hai cùng chạy | `tier3` |
+
+Không ghi `cloud_run_api_min_instances` hay `cloud_run_web_min_instances` trong tfvars. Để trống thì Terraform dùng min instance của tier, tức 0.
+
+Container không khởi động được vì thiếu memory thì tăng memory bằng biến override. Không nâng min instance để chữa lỗi đó.
+
+```hcl
+resource_tier        = "tier3"   # dev thì "tier4"
+cloud_run_api_memory = "512Mi"
+cloud_run_web_memory = "512Mi"
+```
+
+Production chỉ được `cloud_run_api_min_instances = 1` sau khi PM duyệt. Duyệt cho API trước. Web giữ min instance của tier cho đến khi có duyệt riêng.
+
 ## Service account
 
 Cloud Run không chạy bằng service account mặc định `PROJECT_NUMBER-compute@developer.gserviceaccount.com`. Cloud Build không chạy bằng SA legacy `PROJECT_NUMBER@cloudbuild.gserviceaccount.com`. Mỗi việc một danh tính. Runtime tách theo môi trường, nên dev không mang danh tính của prod.
@@ -123,7 +145,7 @@ Repo: [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2), nhán
 | Terraform | [`google_cloud/terraform/README.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/README.md) |
 | Topology SQL | [`google_cloud/terraform/SQL_TOPOLOGY.md`](https://github.com/TeckVeho/drivee-link-2/blob/develop/google_cloud/terraform/SQL_TOPOLOGY.md) |
 
-DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveelink`, region `asia-northeast1`.
+DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveelink`, region `asia-northeast1`. Dev để `resource_tier = "tier4"`. Stg và prod để `tier3`. Min instance Cloud Run giữ 0 theo tier. `cloud_run_api_min_instances = 1` trên prod chỉ sau khi PM duyệt.
 
 | Danh tính | Email |
 |-----------|--------|
