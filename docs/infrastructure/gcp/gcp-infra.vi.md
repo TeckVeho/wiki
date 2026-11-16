@@ -1,6 +1,8 @@
 # Hạ tầng GCP
 
-Tài liệu này tóm tắt kiến thức và kiến trúc triển khai ứng dụng lên Google Cloud. Phần cuối lấy [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2) (nhánh `develop`) làm ví dụ cho thứ tự triển khai. Bản tiếng Anh và tiếng Nhật sẽ thêm sau khi bản này được chốt.
+> **Language**: [🇻🇳 Tiếng Việt](gcp-infra.vi.md) | [🇯🇵 日本語](gcp-infra.ja.md)
+
+Tài liệu này tóm tắt kiến thức và kiến trúc triển khai ứng dụng lên Google Cloud. Phần cuối lấy [TeckVeho/drivee-link-2](https://github.com/TeckVeho/drivee-link-2) (nhánh `develop`) làm ví dụ cho thứ tự triển khai. Bản tiếng Anh sẽ thêm sau.
 
 ## Mục lục
 
@@ -103,6 +105,7 @@ DriveeLink dùng đúng kiến trúc ở trên, trong một project `dx-driveeli
 | Artifact Registry | `asia-northeast1-docker.pkg.dev/dx-driveelink/driveelink-docker` |
 | Cloud Run | `driveelink-api-{env}`, `driveelink-web-{env}` |
 | Job | `driveelink-migrate-{env}`, `driveelink-queue-{env}`, `driveelink-pdf-{env}` |
+
 **Mạng và SQL.** Dev đi tới SQL hub `gcp-dev-sql-hub` qua Shared VPC của hub. Stg và prod dùng một mạng riêng, tách khỏi hub, và dùng chung một Cloud SQL instance. Trên instance đó mỗi môi trường có database và user riêng.
 
 | Môi trường | Mạng | Instance | Database | User |
